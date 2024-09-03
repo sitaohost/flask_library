@@ -1,22 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图书列表</title>
+    <title>管理员端</title>
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0b0c0b;
+            padding: 10px;
+            border-bottom: 2px solid #212321;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            display: flex;
         }
 
-        h1 {
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
             text-align: center;
-            margin: 20px 0;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
+        .navbar-nav a:hover {
+            background-color: #423673;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* 图书列表样式 */
         #books-container {
             display: flex;
             flex-wrap: wrap;
@@ -51,13 +107,27 @@
     </style>
 </head>
 <body>
-    <h1>图书列表</h1>
-    <div id="books-container">
-        <!-- 图书列表将插入到这里 -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/static/bookmanage.html">图书管理</a></li>
+                <li><a href="/admin/students">学生管理</a></li>
+                <li><a href="/admin/borrows">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+    <div class="content">
+        
+        <div id="books-container">
+            <!-- 图书列表将插入到这里 -->
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to fetch books from API
+
             function fetchBooks() {
                 const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
@@ -71,7 +141,6 @@
                     });
             }
 
-            // Function to display books on the page
             function displayBooks(books) {
                 const container = document.getElementById('books-container');
                 container.innerHTML = '';
@@ -87,7 +156,6 @@
                         <p>出版社: ${book.publisher}</p>
                         <p>价格: ¥${book.price.toFixed(2)}</p>
                         <p>页数: ${book.pages}页</p>
-                        <p>库存: ${book.quantity}</p>
                     `;
 
                     container.appendChild(bookCard);

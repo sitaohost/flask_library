@@ -37,7 +37,7 @@ def student_login():
         return jsonify({"error": "Username and password are required"}), 400
 
     student = Student.query.filter_by(name=username).first()
-
+    
     if student and check_password_hash(student.password, password):
         return jsonify({"message": "登录成功!", "user": {"name": username}}), 200
     else:
