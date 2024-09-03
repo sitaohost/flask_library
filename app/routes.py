@@ -6,7 +6,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/', )
 def index():
-    return 'Welcome to the Flask Library Demo!'
+    return 'Welcome to the Flask Library !'
 
 
 # 验证用户登录
