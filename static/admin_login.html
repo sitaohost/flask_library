@@ -45,7 +45,7 @@
             border: none;
             border-radius: 4px;
             color: #fff;
-            background-color: #dc3545;
+            background-color: #181a1f;
             font-size: 16px;
             cursor: pointer;
         }
@@ -102,7 +102,8 @@
                     errorMessage.textContent = data.error;
                 } else {
                     alert(data.message);
-                    // 处理成功登录后的操作
+                    // 登录成功后跳转到admin_index.html页面
+                    window.location.href = '/static/admin_index.html';
                 }
             })
             .catch(error => {

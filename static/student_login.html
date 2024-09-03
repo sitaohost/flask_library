@@ -67,6 +67,7 @@
                 <label for="username">用户名</label>
                 <input type="text" id="username" name="username" required>
             </div>
+
             <div class="form-group">
                 <label for="password">密码</label>
                 <input type="password" id="password" name="password" required>
@@ -102,7 +103,8 @@
                     errorMessage.textContent = data.error;
                 } else {
                     alert(data.message);
-                    // 处理成功登录后的操作
+                    // 登录成功后跳转到student_index.html页面
+                    window.location.href = '/static/student_index.html';
                 }
             })
             .catch(error => {
