@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #books-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .book-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .book-card h2 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .book-card p {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>图书列表</h1>
+    <div id="books-container">
+        <!-- 图书列表将插入到这里 -->
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to fetch books from API
+            function fetchBooks() {
+                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayBooks(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching books:', error);
+                    });
+            }
+
+            // Function to display books on the page
+            function displayBooks(books) {
+                const container = document.getElementById('books-container');
+                container.innerHTML = '';
+
+                books.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+
+                    bookCard.innerHTML = `
+                        <img src="${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                        <h2>${book.title}</h2>
+                        <p>作者: ${book.author}</p>
+                        <p>出版社: ${book.publisher}</p>
+                        <p>价格: ¥${book.price.toFixed(2)}</p>
+                        <p>页数: ${book.pages}页</p>
+                        <p>库存: ${book.quantity}</p>
+                    `;
+
+                    container.appendChild(bookCard);
+                });
+            }
+
+            // Fetch books when page loads
+            fetchBooks();
+        });
+    </script>
+</body>
+</html>
