@@ -1,18 +1,57 @@
 from flask import Blueprint, request, jsonify
-from .models import db, Book
+from .models import Admin, Student, db, Book
+from werkzeug.security import check_password_hash
 
 bp = Blueprint('main', __name__)
 
-@bp.route('/')
+@bp.route('/', )
 def index():
     return 'Welcome to the Flask Library Demo!'
+
+
+# 验证用户登录
+@bp.route('/admin_login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"error": "Username and password are required"}), 400
+
+    admin = Admin.query.filter_by(username=username).first()
+
+    if admin and check_password_hash(admin.password, password):
+        return jsonify({"message": "登录成功!", "user": {"username": username}}), 200
+    else:
+        return jsonify({"error": "Invalid username or password"}), 401
+
+
+@bp.route('/student_login', methods=['POST'])
+def student_login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"error": "Username and password are required"}), 400
+
+    student = Student.query.filter_by(name=username).first()
+
+    if student and check_password_hash(student.password, password):
+        return jsonify({"message": "登录成功!", "user": {"name": username}}), 200
+    else:
+        return jsonify({"error": "Invalid username or password"}), 401
+
+
+
 
 @bp.route('/books/all', methods=['GET'])
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
-@bp.route('/books/<int:book_id>', methods=['GET'])
+@bp.route('/books/get/<int:book_id>', methods=['GET'])
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if book:
