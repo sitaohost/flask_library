@@ -1,50 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>图书管理</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员端 - 书籍管理</title>
     <style>
-        ul.navbar {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 250px;
-            background-color: #f1f1f1;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-        }
-
-        ul.navbar li a {
-            display: block;
-            color: #000;
-            padding: 16px;
-            font-size: 18px;
-            text-decoration: none;
-        }
-
-        ul.navbar li a:hover {
-            background-color: #555;
-            color: white;
-        }
-
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
         }
 
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #202320;
+            padding: 10px;
+            border-bottom: 2px solid #101110;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            background-color: #5c3773;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* 书籍管理样式 */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
         h1 {
-            color: #333;
+            text-align: center;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
         th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
         }
 
         th {
@@ -52,83 +117,119 @@
             font-weight: bold;
         }
 
-        .edit-button, .delete-button {
+        .action-buttons button {
             padding: 6px 12px;
-            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit-button {
+            background-color: #007bff;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .new-button {
+            padding: 6px 12px;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
-
-        .edit-button:hover, .delete-button:hover {
-            background-color: #45a049;
-        }
     </style>
-
-    <script>
-        window.onload = function() {
-            var tip = "录入成功!"; // 模拟 tip 数据，可以用后端渲染替换
-            if (tip != null && tip !== "" && tip === "录入成功!") {
-                alert(tip);
-                window.location.href = "/admin/BookManage"; // 指定跳转的页面URL
-            } else if (tip != null && tip !== "" && tip === "修改成功") {
-                alert(tip);
-                window.location.href = "/admin/BookManage"; // 指定跳转的页面URL
-            }
-        }
-    </script>
 </head>
-
 <body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/admin/books">图书管理</a></li>
+                <li><a href="/admin/students">学生管理</a></li>
+                <li><a href="/admin/borrows">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
 
-<ul class="navbar">
-    <li><a href="/admin/bookList">图书列表</a></li>
-    <li><a href="/admin/addBook">新增图书</a></li>
-    <li><a href="/admin/BookManage">图书管理</a></li>
-    <li><a href="/admin/userList">读者管理</a></li>
-    <li><a href="/admin/adminShowborrow">借还记录</a></li>
-    <li><a href="/adminLogout">注销登录</a></li>
-</ul>
-<div style="margin-left: 270px;">
+    <!-- 书籍管理 -->
+    <div class="container">
+        <h1>书籍管理</h1>
 
-    <h1>图书管理</h1>
-    <!-- 搜索框 -->
-    <form action="/admin/bookSearch" method="GET">
-        <input type="text" name="keyword" placeholder="请输入图书名" />
-        <button type="submit">搜索</button>
-    </form>
+        <div class="search-container">
+            <input type="text" placeholder="Search for...">
+            <button>搜索</button>
+            <button class="new-button">新增</button>
+        </div>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>标题</th>
-            <th>封面</th>
-            <th>作者</th>
-            <th>出版社</th>
-            <th>剩余库存</th>
-            <th>原有库存</th>
-            <th>操作</th>
-        </tr>
-
-        <!-- 模拟数据 -->
-        <tr>
-            <td>1</td>
-            <td>书名1</td>
-            <td><img src="https://books.sitao.org/images/default.png" width="80" height="80"></td>
-            <td>作者1</td>
-            <td>出版社1</td>
-            <td>10</td>
-            <td>20</td>
-            <td>
-                <a href="/admin/updateBook/1" class="edit-button">编辑</a>
-                <a href="#" onclick="if (confirm('确定要删除该图书吗？')) { window.location.href='/admin/deleteBook/1'; }" class="delete-button">删除</a>
-            </td>
-        </tr>
-
-        <!-- 其他数据行 -->
-    </table>
-</div>
-
+        <table>
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>价格</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01</td>
+                    <td>小王子</td>
+                    <td>小王子作者</td>
+                    <td>58.88</td>
+                    <td class="action-buttons">
+                        <button class="edit-button">编辑</button>
+                        <button class="delete-button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>02</td>
+                    <td>安徒生童话</td>
+                    <td>安徒生</td>
+                    <td>38.88</td>
+                    <td class="action-buttons">
+                        <button class="edit-button">编辑</button>
+                        <button class="delete-button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>03</td>
+                    <td>安徒生童话</td>
+                    <td>安徒生</td>
+                    <td>38.88</td>
+                    <td class="action-buttons">
+                        <button class="edit-button">编辑</button>
+                        <button class="delete-button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>04</td>
+                    <td>安徒生童话</td>
+                    <td>安徒生</td>
+                    <td>38.88</td>
+                    <td class="action-buttons">
+                        <button class="edit-button">编辑</button>
+                        <button class="delete-button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>05</td>
+                    <td>安徒生童话</td>
+                    <td>安徒生</td>
+                    <td>38.88</td>
+                    <td class="action-buttons">
+                        <button class="edit-button">编辑</button>
+                        <button class="delete-button">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

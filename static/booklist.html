@@ -1,4 +1,96 @@
 <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员端</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #202320;
+            padding: 10px;
+            border-bottom: 2px solid #101110; /* 边框颜色 */
+            display: flex;
+            justify-content: space-between; /* 左右分布 */
+            align-items: center; /* 垂直居中对齐 */
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto; /* 将退出登录按钮推到右边 */
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* 平滑过渡效果 */
+        }
+
+        .navbar-nav a:hover {
+            background-color: #5c3773;
+            transform: scale(1.05); /* 放大效果 */
+        }
+
+        .logout-button {
+            background-color: #f44336; /* 退出登录按钮的颜色 */
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/admin/books">图书管理</a></li>
+                <li><a href="/admin/students">学生管理</a></li>
+                <li><a href="/admin/borrows">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+    <div class="content">
+        <!-- 页面内容 -->
+    </div>
+</body>
+</html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
