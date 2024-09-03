@@ -132,9 +132,134 @@
         .delete-button {
             background-color: #dc3545;
         }
+
+ /* 模态框样式 */
+.modal {
+    display: none; /* 隐藏 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    /* 使用 Flexbox 实现居中 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* 确保模态框内容能够正确居中 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 表单样式 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+input, textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 提交按钮样式 */
+.submit-button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
     </style>
 </head>
 <body>
+
+    <!-- 新增图书的模态框 -->
+<div id="addBookModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>新增图书</h2>
+        <form id="addBookForm" class="form-container">
+            <div class="form-group">
+                <label for="title">书名：</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">作者：</label>
+                <input type="text" id="author" name="author" required>
+            </div>
+            <div class="form-group">
+                <label for="publisher">出版社：</label>
+                <input type="text" id="publisher" name="publisher" required>
+            </div>
+            <div class="form-group">
+                <label for="pages">页数：</label>
+                <input type="number" id="pages" name="pages" required>
+            </div>
+            <div class="form-group">
+                <label for="price">价格：</label>
+                <input type="number" step="0.01" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">库存：</label>
+                <input type="number" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="description">描述：</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="picture">图片：</label>
+                <input type="file" id="picture" name="picture" accept="image/*">
+            </div>
+            <button type="button" id="submitAddBook">提交</button>
+        </form>
+    </div>
+</div>
 
     <nav class="navbar">
         <div class="navbar-left">
@@ -176,6 +301,49 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('addBookModal');
+            const btnNewBook = document.querySelector('.new-button');
+            const spanClose = document.getElementsByClassName('close')[0];
+
+            // 打开模态框
+            btnNewBook.onclick = function() {
+                modal.style.display = 'block';
+            }
+
+            // 关闭模态框
+            spanClose.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            // 当用户点击模态框外部时关闭模态框
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // 处理提交新增图书
+            document.getElementById('submitAddBook').onclick = function() {
+                const form = document.getElementById('addBookForm');
+                const formData = new FormData(form);
+
+                fetch('/books/add', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        alert('图书新增成功!');
+                        modal.style.display = 'none';
+                        fetchBooks(); // 重新加载图书列表
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            };
+            
             function fetchBooks() {
                 const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
