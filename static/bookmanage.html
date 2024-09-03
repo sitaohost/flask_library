@@ -300,90 +300,128 @@ input, textarea {
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('addBookModal');
-            const btnNewBook = document.querySelector('.new-button');
-            const spanClose = document.getElementsByClassName('close')[0];
+     
+     
+     document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('addBookModal');
+    const btnNewBook = document.querySelector('.new-button');
+    const spanClose = document.getElementsByClassName('close')[0];
 
-            // 打开模态框
-            btnNewBook.onclick = function() {
-                modal.style.display = 'block';
-            }
+    // 打开模态框
+    btnNewBook.onclick = function() {
+        modal.style.display = 'block';
+    }
 
-            // 关闭模态框
-            spanClose.onclick = function() {
+    // 关闭模态框
+    spanClose.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // 当用户点击模态框外部时关闭模态框
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // 处理提交新增图书
+    document.getElementById('submitAddBook').onclick = function() {
+        const form = document.getElementById('addBookForm');
+        const formData = new FormData(form);
+
+        fetch('/books/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                alert('图书新增成功!');
                 modal.style.display = 'none';
+                fetchBooks(); // 重新加载图书列表
             }
-
-            // 当用户点击模态框外部时关闭模态框
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                }
-            }
-
-            // 处理提交新增图书
-            document.getElementById('submitAddBook').onclick = function() {
-                const form = document.getElementById('addBookForm');
-                const formData = new FormData(form);
-
-                fetch('/books/add', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        alert('图书新增成功!');
-                        modal.style.display = 'none';
-                        fetchBooks(); // 重新加载图书列表
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            };
-            
-            function fetchBooks() {
-                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        displayBooks(data);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching books:', error);
-                    });
-            }
-
-            function displayBooks(books) {
-                const container = document.getElementById('books-container');
-                container.innerHTML = '';
-
-                books.forEach(book => {
-                    const row = document.createElement('tr');
-
-                    row.innerHTML = `
-                        <td>${book.bid}</td>
-                        <td>${book.title}</td>
-                        <td>${book.author}</td>
-                        <td>${book.publisher}</td>
-                        <td>¥${book.price.toFixed(2)}</td>
-                        <td>${book.pages}页</td>
-                        <td class="action-buttons">
-                            <button class="edit-button">编辑</button>
-                            <button class="delete-button">删除</button>
-                        </td>
-                    `;
-
-                    container.appendChild(row);
-                });
-            }
-
-            // Fetch books when page loads
-            fetchBooks();
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
+    };
+
+    function fetchBooks() {
+        const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                displayBooks(data);
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+            });
+    }
+
+    function displayBooks(books) {
+        const container = document.getElementById('books-container');
+        container.innerHTML = '';
+
+        books.forEach(book => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${book.bid}</td>
+                <td>${book.title}</td>
+                <td>${book.author}</td>
+                <td>${book.publisher}</td>
+                <td>¥${book.price.toFixed(2)}</td>
+                <td>${book.pages}页</td>
+                <td class="action-buttons">
+                    <button class="edit-button">编辑</button>
+                    <button class="delete-button" data-book-id="${book.bid}">删除</button>
+                </td>
+            `;
+
+            container.appendChild(row);
+        });
+    }
+
+    // 为所有删除按钮添加事件监听器
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-button')) {
+            const bookId = e.target.getAttribute('data-book-id');
+            deleteBook(bookId);
+        }
+    });
+
+    // 删除图书
+    function deleteBook(bookId) {
+        if (confirm('确定要删除这本书吗？')) {
+            fetch(`/books/${bookId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                alert('图书删除成功！');
+                fetchBooks(); // 重新加载图书列表
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                let message = '删除过程中发生错误，请稍后再试！';
+                if (error.message.includes('404')) {
+                    message = '图书未找到！';
+                }
+                alert(message);
+            });
+        }
+    }
+
+    fetchBooks();
+});
+
     </script>
 
 </body>
