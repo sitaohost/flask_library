@@ -343,7 +343,8 @@ input, textarea {
                     console.error('Error:', error);
                 });
             };
-            
+
+            // 获取图书列表并显示
             function fetchBooks() {
                 const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
@@ -376,12 +377,39 @@ input, textarea {
                             <button class="delete-button">删除</button>
                         </td>
                     `;
+                    // 添加删除按钮的事件监听器
+                    const deleteButton = row.querySelector('.delete-button');
+                    deleteButton.addEventListener('click', function() {
+                        deleteBook(book.bid, row);  // 传递书籍ID和当前行
+                    });
 
                     container.appendChild(row);
                 });
             }
 
-            // Fetch books when page loads
+            // 删除图书的函数
+            function deleteBook(bookId, row) {
+                if (confirm('你确定要删除这本书吗？')) {
+                    fetch(`http://localhost:8090/books/delete/${bookId}`, {
+                        method: 'DELETE',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('图书删除成功！');
+                            row.remove();  // 从DOM中移除当前行
+                        } else {
+                            alert('删除失败，请重试！');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('删除过程中出现错误！');
+                    });
+                }
+            }
+
+             // 页面加载时获取图书列表
             fetchBooks();
         });
     </script>

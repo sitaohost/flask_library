@@ -120,11 +120,11 @@ def add_book():
 #         return jsonify(book.to_dict()), 200
 #     return jsonify({"error": "Book not found"}), 404
 
-@bp.route('/books/<int:book_id>', methods=['DELETE'])
+@bp.route('/books/delete/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
-    book = Book.query.filter_by(bid=book_id).first()
+    book = Book.query.filter_by(bid=book_id).first() # 查找对应的图书
     if book:
-        db.session.delete(book)
-        db.session.commit()
-        return jsonify(book.to_dict()), 200
-    return jsonify({"error": "Book not found"}), 404
+        db.session.delete(book)  # 删除图书
+        db.session.commit()  # 提交更改
+        return jsonify({"success": True}), 200
+        return jsonify({"success": False, "error": "Book not found"}), 404
