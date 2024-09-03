@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理员端 - 书籍管理</title>
+    <title>图书管理</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* 导航栏样式 */
         .navbar {
-            background-color: #202320;
+            background-color: #0b0c0b;
             padding: 10px;
-            border-bottom: 2px solid #101110;
+            border-bottom: 2px solid #212321;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -55,7 +54,7 @@
         }
 
         .navbar-nav a:hover {
-            background-color: #5c3773;
+            background-color: #423673;
             transform: scale(1.05);
         }
 
@@ -63,23 +62,19 @@
             background-color: #f44336;
             padding: 10px 20px;
             border-radius: 4px;
+            text-decoration: none;
+            color: white;
         }
 
         .logout-button:hover {
             background-color: #d32f2f;
         }
 
-        /* 书籍管理样式 */
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
+        .content {
             padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-        }
-
+        /* 图书管理页面样式 */
         .search-container {
             display: flex;
             justify-content: space-between;
@@ -95,10 +90,15 @@
 
         .search-container button {
             padding: 6px 12px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+        }
+
+        .new-button {
+            background-color: #28a745;
+            margin-left: 10px;
         }
 
         table {
@@ -132,22 +132,15 @@
         .delete-button {
             background-color: #dc3545;
         }
-
-        .new-button {
-            padding: 6px 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="/admin/books">图书管理</a></li>
+                <li><a href="/static/admin_index.html">首页</a></li>
+                <li><a href="/static/bookmanage.html">图书管理</a></li>
                 <li><a href="/admin/students">学生管理</a></li>
                 <li><a href="/admin/borrows">借阅记录</a></li>
             </ul>
@@ -157,14 +150,10 @@
         </div>
     </nav>
 
-    <!-- 书籍管理 -->
-    <div class="container">
-        <h1>书籍管理</h1>
-
+    <div class="content">
         <div class="search-container">
-            <input type="text" placeholder="Search for...">
-            <button>搜索</button>
-            <button class="new-button">新增</button>
+            <input type="text" placeholder="搜索图书...">
+            <button class="new-button">新增图书</button>
         </div>
 
         <table>
@@ -173,63 +162,61 @@
                     <th>编号</th>
                     <th>书名</th>
                     <th>作者</th>
+                    <th>出版社</th>
                     <th>价格</th>
+                    <th>页数</th>
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>小王子</td>
-                    <td>小王子作者</td>
-                    <td>58.88</td>
-                    <td class="action-buttons">
-                        <button class="edit-button">编辑</button>
-                        <button class="delete-button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>02</td>
-                    <td>安徒生童话</td>
-                    <td>安徒生</td>
-                    <td>38.88</td>
-                    <td class="action-buttons">
-                        <button class="edit-button">编辑</button>
-                        <button class="delete-button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>03</td>
-                    <td>安徒生童话</td>
-                    <td>安徒生</td>
-                    <td>38.88</td>
-                    <td class="action-buttons">
-                        <button class="edit-button">编辑</button>
-                        <button class="delete-button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>04</td>
-                    <td>安徒生童话</td>
-                    <td>安徒生</td>
-                    <td>38.88</td>
-                    <td class="action-buttons">
-                        <button class="edit-button">编辑</button>
-                        <button class="delete-button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>05</td>
-                    <td>安徒生童话</td>
-                    <td>安徒生</td>
-                    <td>38.88</td>
-                    <td class="action-buttons">
-                        <button class="edit-button">编辑</button>
-                        <button class="delete-button">删除</button>
-                    </td>
-                </tr>
+            <tbody id="books-container">
+                <!-- 图书列表将插入到这里 -->
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function fetchBooks() {
+                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayBooks(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching books:', error);
+                    });
+            }
+
+            function displayBooks(books) {
+                const container = document.getElementById('books-container');
+                container.innerHTML = '';
+
+                books.forEach(book => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${book.bid}</td>
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.publisher}</td>
+                        <td>¥${book.price.toFixed(2)}</td>
+                        <td>${book.pages}页</td>
+                        <td class="action-buttons">
+                            <button class="edit-button">编辑</button>
+                            <button class="delete-button">删除</button>
+                        </td>
+                    `;
+
+                    container.appendChild(row);
+                });
+            }
+
+            // Fetch books when page loads
+            fetchBooks();
+        });
+    </script>
+
 </body>
 </html>
