@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图书管理</title>
+    <style>
+        ul.navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 250px;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        ul.navbar li a {
+            display: block;
+            color: #000;
+            padding: 16px;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        ul.navbar li a:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .edit-button, .delete-button {
+            padding: 6px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+    <script>
+        window.onload = function() {
+            var tip = "录入成功!"; // 模拟 tip 数据，可以用后端渲染替换
+            if (tip != null && tip !== "" && tip === "录入成功!") {
+                alert(tip);
+                window.location.href = "/admin/BookManage"; // 指定跳转的页面URL
+            } else if (tip != null && tip !== "" && tip === "修改成功") {
+                alert(tip);
+                window.location.href = "/admin/BookManage"; // 指定跳转的页面URL
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+<ul class="navbar">
+    <li><a href="/admin/bookList">图书列表</a></li>
+    <li><a href="/admin/addBook">新增图书</a></li>
+    <li><a href="/admin/BookManage">图书管理</a></li>
+    <li><a href="/admin/userList">读者管理</a></li>
+    <li><a href="/admin/adminShowborrow">借还记录</a></li>
+    <li><a href="/adminLogout">注销登录</a></li>
+</ul>
+<div style="margin-left: 270px;">
+
+    <h1>图书管理</h1>
+    <!-- 搜索框 -->
+    <form action="/admin/bookSearch" method="GET">
+        <input type="text" name="keyword" placeholder="请输入图书名" />
+        <button type="submit">搜索</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>封面</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>剩余库存</th>
+            <th>原有库存</th>
+            <th>操作</th>
+        </tr>
+
+        <!-- 模拟数据 -->
+        <tr>
+            <td>1</td>
+            <td>书名1</td>
+            <td><img src="https://books.sitao.org/images/default.png" width="80" height="80"></td>
+            <td>作者1</td>
+            <td>出版社1</td>
+            <td>10</td>
+            <td>20</td>
+            <td>
+                <a href="/admin/updateBook/1" class="edit-button">编辑</a>
+                <a href="#" onclick="if (confirm('确定要删除该图书吗？')) { window.location.href='/admin/deleteBook/1'; }" class="delete-button">删除</a>
+            </td>
+        </tr>
+
+        <!-- 其他数据行 -->
+    </table>
+</div>
+
+</body>
+</html>
