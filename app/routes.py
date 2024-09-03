@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .models import Admin, Student, db, Book
+import os
 
 bp = Blueprint('main', __name__)
 
@@ -49,12 +50,13 @@ def student_login():
         return jsonify({"error": "密码错误"}), 401
 
 
-
+# 获取所有图书
 @bp.route('/books/all', methods=['GET'])
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
+# 根据图书 ID 获取图书
 @bp.route('/books/get/<int:book_id>', methods=['GET'])
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -62,23 +64,43 @@ def get_book_by_id(book_id):
         return jsonify(book.to_dict()), 200
     return jsonify({"error": "Book not found"}), 404
 
-# @bp.route('/books', methods=['POST'])
-# def add_book():
-#     data = request.get_json()
-#     new_book = Book(
-#         title=data.get('title'),
-#         author=data.get('author'),
-#         publisher=data.get('publisher'),
-#         pages=data.get('pages'),
-#         price=data.get('price'),
-#         quantity=data.get('quantity'),
-#         originalquantity=data.get('originalquantity'),
-#         description=data.get('description'),
-#         picture=data.get('picture')
-#     )
-#     db.session.add(new_book)
-#     db.session.commit()
-#     return jsonify(new_book.to_dict()), 201
+# 新增图书
+UPLOAD_FOLDER = '/Users/sitao/flask/flask_library/static'  # 定义图书封面保存路径
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+# 确保上传文件夹存在
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@bp.route('/books/add', methods=['POST'])
+def add_book():
+    data = request.form.to_dict()
+    file = request.files.get('picture')
+
+    if file and allowed_file(file.filename):
+        filename = file.filename
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        data['picture'] = os.path.join(UPLOAD_FOLDER, filename)  # 保存图片路径
+    else:
+        data['picture'] = None
+
+    new_book = Book(
+        title=data.get('title'),
+        author=data.get('author'),
+        publisher=data.get('publisher'),
+        pages=data.get('pages'),
+        price=data.get('price'),
+        quantity=data.get('quantity'),
+        originalquantity=data.get('quantity'),
+        description=data.get('description'),
+        picture=data.get('picture')
+    )
+    db.session.add(new_book)
+    db.session.commit()
+    return jsonify(new_book.to_dict()), 201
 
 # @bp.route('/books/<int:book_id>', methods=['PUT'])
 # def update_book(book_id):
@@ -98,11 +120,11 @@ def get_book_by_id(book_id):
 #         return jsonify(book.to_dict()), 200
 #     return jsonify({"error": "Book not found"}), 404
 
-# @bp.route('/books/<int:book_id>', methods=['DELETE'])
-# def delete_book(book_id):
-#     book = Book.query.filter_by(bid=book_id).first()
-#     if book:
-#         db.session.delete(book)
-#         db.session.commit()
-#         return jsonify(book.to_dict()), 200
-#     return jsonify({"error": "Book not found"}), 404
+@bp.route('/books/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id):
+    book = Book.query.filter_by(bid=book_id).first()
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify(book.to_dict()), 200
+    return jsonify({"error": "Book not found"}), 404
