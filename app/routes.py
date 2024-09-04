@@ -7,7 +7,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/', )
 def index():
-    return redirect('/static/admin_login.html')
+    return redirect('/static/index.html')
 
 
 # 验证管理员登录
