@@ -268,3 +268,39 @@ def search_students(keyword):
 
     # 如果没有根据姓名找到学生，返回 404
     return jsonify({"message": "No students found matching the keyword."}), 404
+
+
+@bp.route('/books/borrow/<int:b_bookid>', methods=['POST'])
+def borrow_book(b_bookid):
+    data = request.get_json()
+    student_id = data.get('student_id')
+    days = data.get('days')  # 获取借阅天数
+
+    if days is None:
+        return jsonify({"error": "Missing 'days' parameter"}), 400
+
+    book = Book.query.filter_by(bid=b_bookid).first()
+    student = Student.query.filter_by(rid=student_id).first()
+
+    if not book:
+        return jsonify({"error": "Book not found"}), 404
+
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+
+    if book.quantity <= 0:
+        return jsonify({"error": "Book out of stock"}), 400
+
+    book.quantity -= 1
+    db.session.commit()
+
+    new_record = Bar(
+        book_id=b_bookid,
+        user_id=student_id,
+        days=days  # 假设Bar模型有一个字段记录借阅天数
+    )
+
+    db.session.add(new_record)
+    db.session.commit()
+
+    return jsonify(new_record.to_dict()), 201

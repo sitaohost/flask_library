@@ -106,6 +106,7 @@
             font-size: 14px;
             color: #666;
         }
+
         .button-detail {
             background-color: #e6e6e6; /* 灰色背景 */
             border: 0.5px solid #000; /* 黑色边框 */
@@ -115,11 +116,74 @@
             font-size: 10px; /* 字体大小 */
             cursor: pointer; /* 鼠标悬停时显示为指针 */
             border-radius: 4px; /* 圆角边框 */
-          }
-          
-          .button-detail:hover {
+        }
+
+        .button-detail:hover {
             background-color: #cecece; /* 鼠标悬停时的背景色 */
-          }
+        }
+
+        /* 模态框样式 */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9998; /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        #bookModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999; /* 提高模态框的层级，使其位于其他元素之上 */
+            display: none;
+            background-color: transparent;
+        }
+
+        .modal-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            margin: 0;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            text-align: left;
+        }
+
+        .modal-body p {
+            margin-bottom: 5px;
+        }
+
+        .borrow-button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -137,53 +201,144 @@
     </nav>
 
     <div class="content">
-        
         <div id="books-container">
             <!-- 图书列表将插入到这里 -->
         </div>
     </div>
+
+    <!-- 遮罩层 -->
+    <div class="modal-backdrop"></div>
+
+    <!-- 模态框 -->
+    <div id="bookModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">图书详情</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加图片显示 -->
+                    <img id="modalPicture" src="" alt="封面图片" style="max-width: 300px; max-height: 300px; margin-right: 10px; float: left;">
+                    <p id="modalTitle">标题</p>
+                    <p id="modalAuthor">作者</p>
+                    <p id="modalPublisher">出版社</p>
+                    <p id="modalPages">页数</p>
+                    <p id="modalDescription">描述</p>
+                    <label for="borrowDays">借阅天数（1-90天）:</label>
+                    <input type="number" id="borrowDays" min="1" max="90">
+                    <button class="borrow-button" id="borrowButton">借阅</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+       document.addEventListener('DOMContentLoaded', function () {
+    let currentBook = null;
+    let invalidInputAlertShown = false; // 添加标志变量
 
-            function fetchBooks() {
-                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+    function fetchBooks() {
+        const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        displayBooks(data);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching books:', error);
-                    });
-            }
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                displayBooks(data);
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+            });
+    }
 
-            function displayBooks(books) {
-                const container = document.getElementById('books-container');
-                container.innerHTML = '';
+    function displayBooks(books) {
+        const container = document.getElementById('books-container');
+        container.innerHTML = '';
 
-                books.forEach(book => {
-                    const bookCard = document.createElement('div');
-                    bookCard.className = 'book-card';
+        books.forEach(book => {
+            const bookCard = document.createElement('div');
+            bookCard.className = 'book-card';
 
-                    bookCard.innerHTML = `
-                        <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
-                        <h2>${book.title}</h2>
-                        <p>作者: ${book.author}</p>
-                        <p>出版社: ${book.publisher}</p>
-                        <p>价格: ¥${book.price.toFixed(2)}</p>
-                        <p>页数: ${book.pages}页</p>
-                        <p><button class="button-detail" data-book-id="${book.bid}">详情</button></p>
-                        
-                    `;
+            bookCard.innerHTML = `
+                <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                <h2>${book.title}</h2>
+                <p>作者: ${book.author}</p>
+                <p>出版社: ${book.publisher}</p>
+                <p>页数: ${book.pages}页</p>
+                <p><button class="button-detail" data-book-id="${book.bid}">详情</button></p>
+            `;
 
-                    container.appendChild(bookCard);
-                });
-            }
+            container.appendChild(bookCard);
 
-            // Fetch books when page loads
-            fetchBooks();
+            // 为每个详情按钮添加事件监听器
+            bookCard.querySelector('.button-detail').addEventListener('click', function (event) {
+                event.preventDefault();
+                currentBook = book;
+                showModal();
+            });
         });
+    }
+
+    function showModal() {
+        document.getElementById('bookModal').style.display = 'flex';
+        document.querySelector('.modal-backdrop').style.display = 'block';
+        document.getElementById('modalTitle').textContent = `标题: ${currentBook.title}`;
+        document.getElementById('modalAuthor').textContent = `作者: ${currentBook.author}`;
+        document.getElementById('modalPublisher').textContent = `出版社: ${currentBook.publisher}`;
+        document.getElementById('modalPages').textContent = `页数: ${currentBook.pages}页`;
+        document.getElementById('modalDescription').textContent = `描述: ${currentBook.description || '无描述'}`;
+
+        // 设置封面图片的 src 属性
+    const pictureUrl = `/static/images/${currentBook.picture || 'placeholder.jpg'}`;
+    document.getElementById('modalPicture').src = pictureUrl;
+
+        // 为关闭按钮添加事件监听器
+        document.querySelector('.modal-dialog .close').addEventListener('click', hideModal);
+
+        // 为借阅按钮添加事件监听器
+        document.getElementById('borrowButton').addEventListener('click', function () {
+            const days = parseInt(document.getElementById('borrowDays').value);
+            if (isNaN(days) || days < 1 || days > 90) {
+                if (!invalidInputAlertShown) { // 只有当标志为假时才显示提示
+                    alert('请输入有效的借阅天数（1-90天）');
+                    invalidInputAlertShown = true; // 设置标志为真
+                }
+                return;
+            }
+            borrowBook(currentBook.bid, days);
+        });
+    }
+
+    function hideModal() {
+        document.getElementById('bookModal').style.display = 'none';
+        document.querySelector('.modal-backdrop').style.display = 'none';
+        invalidInputAlertShown = false; // 重置标志变量，以便下次输入时重新启用提示
+    }
+
+    function borrowBook(bookId, days) {
+        const url = `http://localhost:8090/books/borrow/${bookId}?days=${days}`;
+
+        fetch(url, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('借阅成功！');
+                    hideModal();
+                    fetchBooks(); // 刷新图书列表
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error borrowing book:', error);
+                alert('借阅失败，请稍后再试！');
+            });
+    }
+
+    // Fetch books when page loads
+    fetchBooks();
+});
     </script>
 </body>
 </html>
