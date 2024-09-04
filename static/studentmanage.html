@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图书管理</title>
+    <title>学生管理</title>
     <style>
         body {
             margin: 0;
@@ -234,12 +234,9 @@ input, textarea {
 
     <div class="content">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="搜索图书...">
+            <input type="text" placeholder="搜索图书...">
             <button class="new-button">新增图书</button>
-            <button id="searchButton" style="display:none;">搜索</button> <!-- 添加搜索按钮 -->
         </div>
-        <div id="searchResults" class="search-results"></div> <!-- 显示搜索结果的区域 -->
-    </div>
 
         <table>
             <thead>
@@ -359,9 +356,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const updateBookModal = document.getElementById('updateBookModal');
     const closeUpdateBookModal = document.querySelector('#updateBookModal .close');
     const updateBookForm = document.getElementById('updateBookForm');
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-    const searchResultsContainer = document.getElementById('books-container');
 
     // 打开新增图书模态框
     btnNewBook.onclick = function() {
@@ -468,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 提交新增图书表单
     document.getElementById('submitAddBook').addEventListener('click', function() {
         const formData = new FormData(document.getElementById('addBookForm'));
-        
+
         fetch('/books/add', {
             method: 'POST',
             body: formData
@@ -534,53 +528,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 当输入框获得焦点时显示搜索按钮
-    searchInput.addEventListener('focus', function () {
-        searchButton.style.display = 'inline-block';
-    });
-
-    // 当输入框失去焦点时隐藏搜索按钮
-    searchInput.addEventListener('blur', function () {
-        if (!searchInput.value) {
-            searchButton.style.display = 'none';
-        }
-    });
-
-    // 监听搜索按钮点击事件
-    searchButton.addEventListener('click', function () {
-        performSearch(searchInput.value);
-    });
-
-    // 监听回车键事件
-    searchInput.addEventListener('keyup', function (event) {
-        if (event.key === 'Enter') {
-            performSearch(searchInput.value);
-        }
-    });
-
-    function performSearch(keyword) {
-        const url = `http://localhost:8090/books/search/${keyword}`;
-        
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                displayBooks(data); // 使用搜索结果更新图书列表
-            })
-            .catch(error => {
-                console.error('Error searching books:', error);
-                alert('搜索图书失败，请稍后再试！');
-            });
-    }
-
     // 初次加载图书数据
     fetchBooks();
-
-
 });
 
 </script>
