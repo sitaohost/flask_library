@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生主页</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0b0c0b;
+            padding: 10px;
+            border-bottom: 2px solid #212321;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            background-color: #423673;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* 图书列表样式 */
+        #books-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .book-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .book-card h2 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .book-card p {
+            font-size: 14px;
+            color: #666;
+        }
+        .button-detail {
+            background-color: #e6e6e6; /* 灰色背景 */
+            border: 0.5px solid #000; /* 黑色边框 */
+            color: #000; /* 文字颜色 */
+            padding: 5px 10px; /* 内边距 */
+            text-align: center; /* 文字居中 */
+            font-size: 10px; /* 字体大小 */
+            cursor: pointer; /* 鼠标悬停时显示为指针 */
+            border-radius: 4px; /* 圆角边框 */
+          }
+          
+          .button-detail:hover {
+            background-color: #cecece; /* 鼠标悬停时的背景色 */
+          }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/static/student_index.html">首页</a></li>
+                <li><a href="/static/stu_information.html">个人信息</a></li>
+                <li><a href="/static/stu_borrows.html">个人借阅</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        
+        <div id="books-container">
+            <!-- 图书列表将插入到这里 -->
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            function fetchBooks() {
+                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayBooks(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching books:', error);
+                    });
+            }
+
+            function displayBooks(books) {
+                const container = document.getElementById('books-container');
+                container.innerHTML = '';
+
+                books.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+
+                    bookCard.innerHTML = `
+                        <img src="${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                        <h2>${book.title}</h2>
+                        <p>作者: ${book.author}</p>
+                        <p>出版社: ${book.publisher}</p>
+                        <p>价格: ¥${book.price.toFixed(2)}</p>
+                        <p>页数: ${book.pages}页</p>
+                        <p><button class="button-detail" data-book-id="${book.bid}">详情</button></p>
+                        
+                    `;
+
+                    container.appendChild(bookCard);
+                });
+            }
+
+            // Fetch books when page loads
+            fetchBooks();
+        });
+    </script>
+</body>
+</html>
