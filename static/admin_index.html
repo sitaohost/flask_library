@@ -154,7 +154,7 @@
                     bookCard.className = 'book-card';
 
                     bookCard.innerHTML = `
-                        <img src="${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                        <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
                         <h2>${book.title}</h2>
                         <p>作者: ${book.author}</p>
                         <p>出版社: ${book.publisher}</p>
