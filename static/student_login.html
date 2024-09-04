@@ -82,12 +82,12 @@
     <script>
         // 检查 JWT 存储
         const token = localStorage.getItem('access_token');
-        // 如果已经登录，跳转到首页
-        if (token) { 
-            location.href = '/static/student_index.html'; // 登录页面 URL
-        }
+        const who = localStorage.getItem('username');
+        console.log(token);
+        console.log(who);
 
-        document.getElementById('studentLoginForm').addEventListener('submit', function(event) {
+        if (token == null) {
+            document.getElementById('studentLoginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             login();
         });
@@ -113,15 +113,28 @@
             localStorage.setItem('access_token', data.token); // 假设后端返回的data中有token
             localStorage.setItem('userID', userID); // 存储获取的userID
             localStorage.setItem('username', username); // 存储获取的用户名
+
             alert(data.message); // 显示成功消息
             // 登录成功后跳转到 student_index.html 页面
-            window.location.href = '/static/student_index.html';
+            location.href = '/static/student_index.html';
         }
     })
     .catch(error => {
         errorMessage.textContent = '发生错误，请重试。';  // 捕获其他错误
     });
+    }
+
+} else if (token && who == 'admin') { 
+        alert("你是管理员,不要多管闲事");
+        window.location.href = '/static/admin_index.html';
+
+        } 
+
+        if (token && who !== 'admin') { 
+            alert("你已经登录！");
+            location.href = '/static/student_index.html';
         }
+        
     </script>
 </body>
 </html>
