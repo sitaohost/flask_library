@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, request, jsonify
+from flask_jwt_extended import create_access_token
 from .models import Admin, Student, db, Book, Bar
 import os
 
@@ -25,7 +26,8 @@ def admin_login():
         return jsonify({"error": "用户不存在"}), 404
 
     if admin.password == password:
-        return jsonify({"message": "登录成功!", "user": {"username": username}}), 200
+        access_token = create_access_token(identity=username)
+        return jsonify({"message": "登录成功!", "token": access_token}), 200
     else:
         return jsonify({"error": "密码错误"}), 401
 

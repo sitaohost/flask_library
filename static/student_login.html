@@ -80,6 +80,13 @@
     </div>
 
     <script>
+        // 检查 JWT 存储
+        const token = localStorage.getItem('access_token');
+        // 如果已经登录，跳转到首页
+        if (token) { 
+            location.href = '/static/student_index.html'; // 登录页面 URL
+        }
+
         document.getElementById('studentLoginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             login();
@@ -102,6 +109,8 @@
                 if (data.error) {
                     errorMessage.textContent = data.error;
                 } else {
+                    localStorage.setItem('access_token', data.token);
+                    localStorage.setItem('username', username); //获取登录的用户名
                     alert(data.message);
                     // 登录成功后跳转到student_index.html页面
                     window.location.href = '/static/student_index.html';

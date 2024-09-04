@@ -4,10 +4,14 @@ _init__.py 是 Flask 应用程序的初始化文件。它的作用是创建并�
 
 from flask import Flask
 from .models import db
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 def create_app():
     app = Flask(__name__) # 创建一个 Flask 应用实例，__name__ 参数告诉 Flask 在寻找资源文件（如静态文件）时使用当前模块的路径。
     app.json.ensure_ascii = False  # 解决中文乱码问题(防止中文字符在 JSON 响应中被转义为 Unicode 字符串)
+    app.config['JWT_SECRET_KEY'] = '612'  # 改为自己的密钥
+    JWTManager(app)
+
     app.static_folder="../static" # 设置静态文件目录
     app.static_url_path='' # 设置静态文件 URL 前缀
 

@@ -22,6 +22,7 @@
         .navbar-left,
         .navbar-right {
             display: flex;
+            align-items: center; /* 确保所有元素垂直居中 */
         }
 
         .navbar-left {
@@ -64,10 +65,16 @@
             border-radius: 4px;
             text-decoration: none;
             color: white;
+            margin-left: 10px; /* 增加与用户名之间的间距 */
         }
 
         .logout-button:hover {
             background-color: #d32f2f;
+        }
+
+        .username {
+            color: white; /* 设置用户名的字体颜色为白色 */
+            margin-right: 10px; /* 增加与退出按钮之间的间距 */
         }
 
         .content {
@@ -153,7 +160,9 @@
             </ul>
         </div>
         <div class="navbar-right">
-            <a href="/logout" class="logout-button">退出登录</a>
+            <!-- 添加显示用户名的元素 -->
+            <span class="username" id="username-display"></span>
+            <a href="/static/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -188,7 +197,18 @@
     </div>
 
     <script>
+        // 检查 JWT 存储
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            location.href = '/static/student_login.html'; // 没有登录就自动跳转到登录页面
+        } else {
+
         document.addEventListener('DOMContentLoaded', function () {
+    // 获取用户名并显示
+    const username = localStorage.getItem('username'); 
+    console.log(username);
+    document.getElementById('username-display').textContent = `欢迎, ${username}`;
+
             // 获取学生信息的函数
             function fetchStudent() {
                 const url = 'http://localhost:8090/students/all'; // 确保这个URL匹配你的Flask路由
@@ -270,6 +290,7 @@
             // 初次加载学生数据
             fetchStudent();
         });
+    }
     </script>
 </body>
 </html>
