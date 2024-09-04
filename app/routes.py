@@ -42,12 +42,13 @@ def student_login():
         return jsonify({"error": "Username and password are required"}), 400
 
     student = Student.query.filter_by(name=username).first()
-    
+    userID = student.rid # 获取用户ID
+
     if not student:
         return jsonify({"error": "用户不存在"}), 404
 
     if student.password == password:
-        return jsonify({"message": "登录成功!", "user": {"username": username}}), 200
+        return jsonify({"message": "登录成功!", "user": {"username": username,"userID": userID}}), 200
     else:
         return jsonify({"error": "密码错误"}), 401
 
