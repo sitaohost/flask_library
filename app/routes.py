@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import Admin, Student, db, Book
+from .models import Admin, Student, db, Book, Bar
 import os
 
 bp = Blueprint('main', __name__)
@@ -83,7 +83,7 @@ def add_book():
     if file and allowed_file(file.filename):
         filename = file.filename
         file.save(os.path.join(UPLOAD_FOLDER, filename))
-        data['picture'] = os.path.join(UPLOAD_FOLDER, filename)  # 保存图片路径
+        data['picture'] = filename
     else:
         data['picture'] = None
 
@@ -126,7 +126,7 @@ def update_book(book_id):
     if file and allowed_file(file.filename):
         filename = file.filename
         file.save(os.path.join(UPLOAD_FOLDER, filename))
-        book.picture = os.path.join(UPLOAD_FOLDER, filename)  # 更新图片
+        book.picture = filename  # 更新图片
 
     db.session.commit()
     return jsonify(book.to_dict()), 200
@@ -159,6 +159,37 @@ def search_books(keyword):
     
     # 如果既没有根据书名也没有根据作者找到书籍，返回 404 Not Found
     return jsonify({"message": "No books found matching the keyword."}), 404
+
+# 展示所有学生的借阅记录
+@bp.route('/books/show_borrow_records', methods=['GET'])
+def show_borrow_records():
+    # 查询所有借阅记录
+    borrow_records = Bar.query.all()
+    
+    # 将查询结果转换为字典列表
+    records_list = [record.to_dict() for record in borrow_records]
+    
+    return jsonify(records_list), 200
+
+@bp.route('/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
+def delete_borrow_record(bar_id):
+    record = Bar.query.filter_by(borrow_id=bar_id).first()
+    if record:
+        db.session.delete(record)
+        db.session.commit()
+        return jsonify(record.to_dict()), 200
+    return jsonify({"error": "Record not found"}), 404
+
+
+@bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
+def show_borrow_records_by_student_id(student_id):
+    # 查询指定学生编号的借阅记录
+    borrow_records = Bar.query.filter_by(user_id=student_id).all()
+    
+    # 将查询结果转换为字典列表
+    records_list = [record.to_dict() for record in borrow_records]
+    
+    return jsonify(records_list), 200
 
 
 # 获取所有学生信息
