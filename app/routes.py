@@ -83,7 +83,7 @@ def add_book():
     if file and allowed_file(file.filename):
         filename = file.filename
         file.save(os.path.join(UPLOAD_FOLDER, filename))
-        data['picture'] = os.path.join(UPLOAD_FOLDER, filename)  # 保存图片路径
+        data['picture'] = filename
     else:
         data['picture'] = None
 
@@ -126,7 +126,7 @@ def update_book(book_id):
     if file and allowed_file(file.filename):
         filename = file.filename
         file.save(os.path.join(UPLOAD_FOLDER, filename))
-        book.picture = os.path.join(UPLOAD_FOLDER, filename)  # 更新图片
+        book.picture = filename  # 更新图片
 
     db.session.commit()
     return jsonify(book.to_dict()), 200
