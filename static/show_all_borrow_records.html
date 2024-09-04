@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员端</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0b0c0b;
+            padding: 10px;
+            border-bottom: 2px solid #212321;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            background-color: #423673;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* 借阅记录管理页面样式 */
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.action-buttons button {
+    padding: 6px 12px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+    </style>
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/static/admin_index.html">首页</a></li>
+                <li><a href="/static/bookmanage.html">图书管理</a></li>
+                <li><a href="/admin/students">学生管理</a></li>
+                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+
+    
+    <div class="content">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索借阅记录[输入学生号]...">
+            <button id="searchButton" style="display:none;">搜索</button> <!-- 添加搜索按钮 -->
+        </div>
+    </div>
+
+        <table id="borrow-records-container">
+            <thead>
+                <tr>
+                    <th>借阅记录ID</th>
+                    <th>书名</th>
+                    <th>用户名</th>
+                    <th>借阅日期</th>
+                    <th>借阅天数</th>
+                    <th>归还日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="borrow-records-body"></tbody>
+        </table>
+    </div>
+
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 获取输入框元素
+    const searchInput = document.getElementById('searchInput');
+
+    function fetchBorrowRecords() {
+        const url = 'http://localhost:8090/books/show_borrow_records'; // 确保这个 URL 匹配你的 Flask 路由
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayBorrowRecords(data);
+            })
+            .catch(error => {
+                console.error('Error fetching borrow records:', error);
+                alert('获取借阅记录失败，请稍后再试！');
+            });
+    }
+
+    function displayBorrowRecords(records) {
+        const tbody = document.getElementById('borrow-records-body');
+        tbody.innerHTML = ''; // 清空容器
+
+        records.forEach(record => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${record.borrow_id}</td>
+                <td>${record.book_name}</td>
+                <td>${record.user_name}</td>
+                <td>${record.borrow_date || '未指定'}</td>
+                <td>${record.borrow_days || '未指定'}天</td>
+                <td>${record.return_date || '未归还'}</td>
+                <td class="action-buttons">
+                    <button class="delete-button" data-borrow-id="${record.borrow_id}">删除</button>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+        });
+
+        // 给所有的删除按钮添加点击事件监听器
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const borrowId = this.getAttribute('data-borrow-id');
+                handleDelete(borrowId);
+            });
+        });
+    }
+
+    function handleDelete(borrowId) {
+
+        if (confirm(`确定要删除借阅记录ID: ${borrowId}吗？`)) {
+            fetch(`http://localhost:8090/books/delete_borrow_record/${borrowId}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        // 删除成功后重新获取借阅记录
+                        fetchBorrowRecords();
+                    } else {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting borrow record:', error);
+                    alert('删除借阅记录失败，请稍后再试！');
+                });
+        }
+    }
+
+    function searchBorrowRecordsByStudentId(studentId) {
+        const url = `http://localhost:8090/books/show_borrow_records_by_student_id/${studentId}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayBorrowRecords(data);
+            })
+            .catch(error => {
+                console.error('Error searching borrow records by student ID:', error);
+                alert('按学生编号查找借阅记录失败，请稍后再试！');
+            });
+    }
+
+     // 为输入框添加键盘事件监听器
+     searchInput.addEventListener('keyup', function (event) {
+        // 检查是否按下了回车键
+        if (event.key === 'Enter') {
+            const studentId = searchInput.value.trim();
+            if (studentId === '') {
+                alert('请输入学生编号！');
+                return;
+            }
+            searchBorrowRecordsByStudentId(studentId);
+        }
+    });
+
+
+    // 初始化加载所有借阅记录
+    fetchBorrowRecords();
+});
+
+</script>
+</body>
+</html>
