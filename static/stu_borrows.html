@@ -270,11 +270,10 @@ input, textarea {
 <script>
     // 检查 JWT 存储
     const token = localStorage.getItem('access_token');
-        if (!token) {
-            location.href = '/static/student_login.html'; // 没有登录就自动跳转到登录页面
-        } else {
+    const who = localStorage.getItem('username');
 
-document.addEventListener('DOMContentLoaded', function () {
+        if (token && who !== 'admin') {
+    document.addEventListener('DOMContentLoaded', function () {
     // 获取用户名并显示
     const username = localStorage.getItem('username'); 
     console.log(username);
@@ -419,6 +418,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+}else if (token == null) { 
+            alert("请先登录！");
+            location.href = '/static/student_login.html';
+        } else {
+            alert("你是管理员，不要多管闲事！");
+            window.location.href = '/static/admin_index.html';
 }
 </script>
 
