@@ -84,57 +84,14 @@
             align-items: center;
         }
 
-        /* 学生信息表格样式 */
-        .student-info-table {
-            border-collapse: collapse;
-            width: 60%;
-            margin: 0 auto;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        .student-info-table th,
-        .student-info-table td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-
-        .student-info-table th {
-            background-color: #f4f4f4;
-            font-weight: bold;
-        }
-
-        /* 修改密码按钮 */
-        .change-password-button {
-            margin: 20px auto;
-            padding: 10px 20px;
-            display: block;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .change-password-button:hover {
-            background-color: #45a049;
-        }
-
-        /* 学生列表表格样式 */
-        .students-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
+        /* 所有学生信息表格样式 */
         .students-table {
             border-collapse: collapse;
-            width: 100%;
+            width: 60%;
             text-align: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #fff;
+            margin: 0 auto;
         }
 
         .students-table th,
@@ -147,7 +104,6 @@
             background-color: #f4f4f4;
             font-weight: bold;
         }
-
     </style>
 </head>
 <body>
@@ -167,8 +123,8 @@
     </nav>
 
     <div class="content">
-        <!-- 单个学生信息展示 -->
-        <table class="student-info-table">
+        <!-- 所有学生信息展示 -->
+        <table class="students-table">
             <tr>
                 <th>学号</th>
                 <th>姓名</th>
@@ -178,22 +134,7 @@
                 <th>电话</th>
                 <th>密码</th>
             </tr>
-            <tr>
-                <td id="student-id"></td>
-                <td id="student-name"></td>
-                <td id="student-sex"></td>
-                <td id="student-age"></td>
-                <td id="student-address"></td>
-                <td id="student-phone"></td>
-                <td id="student-password"></td>
-            </tr>
         </table>
-
-        <!-- 修改密码按钮 -->
-        <button class="change-password-button" onclick="location.href='/change_password.html'">修改密码</button>
-
-        <!-- 所有学生信息展示 -->
-        <div id="students-container" class="students-container"></div>
     </div>
 
     <script>
@@ -254,23 +195,8 @@
                     });
             }
 
-            // 显示所有学生的函数
             function displayStudents(students) {
-                const container = document.getElementById('students-container');
-                container.innerHTML = `
-                    <table class="students-table">
-                        <tr>
-                            <th>学号</th>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>年龄</th>
-                            <th>地址</th>
-                            <th>电话</th>
-                            <th>密码</th>
-                        </tr>
-                    </table>
-                `;
-                const table = container.querySelector('.students-table');
+                const table = document.querySelector('.students-table');
 
                 students.forEach(student => {
                     const row = document.createElement('tr');
@@ -288,7 +214,7 @@
             }
 
             // 初次加载学生数据
-            fetchStudent();
+            fetchStudents();
         });
     }
     </script>
