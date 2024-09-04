@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生主页</title>
     <style>
-        body {
+       body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
@@ -22,6 +22,7 @@
         .navbar-left,
         .navbar-right {
             display: flex;
+            align-items: center; /* 确保所有元素垂直居中 */
         }
 
         .navbar-left {
@@ -64,16 +65,21 @@
             border-radius: 4px;
             text-decoration: none;
             color: white;
+            margin-left: 10px; /* 增加与用户名之间的间距 */
         }
 
         .logout-button:hover {
             background-color: #d32f2f;
         }
 
+        .username {
+            color: white; /* 设置用户名的字体颜色为白色 */
+            margin-right: 10px; /* 增加与退出按钮之间的间距 */
+        }
+
         .content {
             padding: 20px;
         }
-
         /* 图书列表样式 */
         #books-container {
             display: flex;
@@ -184,9 +190,24 @@
         .borrow-button {
             margin-top: 10px;
         }
+
+        /* 动态背景样式 */
+    #background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1; /* 使背景处于所有内容的后面 */
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+
     </style>
 </head>
 <body>
+    <div id="background-container"></div>
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
@@ -196,7 +217,9 @@
             </ul>
         </div>
         <div class="navbar-right">
-            <a href="/logout" class="logout-button">退出登录</a>
+            <!-- 添加显示用户名的元素 -->
+            <span class="username" id="username-display"></span>
+            <a href="/static/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -234,9 +257,41 @@
     </div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
+
+        // 检查 JWT 存储
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            location.href = '/static/student_login.html'; // 没有登录就自动跳转到登录页面
+        } else {
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // 获取用户名并显示
+    const username = localStorage.getItem('username'); 
+    console.log(username);
+    document.getElementById('username-display').textContent = `欢迎, ${username}`;
+
     let currentBook = null;
     let invalidInputAlertShown = false; // 添加标志变量
+
+    let currentBackgroundIndex = 0;
+    const backgroundImages = [
+        '/static/images/p1.jpg',
+        '/static/images/p2.jpg',
+        '/static/images/p3.jpg'
+    ];
+
+    function changeBackground() {
+        const backgroundContainer = document.getElementById('background-container');
+        backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+        currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+    }
+
+    // 每5秒更换一次背景图
+    setInterval(changeBackground, 5000);
+
+    // 初始化背景图
+    changeBackground();
+
 
     function fetchBooks() {
         const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
@@ -339,6 +394,10 @@
     // Fetch books when page loads
     fetchBooks();
 });
-    </script>
+
+}
+</script>
+
 </body>
+
 </html>
