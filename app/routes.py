@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, redirect, request, jsonify
 from .models import Admin, Student, db, Book, Bar
 import os
 
@@ -6,7 +6,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/', )
 def index():
-    return 'Welcome to the Flask Library !'
+    return redirect('/static/admin_login.html')
 
 
 # 验证管理员登录
