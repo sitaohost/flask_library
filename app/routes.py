@@ -102,6 +102,7 @@ def add_book():
     db.session.commit()
     return jsonify(new_book.to_dict()), 201
 
+#更新图书
 @bp.route('/books/update/<int:book_id>', methods=['PUT'])
 def update_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -130,7 +131,7 @@ def update_book(book_id):
     db.session.commit()
     return jsonify(book.to_dict()), 200
 
-
+#删除图书
 @bp.route('/books/delete/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -190,3 +191,80 @@ def show_borrow_records_by_student_id(student_id):
     
     return jsonify(records_list), 200
 
+
+# 获取所有学生信息
+@bp.route('/students/all', methods=['GET'])
+def get_students_all():
+    students = Student.query.all()
+    return jsonify([student.to_dict() for student in students]), 200
+
+
+# 根据学生 ID 获取学生信息
+@bp.route('/students/get/<int:student_id>', methods=['GET'])
+def get_student_by_id(student_id):
+    student = Student.query.filter_by(rid=student_id).first()
+    if student:
+        return jsonify(student.to_dict()), 200
+    return jsonify({"error": "Student not found"}), 404
+
+# 新增学生
+@bp.route('/students/add', methods=['POST'])
+def add_student():
+    data = request.form.to_dict()
+
+    new_student = Student(
+        name=data.get('name'),
+        sex=data.get('sex'),
+        age=data.get('age'),
+        address=data.get('address'),
+        phone=data.get('phone'),
+        password=data.get('password')
+    )
+
+    db.session.add(new_student)
+    db.session.commit()
+    return jsonify(new_student.to_dict()), 201
+
+
+# 更新学生信息
+@bp.route('/students/update/<int:student_id>', methods=['PUT'])
+def update_student(student_id):
+    student = Student.query.filter_by(rid=student_id).first()
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+
+    data = request.form.to_dict()
+
+    # 更新学生信息
+    student.name = data.get('name', student.name)
+    student.sex = data.get('sex', student.sex)
+    student.age = data.get('age', student.age)
+    student.address = data.get('address', student.address)
+    student.phone = data.get('phone', student.phone)
+    student.password = data.get('password', student.password)
+
+    db.session.commit()
+    return jsonify(student.to_dict()), 200
+
+
+# 删除学生
+@bp.route('/students/delete/<int:student_id>', methods=['DELETE'])
+def delete_student(student_id):
+    student = Student.query.filter_by(rid=student_id).first()
+    if student:
+        db.session.delete(student)
+        db.session.commit()
+        return jsonify(student.to_dict()), 200
+    return jsonify({"error": "Student not found"}), 404
+
+
+# 搜索学生
+@bp.route('/students/search/<string:keyword>', methods=['GET'])
+def search_students(keyword):
+    # 根据姓名搜索
+    students_by_name = Student.query.filter(Student.name.like(f'%{keyword}%')).all()
+    if students_by_name:
+        return jsonify([student.to_dict() for student in students_by_name]), 200
+
+    # 如果没有根据姓名找到学生，返回 404
+    return jsonify({"message": "No students found matching the keyword."}), 404

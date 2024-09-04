@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生管理</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0b0c0b;
+            padding: 10px;
+            border-bottom: 2px solid #212321;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            background-color: #423673;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .new-button {
+            background-color: #28a745;
+            margin-left: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .action-buttons button {
+            padding: 6px 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit-button {
+            background-color: #007bff;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        input, textarea {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 提交按钮样式 */
+        .submit-button {
+            display: block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="/static/admin_index.html">首页</a></li>
+                <li><a href="/static/bookmanage.html">图书管理</a></li>
+                <li><a href="/static/studentmanage.html">学生管理</a></li>
+                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索学生...">
+            <button class="new-button">新增学生</button>
+            <button id="searchButton" style="display:none;">搜索</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>地址</th>
+                <th>电话</th>
+                <th>密码</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="students-container">
+            <!-- 学生列表将插入到这里 -->
+        </tbody>
+    </table>
+
+    <!-- 新增学生的模态框 -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddStudentModal()">&times;</span>
+            <h2>新增学生</h2>
+            <form id="addStudentForm" class="form-container">
+                <div class="form-group">
+                    <label for="addName">姓名：</label>
+                    <input type="text" id="addName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="addSex">性别：</label>
+                    <input type="text" id="addSex" name="sex" required>
+                </div>
+                <div class="form-group">
+                    <label for="addAge">年龄：</label>
+                    <input type="number" id="addAge" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="addAddress">地址：</label>
+                    <input type="text" id="addAddress" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="addPhone">电话：</label>
+                    <input type="tel" id="addPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="addPassword">密码：</label>
+                    <input type="password" id="addPassword" name="password" required>
+                </div>
+                <button type="button" id="submitAddStudent" class="submit-button">提交</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 更新学生信息的模态框 -->
+    <div id="updateStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUpdateStudentModal()">&times;</span>
+            <h2>修改学生信息</h2>
+            <form id="updateStudentForm">
+                <input type="hidden" id="updateStudentId" name="student_id">
+                <div class="form-group">
+                    <label for="updateName">姓名：</label>
+                    <input type="text" id="updateName" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="updateSex">性别：</label>
+                    <input type="text" id="updateSex" name="sex">
+                </div>
+                <div class="form-group">
+                    <label for="updateAge">年龄：</label>
+                    <input type="number" id="updateAge" name="age">
+                </div>
+                <div class="form-group">
+                    <label for="updateAddress">地址：</label>
+                    <input type="text" id="updateAddress" name="address">
+                </div>
+                <div class="form-group">
+                    <label for="updatePhone">电话：</label>
+                    <input type="tel" id="updatePhone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="updatePassword">密码：</label>
+                    <input type="password" id="updatePassword" name="password">
+                </div>
+                <button type="button" id="submitUpdateStudent" class="submit-button">提交</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addStudentModal = document.getElementById('addStudentModal');
+    const btnNewStudent = document.querySelector('.new-button');
+    const closeAddStudentModal = document.querySelector('#addStudentModal .close');
+    const updateStudentModal = document.getElementById('updateStudentModal');
+    const closeUpdateStudentModal = document.querySelector('#updateStudentModal .close');
+    const updateStudentForm = document.getElementById('updateStudentForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const searchResultsContainer = document.getElementById('students-container');
+
+    // 打开新增学生模态框
+    btnNewStudent.onclick = function() {
+        addStudentModal.style.display = 'block';
+    };
+
+    // 关闭新增学生模态框
+    closeAddStudentModal.onclick = function() {
+        addStudentModal.style.display = 'none';
+    };
+
+    // 关闭更新学生模态框
+    closeUpdateStudentModal.onclick = function() {
+        updateStudentModal.style.display = 'none';
+    };
+
+    // 当用户点击模态框外部时关闭模态框
+    window.onclick = function(event) {
+        if (event.target === addStudentModal) {
+            addStudentModal.style.display = 'none';
+        } else if (event.target === updateStudentModal) {
+            updateStudentModal.style.display = 'none';
+        }
+    };
+
+    function fetchStudents() {
+        const url = 'http://localhost:8090/students/all'; // 确保这个URL匹配你的Flask路由
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                displayStudents(data);
+            })
+            .catch(error => {
+                console.error('Error fetching students:', error);
+            });
+    }
+
+    function displayStudents(students) {
+        const container = document.getElementById('students-container');
+        container.innerHTML = ''; // 清空容器
+
+        students.forEach(student => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${student.rid}</td>
+                <td>${student.name}</td>
+                <td>${student.sex}</td>
+                <td>${student.age}</td>
+                <td>${student.address}</td>
+                <td>${student.phone}</td>
+                <td>${student.password}</td>
+                <td class="action-buttons">
+                    <button class="edit-button" data-student-id="${student.rid}">编辑</button>
+                    <button class="delete-button" data-student-id="${student.rid}">删除</button>
+                </td>
+            `;
+
+            container.appendChild(row);
+        });
+
+        // 处理编辑按钮点击事件
+        handleEditButtonClick();
+
+        // 处理删除按钮点击事件
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-button')) {
+                const studentId = e.target.getAttribute('data-student-id');
+                deleteStudent(studentId);
+            }
+        });
+    }
+
+    function handleEditButtonClick() {
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-student-id');
+                fetch(`http://localhost:8090/students/get/${studentId}`)
+                    .then(response => response.json())
+                    .then(student => {
+                        openUpdateStudentModal(student);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching student details:', error);
+                    });
+            });
+        });
+    }
+
+    function openUpdateStudentModal(student) {
+        document.getElementById('updateStudentId').value = student.rid;
+        document.getElementById('updateName').value = student.name;
+        document.getElementById('updateSex').value = student.sex;
+        document.getElementById('updateAge').value = student.age;
+        document.getElementById('updateAddress').value = student.address;
+        document.getElementById('updatePhone').value = student.phone;
+        document.getElementById('updatePassword').value = student.password;
+        updateStudentModal.style.display = 'block';
+    }
+
+    // 提交新增学生表单
+    document.getElementById('submitAddStudent').addEventListener('click', function() {
+        const formData = new FormData(document.getElementById('addStudentForm'));
+
+        fetch('/students/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('学生添加成功！');
+            window.location.href = '/static/studentmanage.html';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('添加学生失败，请稍后再试！');
+        });
+    });
+
+    // 提交更新学生信息表单
+    updateStudentForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // 防止表单默认提交
+
+        const formData = new FormData(updateStudentForm);
+        const studentId = document.getElementById('updateStudentId').value;
+
+        fetch(`/students/update/${studentId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('学生信息更新成功！');
+            window.location.href = '/static/studentmanage.html';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('更新学生信息失败，请稍后再试！');
+        });
+    });
+
+    // 删除学生
+    function deleteStudent(studentId) {
+        if (confirm('确定要删除这个学生吗？')) {
+            fetch(`/students/delete/${studentId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                alert('学生删除成功！');
+                fetchStudents(); // 重新加载学生列表
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                let message = '删除过程中发生错误，请稍后再试！';
+                if (error.message.includes('404')) {
+                    message = '学生未找到！';
+                }
+                alert(message);
+            });
+        }
+    }
+
+    // 当输入框获得焦点时显示搜索按钮
+    searchInput.addEventListener('focus', function () {
+        searchButton.style.display = 'inline-block';
+    });
+
+    // 当输入框失去焦点时隐藏搜索按钮
+    searchInput.addEventListener('blur', function () {
+        if (!searchInput.value) {
+            searchButton.style.display = 'none';
+        }
+    });
+
+    // 监听搜索按钮点击事件
+    searchButton.addEventListener('click', function () {
+        performSearch(searchInput.value);
+    });
+
+    // 监听回车键事件
+    searchInput.addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+            performSearch(searchInput.value);
+        }
+    });
+
+    function performSearch(keyword) {
+        const url = `http://localhost:8090/students/search/${keyword}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayStudents(data); // 使用搜索结果更新学生列表
+            })
+            .catch(error => {
+                console.error('Error searching students:', error);
+                alert('搜索学生失败，请稍后再试！');
+            });
+    }
+
+    // 初次加载学生数据
+    fetchStudents();
+});
+</script>
+
+</body>
+</html>

@@ -24,8 +24,17 @@ class Student(db.Model):
     phone = db.Column(db.String(255), nullable=True)
     password = db.Column(db.String(255), nullable=True)
 
-    def __repr__(self):
-        return f'<Student {self.name}>'
+    # 定义to_dict方法
+    def to_dict(self):
+        return {
+            "rid": self.rid,
+            "name": self.name,
+            "sex": self.sex,
+            "age": self.age,
+            "address": self.address,
+            "phone": self.phone,
+            "password": self.password
+        }
 
 
 class Book(db.Model):
@@ -83,3 +92,15 @@ class Bar(db.Model):
     
     def __repr__(self):
         return f'<Bar {self.borrow_id}>'
+    # 定义to_dict方法
+    def to_dict(self):
+        return {
+            "borrow_id": self.borrow_id,
+            "book_id": self.book_id,
+            "book_name": self.book_name,
+            "user_id": self.user_id,
+            "user_name": self.user_name,
+            "borrow_date": self.borrow_date.strftime('%Y-%m-%d') if self.borrow_date else None,
+            "borrow_days": self.borrow_days,
+            "return_date": self.return_date.strftime('%Y-%m-%d') if self.return_date else None
+        }

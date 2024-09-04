@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理员端</title>
+    <title>学生主页</title>
     <style>
         body {
             margin: 0;
@@ -106,16 +106,29 @@
             font-size: 14px;
             color: #666;
         }
+        .button-detail {
+            background-color: #e6e6e6; /* 灰色背景 */
+            border: 0.5px solid #000; /* 黑色边框 */
+            color: #000; /* 文字颜色 */
+            padding: 5px 10px; /* 内边距 */
+            text-align: center; /* 文字居中 */
+            font-size: 10px; /* 字体大小 */
+            cursor: pointer; /* 鼠标悬停时显示为指针 */
+            border-radius: 4px; /* 圆角边框 */
+          }
+          
+          .button-detail:hover {
+            background-color: #cecece; /* 鼠标悬停时的背景色 */
+          }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="/static/admin_index.html">首页</a></li>
-                <li><a href="/static/bookmanage.html">图书管理</a></li>
-                <li><a href="/static/studentmanage.html">学生管理</a></li>
-                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+                <li><a href="/static/student_index.html">首页</a></li>
+                <li><a href="/static/stu_information.html">个人信息</a></li>
+                <li><a href="/static/stu_borrows.html">个人借阅</a></li>
             </ul>
         </div>
         <div class="navbar-right">
@@ -160,6 +173,8 @@
                         <p>出版社: ${book.publisher}</p>
                         <p>价格: ¥${book.price.toFixed(2)}</p>
                         <p>页数: ${book.pages}页</p>
+                        <p><button class="button-detail" data-book-id="${book.bid}">详情</button></p>
+                        
                     `;
 
                     container.appendChild(bookCard);
