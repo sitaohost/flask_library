@@ -24,8 +24,17 @@ class Student(db.Model):
     phone = db.Column(db.String(255), nullable=True)
     password = db.Column(db.String(255), nullable=True)
 
-    def __repr__(self):
-        return f'<Student {self.name}>'
+    # 定义to_dict方法
+    def to_dict(self):
+        return {
+            "rid": self.rid,
+            "name": self.name,
+            "sex": self.sex,
+            "age": self.age,
+            "address": self.address,
+            "phone": self.phone,
+            "password": self.password
+        }
 
 
 class Book(db.Model):
