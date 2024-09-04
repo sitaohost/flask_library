@@ -102,29 +102,40 @@ def add_book():
     db.session.commit()
     return jsonify(new_book.to_dict()), 201
 
-# @bp.route('/books/<int:book_id>', methods=['PUT'])
-# def update_book(book_id):
-#     book = Book.query.filter_by(bid=book_id).first()
-#     if book:
-#         data = request.get_json()
-#         book.title = data.get('title', book.title)
-#         book.author = data.get('author', book.author)
-#         book.publisher = data.get('publisher', book.publisher)
-#         book.pages = data.get('pages', book.pages)
-#         book.price = data.get('price', book.price)
-#         book.quantity = data.get('quantity', book.quantity)
-#         book.originalquantity = data.get('originalquantity', book.originalquantity)
-#         book.description = data.get('description', book.description)
-#         book.picture = data.get('picture', book.picture)
-#         db.session.commit()
-#         return jsonify(book.to_dict()), 200
-#     return jsonify({"error": "Book not found"}), 404
+@bp.route('/books/update/<int:book_id>', methods=['PUT'])
+def update_book(book_id):
+    book = Book.query.filter_by(bid=book_id).first()
+    if not book:
+        return jsonify({"error": "Book not found"}), 404
+
+    data = request.form.to_dict()
+    file = request.files.get('picture')
+
+    # 更新图书信息
+    book.title = data.get('title', book.title)
+    book.author = data.get('author', book.author)
+    book.publisher = data.get('publisher', book.publisher)
+    book.pages = data.get('pages', book.pages)
+    book.price = data.get('price', book.price)
+    book.quantity = data.get('quantity', book.quantity)
+    book.originalquantity = data.get('originalquantity', book.originalquantity)
+    book.description = data.get('description', book.description)
+
+    # 处理图片上传
+    if file and allowed_file(file.filename):
+        filename = file.filename
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        book.picture = os.path.join(UPLOAD_FOLDER, filename)  # 更新图片
+
+    db.session.commit()
+    return jsonify(book.to_dict()), 200
+
 
 @bp.route('/books/delete/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
-    book = Book.query.filter_by(bid=book_id).first() # 查找对应的图书
+    book = Book.query.filter_by(bid=book_id).first()
     if book:
-        db.session.delete(book)  # 删除图书
-        db.session.commit()  # 提交更改
-        return jsonify({"success": True}), 200
-        return jsonify({"success": False, "error": "Book not found"}), 404
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify(book.to_dict()), 200
+    return jsonify({"error": "Book not found"}), 404

@@ -218,49 +218,6 @@ input, textarea {
 </head>
 <body>
 
-    <!-- 新增图书的模态框 -->
-<div id="addBookModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>新增图书</h2>
-        <form id="addBookForm" class="form-container">
-            <div class="form-group">
-                <label for="title">书名：</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div class="form-group">
-                <label for="author">作者：</label>
-                <input type="text" id="author" name="author" required>
-            </div>
-            <div class="form-group">
-                <label for="publisher">出版社：</label>
-                <input type="text" id="publisher" name="publisher" required>
-            </div>
-            <div class="form-group">
-                <label for="pages">页数：</label>
-                <input type="number" id="pages" name="pages" required>
-            </div>
-            <div class="form-group">
-                <label for="price">价格：</label>
-                <input type="number" step="0.01" id="price" name="price" required>
-            </div>
-            <div class="form-group">
-                <label for="quantity">库存：</label>
-                <input type="number" id="quantity" name="quantity" required>
-            </div>
-            <div class="form-group">
-                <label for="description">描述：</label>
-                <textarea id="description" name="description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="picture">图片：</label>
-                <input type="file" id="picture" name="picture" accept="image/*">
-            </div>
-            <button type="button" id="submitAddBook">提交</button>
-        </form>
-    </div>
-</div>
-
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
@@ -299,51 +256,129 @@ input, textarea {
         </table>
     </div>
 
-    <script>
-     
-     
-     document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('addBookModal');
+<!-- 新增图书的模态框 -->
+<div id="addBookModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddBookModal()">&times;</span>
+        <h2>新增图书</h2>
+        <form id="addBookForm" class="form-container">
+            <div class="form-group">
+                <label for="addTitle">书名：</label>
+                <input type="text" id="addTitle" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="addAuthor">作者：</label>
+                <input type="text" id="addAuthor" name="author" required>
+            </div>
+            <div class="form-group">
+                <label for="addPublisher">出版社：</label>
+                <input type="text" id="addPublisher" name="publisher" required>
+            </div>
+            <div class="form-group">
+                <label for="addPages">页数：</label>
+                <input type="number" id="addPages" name="pages" required>
+            </div>
+            <div class="form-group">
+                <label for="addPrice">价格：</label>
+                <input type="number" step="0.01" id="addPrice" name="price" required>
+            </div>
+            <div class="form-group">
+                <label for="addQuantity">库存：</label>
+                <input type="number" id="addQuantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="addDescription">描述：</label>
+                <textarea id="addDescription" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="addPicture">图片：</label>
+                <input type="file" id="addPicture" name="picture" accept="image/*">
+            </div>
+            <button type="button" id="submitAddBook">提交</button>
+        </form>
+    </div>
+</div>
+
+<!-- 更新图书信息的模态框 -->
+<div id="updateBookModal" class="modal">
+    <div class="modal-content">
+        <span id="closeUpdateBookModal" class="close" onclick="closeUpdateBookModal()">&times;</span>
+        <h2>修改图书信息</h2>
+        <form id="updateBookForm">
+            <input type="hidden" id="updateBookId" name="book_id"> <!-- 用于存储图书 ID -->
+            <div class="form-group">
+                <label for="updateTitle">书名：</label>
+                <input type="text" id="updateTitle" name="title">
+            </div>
+            <div class="form-group">
+                <label for="updateAuthor">作者：</label>
+                <input type="text" id="updateAuthor" name="author">
+            </div>
+            <div class="form-group">
+                <label for="updatePublisher">出版社：</label>
+                <input type="text" id="updatePublisher" name="publisher">
+            </div>
+            <div class="form-group">
+                <label for="updatePages">页数：</label>
+                <input type="number" id="updatePages" name="pages">
+            </div>
+            <div class="form-group">
+                <label for="updatePrice">价格：</label>
+                <input type="number" step="0.01" id="updatePrice" name="price">
+            </div>
+            <div class="form-group">
+                <label for="updateQuantity">库存数量：</label>
+                <input type="number" id="updateQuantity" name="quantity">
+            </div>
+            <div class="form-group">
+                <label for="updateOriginalQuantity">原始数量：</label>
+                <input type="number" id="updateOriginalQuantity" name="originalquantity">
+            </div>
+            <div class="form-group">
+                <label for="updateDescription">描述：</label>
+                <textarea id="updateDescription" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="updatePicture">新封面：</label>
+                <input type="file" id="updatePicture" name="picture" accept="image/*">
+            </div>
+            <button type="submit" id="submitUpdateBook">提交修改</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addBookModal = document.getElementById('addBookModal');
     const btnNewBook = document.querySelector('.new-button');
-    const spanClose = document.getElementsByClassName('close')[0];
+    const closeAddBookModal = document.querySelector('#addBookModal .close');
+    const updateBookModal = document.getElementById('updateBookModal');
+    const closeUpdateBookModal = document.querySelector('#updateBookModal .close');
+    const updateBookForm = document.getElementById('updateBookForm');
 
-    // 打开模态框
+    // 打开新增图书模态框
     btnNewBook.onclick = function() {
-        modal.style.display = 'block';
-    }
+        addBookModal.style.display = 'block';
+    };
 
-    // 关闭模态框
-    spanClose.onclick = function() {
-        modal.style.display = 'none';
-    }
+    // 关闭新增图书模态框
+    closeAddBookModal.onclick = function() {
+        addBookModal.style.display = 'none';
+    };
+
+    // 关闭更新图书模态框
+    closeUpdateBookModal.onclick = function() {
+        updateBookModal.style.display = 'none';
+    };
 
     // 当用户点击模态框外部时关闭模态框
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
+        if (event.target === addBookModal) {
+            addBookModal.style.display = 'none';
+        } else if (event.target === updateBookModal) {
+            updateBookModal.style.display = 'none';
         }
-    }
-
-    // 处理提交新增图书
-    document.getElementById('submitAddBook').onclick = function() {
-        const form = document.getElementById('addBookForm');
-        const formData = new FormData(form);
-
-        fetch('/books/add', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                alert('图书新增成功!');
-                modal.style.display = 'none';
-                fetchBooks(); // 重新加载图书列表
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
     };
 
     function fetchBooks() {
@@ -361,7 +396,7 @@ input, textarea {
 
     function displayBooks(books) {
         const container = document.getElementById('books-container');
-        container.innerHTML = '';
+        container.innerHTML = ''; // 清空容器
 
         books.forEach(book => {
             const row = document.createElement('tr');
@@ -374,27 +409,101 @@ input, textarea {
                 <td>¥${book.price.toFixed(2)}</td>
                 <td>${book.pages}页</td>
                 <td class="action-buttons">
-                    <button class="edit-button">编辑</button>
+                    <button class="edit-button" data-book-id="${book.bid}">编辑</button>
                     <button class="delete-button" data-book-id="${book.bid}">删除</button>
                 </td>
             `;
 
             container.appendChild(row);
         });
+
+        // 编辑按钮的点击事件
+        handleEditButtonClick();
+
+        // 删除按钮的点击事件
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-button')) {
+                const bookId = e.target.getAttribute('data-book-id');
+                deleteBook(bookId);
+            }
+        });
     }
 
-    // 为所有删除按钮添加事件监听器
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('delete-button')) {
-            const bookId = e.target.getAttribute('data-book-id');
-            deleteBook(bookId);
-        }
+    function handleEditButtonClick() {
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const bookId = this.getAttribute('data-book-id');
+                fetch(`http://localhost:8090/books/get/${bookId}`)
+                    .then(response => response.json())
+                    .then(book => {
+                        openUpdateBookModal(book);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching book details:', error);
+                    });
+            });
+        });
+    }
+
+    function openUpdateBookModal(book) {
+        document.getElementById('updateBookId').value = book.bid;
+        document.getElementById('updateTitle').value = book.title;
+        document.getElementById('updateAuthor').value = book.author;
+        document.getElementById('updatePublisher').value = book.publisher;
+        document.getElementById('updatePages').value = book.pages;
+        document.getElementById('updatePrice').value = book.price;
+        document.getElementById('updateQuantity').value = book.quantity;
+        document.getElementById('updateOriginalQuantity').value = book.originalquantity;
+        document.getElementById('updateDescription').value = book.description;
+        updateBookModal.style.display = 'block';
+    }
+
+    // 提交新增图书表单
+    document.getElementById('submitAddBook').addEventListener('click', function() {
+        const formData = new FormData(document.getElementById('addBookForm'));
+        
+        fetch('/books/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('图书添加成功！');
+            window.location.href = '/static/bookmanage.html';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('添加图书失败，请稍后再试！');
+        });
+    });
+
+    // 提交更新图书信息表单
+    updateBookForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // 防止表单默认提交
+
+        const formData = new FormData(updateBookForm);
+        const bookId = document.getElementById('updateBookId').value;
+
+        fetch(`/books/update/${bookId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('图书信息更新成功！');
+            window.location.href = '/static/bookmanage.html';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('更新图书信息失败，请稍后再试！');
+        });
     });
 
     // 删除图书
     function deleteBook(bookId) {
         if (confirm('确定要删除这本书吗？')) {
-            fetch(`/books/${bookId}`, {
+            fetch(`/books/delete/${bookId}`, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -419,10 +528,11 @@ input, textarea {
         }
     }
 
+    // 初次加载图书数据
     fetchBooks();
 });
 
-    </script>
+</script>
 
 </body>
 </html>
