@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图书管理</title>
+    <title>学生管理</title>
     <style>
         body {
             margin: 0;
@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 提交新增图书表单
     document.getElementById('submitAddBook').addEventListener('click', function() {
         const formData = new FormData(document.getElementById('addBookForm'));
-        
+
         fetch('/books/add', {
             method: 'POST',
             body: formData
