@@ -97,28 +97,30 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
 
-            fetch('/student_login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    errorMessage.textContent = data.error;
-                } else {
-                    localStorage.setItem('access_token', data.token);
-                    localStorage.setItem('username', username); //获取登录的用户名
-                    alert(data.message);
-                    // 登录成功后跳转到student_index.html页面
-                    window.location.href = '/static/student_index.html';
-                }
-            })
-            .catch(error => {
-                errorMessage.textContent = '发生错误，请重试。';
-            });
+            fetch('http://localhost:8090/student_login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password })
+})
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            errorMessage.textContent = data.error;  // 显示错误信息
+        } else {
+            const { username, userID } = data.user; // 获取user对象中的username和userID
+            localStorage.setItem('access_token', data.token); // 假设后端返回的data中有token
+            localStorage.setItem('userID', userID); // 存储获取的userID
+            localStorage.setItem('username', username); // 存储获取的用户名
+            alert(data.message); // 显示成功消息
+            // 登录成功后跳转到 student_index.html 页面
+            window.location.href = '/static/student_index.html';
+        }
+    })
+    .catch(error => {
+        errorMessage.textContent = '发生错误，请重试。';  // 捕获其他错误
+    });
         }
     </script>
 </body>
