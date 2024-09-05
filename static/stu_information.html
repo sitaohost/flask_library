@@ -145,7 +145,7 @@
         if (token && who !== 'admin') {
         document.addEventListener('DOMContentLoaded', function () {
     // 获取用户名并显示
-    const username = localStorage.getItem('username'); 
+    const username = localStorage.getItem('username');
     console.log(username);
     document.getElementById('username-display').textContent = `欢迎, ${username}`;
 
@@ -216,14 +216,14 @@
             fetchStudents();
         });
     }
-    else if (token == null) { 
+    else if (token == null) {
             alert("请先登录！");
             location.href = '/static/student_login.html';
         } else {
             alert("你是管理员，不要多管闲事！");
             window.location.href = '/static/admin_index.html';
         }
-        
+
     </script>
 </body>
 </html>
