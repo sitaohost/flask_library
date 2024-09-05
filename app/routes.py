@@ -335,3 +335,5 @@ def borrow_book(b_bookid,u_id,b_days):
     db.session.commit()
 
     return jsonify(new_record.to_dict()), 201
+
+
