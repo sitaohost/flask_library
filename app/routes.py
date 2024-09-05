@@ -144,14 +144,7 @@ def delete_book(book_id):
         return jsonify(book.to_dict()), 200
     return jsonify({"error": "Book not found"}), 404
 
-'''
-@bp.route('/books/borrow/<int:book_id>?days=<int:days>?stu_id=<stu_id>', methods=['POST'])
-def borrow_book(book_id,days,stu_id):
-    book=Book.query.filter_by(bid=book_id).first()
-    if not book:
-        return jsonify({"error": "Book not found"}), 404
-    
-'''        
+
 
 # 搜索图书
 @bp.route('/books/search/<string:keyword>', methods=['GET'])
