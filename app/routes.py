@@ -7,7 +7,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/', )
 def index():
-    return redirect('/static/admin_login.html')
+    return redirect('/static/index.html')
 
 
 # 验证管理员登录
@@ -26,7 +26,7 @@ def admin_login():
         return jsonify({"error": "用户不存在"}), 404
 
     if admin.password == password:
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity={"username": username, "role": "admin"})
         return jsonify({"message": "登录成功!", "token": access_token}), 200
     else:
         return jsonify({"error": "密码错误"}), 401
@@ -39,7 +39,7 @@ def student_login():
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({"error": "Username and password are required"}), 400
+        return jsonify({"error": "请输入用户名或密码"}), 400
 
     student = Student.query.filter_by(name=username).first()
     userID = student.rid # 获取用户ID
@@ -48,7 +48,8 @@ def student_login():
         return jsonify({"error": "用户不存在"}), 404
 
     if student.password == password:
-        return jsonify({"message": "登录成功!", "user": {"username": username,"userID": userID}}), 200
+        access_token = create_access_token(identity={"username": username, "role": 'student'})
+        return jsonify({"message": "登录成功!", "user": {"username": username,"userID": userID, "token": access_token}}), 200
     else:
         return jsonify({"error": "密码错误"}), 401
 

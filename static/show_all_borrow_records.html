@@ -179,9 +179,10 @@ th {
 
 // 检查 JWT 存储
 const token = localStorage.getItem('access_token');
-        if (!token) {
-            location.href = '/static/admin_login.html'; // 登录页面 URL
-        } else {
+const who = localStorage.getItem('username');
+
+// 如果已经登录且是admin, 显示首页
+if (token && who == 'admin') {
 
 document.addEventListener('DOMContentLoaded', function () {
      // 获取用户名并显示
@@ -299,7 +300,16 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchBorrowRecords();
 });
 
-}
+}else if (token && who !== 'admin') { // 如果已经登录但不是管理员
+                alert("大胆！没有权限访问此页面！");
+                // 重定向到学生端首页
+                window.location.href = '/static/student_index.html';
+            } else {
+                alert("请先登录！");
+                // 重定向到登录页面
+                window.location.href = '/static/admin_login.html';
+            }
+
 </script>
 </body>
 </html>

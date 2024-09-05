@@ -4,17 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登出</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .return-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             // 清除本地存储中的 JWT
             localStorage.removeItem('access_token');
-
-            // 重定向到登录页面
+            localStorage.removeItem('username');
+            
+            // 可重定向到登录页面
             // window.location.href = '/static/admin_login.html';
+            //window.location.href = '/static/admin_login.html';
         });
     </script>
 </head>
 <body>
-    <p>已退出登录</p>
+    <h1>已退出登录</h1>
+    <a href="/static/index.html" class="return-btn">返回首页</a>
 </body>
 </html>
