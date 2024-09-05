@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, decode_token
 from .models import Admin, Student, db, Book, Bar
 import os
 import datetime
@@ -210,7 +210,6 @@ def show_borrow_records_by_student_id(student_id):
 
 # 获取所有学生信息
 @bp.route('/students/all', methods=['GET'])
-@jwt_required()
 def get_students_all():
     students = Student.query.all()
     return jsonify([student.to_dict() for student in students]), 200
@@ -224,6 +223,7 @@ def get_student_by_id(student_id):
     if student:
         return jsonify(student.to_dict()), 200
     return jsonify({"error": "Student not found"}), 404
+
 
 # 新增学生
 @bp.route('/students/add', methods=['POST'])
@@ -307,7 +307,7 @@ def borrow_book(b_bookid,u_id,b_days):
     if is_borrow > 0:
         return jsonify({"error": "你已经借阅了这本书,请勿重复借阅"}), 403
     
-    if not_return > 3:
+    if not_return > 2:
         return jsonify({"error": "你的借阅数量已超过3本,请归还其他图书后重试"}), 402
     
     if not book:
