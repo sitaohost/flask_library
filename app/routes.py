@@ -197,7 +197,7 @@ def delete_borrow_record(bar_id):
 
 
 @bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
-@jwt_required()
+
 def show_borrow_records_by_student_id(student_id):
     # 查询指定学生编号的借阅记录
     borrow_records = Bar.query.filter_by(user_id=student_id).all()
@@ -266,7 +266,6 @@ def update_student(student_id):
     db.session.commit()
     return jsonify(student.to_dict()), 200
 
-
 # 删除学生
 @bp.route('/students/delete/<int:student_id>', methods=['DELETE'])
 @jwt_required()
@@ -304,11 +303,13 @@ def borrow_book(b_bookid,u_id,b_days):
     student = Student.query.filter_by(rid=u_id).first()
     not_return = Bar.query.filter_by(user_id=u_id).filter(Bar.return_date.is_(None)).count()
     is_borrow = Bar.query.filter_by(user_id=u_id).filter_by(book_id=b_bookid).filter(Bar.return_date.is_(None)).count()
+
+
     if is_borrow > 0:
         return jsonify({"error": "你已经借阅了这本书,请勿重复借阅"}), 403
     
-    if not_return > 3:
-        return jsonify({"error": "你的借阅数量已超过3本,请归还其他图书后重试"}), 402
+    if not_return >= 3:
+        return jsonify({"error": "借阅数量过多,请归还其他图书后重试"}), 402
     
     if not book:
         return jsonify({"error": "Book not found"}), 404
