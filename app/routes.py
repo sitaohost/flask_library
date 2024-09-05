@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, request, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required
 from .models import Admin, Student, db, Book, Bar
 import os
 
@@ -56,12 +56,14 @@ def student_login():
 
 # 获取所有图书
 @bp.route('/books/all', methods=['GET'])
+@jwt_required()
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
 # 根据图书 ID 获取图书
 @bp.route('/books/get/<int:book_id>', methods=['GET'])
+@jwt_required()
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if book:
@@ -80,6 +82,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/books/add', methods=['POST'])
+@jwt_required()
 def add_book():
     data = request.form.to_dict()
     file = request.files.get('picture')
@@ -108,6 +111,7 @@ def add_book():
 
 #更新图书
 @bp.route('/books/update/<int:book_id>', methods=['PUT'])
+@jwt_required()
 def update_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if not book:
@@ -137,6 +141,7 @@ def update_book(book_id):
 
 #删除图书
 @bp.route('/books/delete/<int:book_id>', methods=['DELETE'])
+@jwt_required()
 def delete_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if book:
@@ -147,6 +152,7 @@ def delete_book(book_id):
 
 # 搜索图书
 @bp.route('/books/search/<string:keyword>', methods=['GET'])
+@jwt_required()
 def search_books(keyword):
     # 根据书名搜索
     books_by_title = Book.query.filter(Book.title.like(f'%{keyword}%')).all()
@@ -166,6 +172,7 @@ def search_books(keyword):
 
 # 展示所有学生的借阅记录
 @bp.route('/books/show_borrow_records', methods=['GET'])
+@jwt_required()
 def show_borrow_records():
     # 查询所有借阅记录
     borrow_records = Bar.query.all()
@@ -176,6 +183,7 @@ def show_borrow_records():
     return jsonify(records_list), 200
 
 @bp.route('/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
+@jwt_required()
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
     if record:
@@ -186,6 +194,7 @@ def delete_borrow_record(bar_id):
 
 
 @bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
+@jwt_required()
 def show_borrow_records_by_student_id(student_id):
     # 查询指定学生编号的借阅记录
     borrow_records = Bar.query.filter_by(user_id=student_id).all()
@@ -198,6 +207,7 @@ def show_borrow_records_by_student_id(student_id):
 
 # 获取所有学生信息
 @bp.route('/students/all', methods=['GET'])
+@jwt_required()
 def get_students_all():
     students = Student.query.all()
     return jsonify([student.to_dict() for student in students]), 200
@@ -205,6 +215,7 @@ def get_students_all():
 
 # 根据学生 ID 获取学生信息
 @bp.route('/students/get/<int:student_id>', methods=['GET'])
+@jwt_required()
 def get_student_by_id(student_id):
     student = Student.query.filter_by(rid=student_id).first()
     if student:
@@ -213,6 +224,7 @@ def get_student_by_id(student_id):
 
 # 新增学生
 @bp.route('/students/add', methods=['POST'])
+@jwt_required()
 def add_student():
     data = request.form.to_dict()
 
@@ -232,6 +244,7 @@ def add_student():
 
 # 更新学生信息
 @bp.route('/students/update/<int:student_id>', methods=['PUT'])
+@jwt_required()
 def update_student(student_id):
     student = Student.query.filter_by(rid=student_id).first()
     if not student:
@@ -253,6 +266,7 @@ def update_student(student_id):
 
 # 删除学生
 @bp.route('/students/delete/<int:student_id>', methods=['DELETE'])
+@jwt_required()
 def delete_student(student_id):
     student = Student.query.filter_by(rid=student_id).first()
     if student:
@@ -264,6 +278,7 @@ def delete_student(student_id):
 
 # 搜索学生
 @bp.route('/students/search/<string:keyword>', methods=['GET'])
+@jwt_required()
 def search_students(keyword):
     # 根据姓名搜索
     students_by_name = Student.query.filter(Student.name.like(f'%{keyword}%')).all()
@@ -275,6 +290,7 @@ def search_students(keyword):
 
 
 @bp.route('/books/borrow/<int:b_bookid>', methods=['POST'])
+@jwt_required()
 def borrow_book(b_bookid):
     data = request.get_json()
     student_id = data.get('student_id')

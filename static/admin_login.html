@@ -112,6 +112,7 @@
             } else {
                 localStorage.setItem('access_token', data.token);
                 localStorage.setItem('username', "admin");  // 添加用户名信息
+                localStorage.setItem('userID', 1);
 
                 alert(data.message);
                 location.href = '/static/admin_index.html';

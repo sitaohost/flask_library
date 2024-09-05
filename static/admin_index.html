@@ -160,6 +160,12 @@
 
         // 如果已经登录且是admin, 显示首页
         if (token && who == 'admin') {
+
+        // 创建一个请求头对象
+        const headers = new Headers({
+        'Authorization': `Bearer ${token}`
+    });
+
             document.addEventListener('DOMContentLoaded', function () {
                 // 获取用户名并显示
                 const username = localStorage.getItem('username');
@@ -188,7 +194,12 @@
             function fetchBooks() {
                 const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
-                    fetch(url)
+                    fetch(url, {
+                        method: 'GET',
+                         headers: {
+                        'Authorization': `Bearer ${token}`
+                        }
+                    })
                         .then(response => response.json())
                         .then(data => {
                             displayBooks(data);
