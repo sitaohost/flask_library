@@ -195,9 +195,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
 
     function fetchBorrowRecords() {
-        const url = 'http://localhost:8090/books/show_borrow_records'; // 确保这个 URL 匹配你的 Flask 路由
+        const api = 'http://localhost:8090/books/show_borrow_records';
 
-        fetch(url)
+        fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -246,8 +251,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleDelete(borrowId) {
 
+        const api = `http://localhost:8090/books/delete_borrow_record/${borrowId}`;
         if (confirm(`确定要删除借阅记录ID: ${borrowId}吗？`)) {
-            fetch(`http://localhost:8090/books/delete_borrow_record/${borrowId}`, { method: 'DELETE' })
+            fetch(api, {
+                        method: 'DELETE',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
                 .then(response => {
                     if (response.ok) {
                         // 删除成功后重新获取借阅记录
@@ -264,9 +275,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function searchBorrowRecordsByStudentId(studentId) {
-        const url = `http://localhost:8090/books/show_borrow_records_by_student_id/${studentId}`;
+        const api = `http://localhost:8090/books/show_borrow_records_by_student_id/${studentId}`;
 
-        fetch(url)
+        fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

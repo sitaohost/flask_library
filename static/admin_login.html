@@ -115,7 +115,7 @@
                 localStorage.setItem('userID', 1);
 
                 alert(data.message);
-                location.href = '/static/admin_index.html';
+                location.href = 'http://localhost:8090/static/admin_index.html';
             }
         })
         .catch(error => {
@@ -126,12 +126,12 @@
     }
          else if (token !== null && who == 'admin') { // 如果已经登录且是admin，跳转到首页
             alert("您已经登录！");
-            window.location.href = '/static/admin_index.html';
+            window.location.href = 'http://localhost:8090/static/admin_index.html';
         }
 
         if (token !== null && who !== 'admin') { 
             alert("你已经以学生身份登录，如需切换到管理员身份，请先退出登录！");
-            location.href = '/static/student_index.html';
+            location.href = 'http://localhost:8090/static/student_index.html';
         }
 
 
