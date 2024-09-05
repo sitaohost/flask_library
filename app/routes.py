@@ -57,14 +57,14 @@ def student_login():
 
 # 获取所有图书
 @bp.route('/books/all', methods=['GET'])
-@jwt_required()
+
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
 # 根据图书 ID 获取图书
 @bp.route('/books/get/<int:book_id>', methods=['GET'])
-@jwt_required()
+
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if book:
@@ -293,18 +293,22 @@ def search_students(keyword):
 
 
 @bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
-@jwt_required()
+
 def borrow_book(b_bookid,u_id,b_days):
 
-    if b_days is None:
-        return jsonify({"error": "Missing 'days' parameter"}), 400
-
+    # if b_days is None:
+    #     return jsonify({"error": "Missing 'days' parameter"}), 400
+    # 在前端页面判断借阅天数是否为空即可
+    
     book = Book.query.filter_by(bid=b_bookid).first()
     student = Student.query.filter_by(rid=u_id).first()
     not_return = Bar.query.filter_by(user_id=u_id).filter(Bar.return_date.is_(None)).count()
-
-    if not_return>3:
-        return jsonify({"error": "You can't borrow more"}), 404
+    is_borrow = Bar.query.filter_by(user_id=u_id).filter_by(book_id=b_bookid).filter(Bar.return_date.is_(None)).count()
+    if is_borrow > 0:
+        return jsonify({"error": "你已经借阅了这本书,请勿重复借阅"}), 403
+    
+    if not_return > 3:
+        return jsonify({"error": "你的借阅数量已超过3本,请归还其他图书后重试"}), 402
     
     if not book:
         return jsonify({"error": "Book not found"}), 404
@@ -313,7 +317,7 @@ def borrow_book(b_bookid,u_id,b_days):
         return jsonify({"error": "Student not found"}), 404
 
     if book.quantity <= 0:
-        return jsonify({"error": "Book out of stock"}), 400
+        return jsonify({"error": "out of stock"}), 405
 
     book.quantity -= 1
     db.session.commit()
