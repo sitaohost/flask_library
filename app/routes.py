@@ -295,9 +295,6 @@ def search_students(keyword):
 @bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
 @jwt_required()
 def borrow_book(b_bookid,u_id,b_days):
-    data = request.get_json()
-    student_id = data.get('student_id')
-    days = data.get('days')  # 获取借阅天数
 
     if b_days is None:
         return jsonify({"error": "Missing 'days' parameter"}), 400
