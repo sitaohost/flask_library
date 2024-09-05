@@ -459,6 +459,8 @@ if (token && who !== 'admin') {
     function borrowBook(b_bookId, b_days) {
         const u_id = localStorage.getItem('userID');
         const api = `http://localhost:8090/books/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
+        const borrowButton = document.getElementById('borrowButton');
+        borrowButton.disabled = true; // 禁用按钮
 
         fetch(api, {
                         method: 'POST',

@@ -290,7 +290,7 @@ def search_students(keyword):
     # 如果没有根据姓名找到学生，返回 404
     return jsonify({"message": "No students found matching the keyword."}), 404
 
-
+# 借书
 @bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
 @jwt_required()
 def borrow_book(b_bookid,u_id,b_days):
@@ -308,13 +308,8 @@ def borrow_book(b_bookid,u_id,b_days):
     if is_borrow > 0:
         return jsonify({"error": "你已经借阅了这本书,请勿重复借阅"}), 403
     
-<<<<<<< HEAD
     if not_return >= 3:
         return jsonify({"error": "借阅数量过多,请归还其他图书后重试"}), 402
-=======
-    if not_return > 2:
-        return jsonify({"error": "你的借阅数量已超过3本,请归还其他图书后重试"}), 402
->>>>>>> 22767587cf6faf8cc7d1845120ef2774e7b34cfe
     
     if not book:
         return jsonify({"error": "Book not found"}), 404
