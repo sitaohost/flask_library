@@ -378,28 +378,28 @@ if (token && who !== 'admin') {
         invalidInputAlertShown = false; // 重置标志变量，以便下次输入时重新启用提示
     }
 
-    function borrowBook(bookId, days) {
-        const url = `http://localhost:8090/books/borrow/${bookId}?days=${days}`;
+    function borrowBook(b_bookId, b_days) {
+        const u_id = localStorage.getItem('userID');
+        const url = `http://localhost:8090/books/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
 
         fetch(url, {
             method: 'POST'
         })
-            .then(response => {
-                if (response.ok) {
-                    alert('借阅成功！');
-                    hideModal();
-                    fetchBooks(); // 刷新图书列表
-                } else {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            })
-            .catch(error => {
-                console.error('Error borrowing book:', error);
-                alert('借阅失败，请稍后再试！');
-            });
+        .then(response => {
+    if (response.ok) {
+        alert('借阅成功！');
+        // hideModal();
+        window.location.href = '/static/student_index.html';
+    } else {
+        // 如果响应不是成功的状态码，则解析错误信息
+        return response.json().then(data => {
+            alert(data.error || '借阅失败，请稍后再试！');
+            console.error('Error borrowing book:', data.error);
+        });
+    }
+        })
     }
 
-    // Fetch books when page loads
     fetchBooks();
 });
 
