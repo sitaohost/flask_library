@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, request, jsonify
 from flask_jwt_extended import create_access_token
 from .models import Admin, Student, db, Book, Bar
 import os
+import datetime
 
 bp = Blueprint('main', __name__)
 
@@ -276,18 +277,19 @@ def search_students(keyword):
     return jsonify({"message": "No students found matching the keyword."}), 404
 
 
-@bp.route('/books/borrow/<int:b_bookid>', methods=['POST'])
-def borrow_book(b_bookid):
-    data = request.get_json()
-    student_id = data.get('student_id')
-    days = data.get('days')  # 获取借阅天数
+@bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
+def borrow_book(b_bookid,u_id,b_days):
 
-    if days is None:
+    if b_days is None:
         return jsonify({"error": "Missing 'days' parameter"}), 400
 
     book = Book.query.filter_by(bid=b_bookid).first()
-    student = Student.query.filter_by(rid=student_id).first()
+    student = Student.query.filter_by(rid=u_id).first()
+    not_return = Bar.query.filter_by(user_id=u_id).filter(Bar.return_date.is_(None)).count()
 
+    if not_return>3:
+        return jsonify({"error": "You can't borrow more"}), 404
+    
     if not book:
         return jsonify({"error": "Book not found"}), 404
 
@@ -302,8 +304,11 @@ def borrow_book(b_bookid):
 
     new_record = Bar(
         book_id=b_bookid,
-        user_id=student_id,
-        days=days  # 假设Bar模型有一个字段记录借阅天数
+        book_name=book.title,
+        user_id=u_id,
+        user_name=student.name,
+        borrow_date=datetime.date.today(),
+        borrow_days=b_days  # 假设Bar模型有一个字段记录借阅天数
     )
 
     db.session.add(new_record)
