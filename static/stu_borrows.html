@@ -318,9 +318,9 @@
                 <td>${record.borrow_days}</td>
                 <td>${record.return_date || '未归还'}</td>
                 <td class="action-buttons">
-                    ${record.return_date ? '' : `<button class="delete-button" data-book-id="${record.book_id}">归还</button>`}
+                    ${record.return_date ? '' : `<button class="delete-button" borrow-id="${record.borrow_id}" data-book-id="${record.book_id}">归还</button>`}
                 </td>
-            `;
+                `;
 
                         container.appendChild(row);
                     });
@@ -329,7 +329,8 @@
                     document.addEventListener('click', function (e) {
                         if (e.target.classList.contains('delete-button')) {
                             const bookId = e.target.getAttribute('data-book-id');
-                            returnBook(bookId);
+                            const borrow_id=e.target.getAttribute('borrow-id')
+                            returnBook(bookId,borrow_id);
                         }
                     });
                 }
@@ -349,9 +350,9 @@
                 }
 
                 // 归还图书
-                function returnBook(bookId) {
+                function returnBook(bookId,borrow_id) {
                     if (confirm('确定要归还这本书吗？')) {
-                        fetch(`/books/return/${bookId}`, {
+                        fetch(`/books/return/bar_id=${borrow_id}&book_id=${bookId}`, {
                             method: 'POST'
                         })
                             .then(response => {
@@ -418,94 +419,6 @@
                             alert('搜索图书失败，请稍后再试！');
                         });
                 }
-
-
-
-
-                function openUpdateBookModal(book) {
-                    document.getElementById('updateBookId').value = book.bid;
-                    document.getElementById('updateTitle').value = book.title;
-                    document.getElementById('updateAuthor').value = book.author;
-                    document.getElementById('updatePublisher').value = book.publisher;
-                    document.getElementById('updatePages').value = book.pages;
-                    document.getElementById('updatePrice').value = book.price;
-                    document.getElementById('updateQuantity').value = book.quantity;
-                    document.getElementById('updateOriginalQuantity').value = book.originalquantity;
-                    document.getElementById('updateDescription').value = book.description;
-                    updateBookModal.style.display = 'block';
-                }
-
-                // 归还图书
-                function returnBook(bookId) {
-                    if (confirm('确定要归还这本书吗？')) {
-                        fetch(`/books/return/${bookId}`, {
-                            method: 'POST'
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    return response.json();
-                                } else {
-                                    throw new Error(`HTTP error! Status: ${response.status}`);
-                                }
-                            })
-                            .then(data => {
-                                alert('图书归还成功！');
-                                fetchBooks(); // 重新加载图书列表
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                let message = '归还过程中发生错误，请稍后再试！';
-                                if (error.message.includes('404')) {
-                                    message = '图书未找到！';
-                                }
-                                alert(message);
-                            });
-                    }
-                }
-
-                // 当输入框获得焦点时显示搜索按钮
-                searchInput.addEventListener('focus', function () {
-                    searchButton.style.display = 'inline-block';
-                });
-
-                // 当输入框失去焦点时隐藏搜索按钮
-                searchInput.addEventListener('blur', function () {
-                    if (!searchInput.value) {
-                        searchButton.style.display = 'none';
-                    }
-                });
-
-                // 监听搜索按钮点击事件
-                searchButton.addEventListener('click', function () {
-                    performSearch(searchInput.value);
-                });
-
-                // 监听回车键事件
-                searchInput.addEventListener('keyup', function (event) {
-                    if (event.key === 'Enter') {
-                        performSearch(searchInput.value);
-                    }
-                });
-
-                function performSearch(keyword) {
-                    const url = `http://localhost:8090/books/search/${keyword}`;
-
-                    fetch(url)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            displayBooks(data); // 使用搜索结果更新图书列表
-                        })
-                        .catch(error => {
-                            console.error('Error searching books:', error);
-                            alert('搜索图书失败，请稍后再试！');
-                        });
-                }
-
                 // 初次加载图书数据
                 fetchBooks();
 
