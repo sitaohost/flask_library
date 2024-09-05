@@ -175,7 +175,7 @@ def search_books(keyword):
 
 # 展示所有学生的借阅记录
 @bp.route('/books/show_borrow_records', methods=['GET'])
-@jwt_required()
+
 def show_borrow_records():
     # 查询所有借阅记录
     borrow_records = Bar.query.all()
@@ -186,7 +186,7 @@ def show_borrow_records():
     return jsonify(records_list), 200
 
 @bp.route('/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
-@jwt_required()
+
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
     if record:
@@ -197,7 +197,7 @@ def delete_borrow_record(bar_id):
 
 
 @bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
-@jwt_required()
+
 def show_borrow_records_by_student_id(student_id):
     # 查询指定学生编号的借阅记录
     borrow_records = Bar.query.filter_by(user_id=student_id).all()
