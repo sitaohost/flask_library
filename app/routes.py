@@ -155,7 +155,7 @@ def delete_book(book_id):
 
 # 搜索图书
 @bp.route('/books/search/<string:keyword>', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def search_books(keyword):
     # 根据书名搜索
     books_by_title = Book.query.filter(Book.title.like(f'%{keyword}%')).all()
@@ -336,4 +336,22 @@ def borrow_book(b_bookid,u_id,b_days):
 
     return jsonify(new_record.to_dict()), 201
 
+#归还图书
+@bp.route('/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
+def return_book(bar_id,book_id):
+    bar=Bar.query.filter_by(borrow_id=bar_id).first()
+    book=Book.query.filter_by(bid=book_id).first()
+    
+    if not book:
+        return jsonify({"error": "Book not found"}), 404
+    
+    if not bar:
+        return jsonify({"error": "借阅记录未找到"}), 404 
+    
+    bar.return_date=datetime.date.today()
+    book.quantity += 1
 
+    db.session.commit()
+    
+    return jsonify(bar.to_dict()), 201
+    
