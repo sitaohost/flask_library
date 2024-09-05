@@ -130,34 +130,31 @@
     </style>
 </head>
 <body>
-  <div id="background-container"></div>
-    <nav class="navbar">
-        <div class="navbar-left">
-            <ul class="navbar-nav">
-                <li><a href="/static/admin_index.html">首页</a></li>
-                <li><a href="/static/bookmanage.html">图书管理</a></li>
-                <li><a href="/static/studentmanage.html">学生管理</a></li>
-                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <!-- 添加显示用户名的元素 -->
-            <span class="username" id="username-display"></span>
-            <a href="/static/logout.html" class="logout-button">退出登录</a>
-        </div>
-    </nav>
-
-    <div class="content">
-        <div id="books-container">
-            <!-- 图书列表将插入到这里 -->
-        </div>
+<div id="background-container"></div>
+<nav class="navbar">
+    <div class="navbar-left">
+        <ul class="navbar-nav">
+            <li><a href="/static/admin_index.html">首页</a></li>
+            <li><a href="/static/bookmanage.html">图书管理</a></li>
+            <li><a href="/static/studentmanage.html">学生管理</a></li>
+            <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+        </ul>
     </div>
-    <script>
+    <div class="navbar-right">
+        <!-- 添加显示用户名的元素 -->
+        <span class="username" id="username-display"></span>
+        <a href="/static/logout.html" class="logout-button">退出登录</a>
+    </div>
+</nav>
 
-        // 检查 JWT 存储
-        const token = localStorage.getItem('access_token'); 
-        const who = localStorage.getItem('username');
+<div class="content">
+    <div id="books-container">
+        <!-- 图书列表将插入到这里 -->
+    </div>
+</div>
+<script>
 
+<<<<<<< HEAD
         // 如果已经登录且是admin, 显示首页
         if (token && who == 'admin') {
 
@@ -171,29 +168,43 @@
                 const username = localStorage.getItem('username');
                 console.log(username);
                 document.getElementById('username-display').textContent = `欢迎, ${username}`;
+=======
+    // 检查 JWT 存储
+    const token = localStorage.getItem('access_token');
+    const who = localStorage.getItem('username');
+>>>>>>> b1c3205391051a0b71e1796587e7ce5ac8af8e72
 
-        let currentBackgroundIndex = 0;
-    const backgroundImages = [
-        '/static/images/p1.jpg',
-        '/static/images/p2.jpg',
-        '/static/images/p3.jpg'
-    ];
+    // 如果已经登录且是admin, 显示首页
+    if (token && who == 'admin') {
+        document.addEventListener('DOMContentLoaded', function () {
+            // 获取用户名并显示
+            const username = localStorage.getItem('username');
+            console.log(username);
+            document.getElementById('username-display').textContent = `欢迎, ${username}`;
 
-    function changeBackground() {
-        const backgroundContainer = document.getElementById('background-container');
-        backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
-        currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
-    }
+    let currentBackgroundIndex = 0;
+const backgroundImages = [
+    '/static/images/p1.jpg',
+    '/static/images/p2.jpg',
+    '/static/images/p3.jpg'
+];
 
-    // 每5秒更换一次背景图
-    setInterval(changeBackground, 5000);
+ // 预加载图片
+ backgroundImages.forEach(src => {
+       const img = new Image();
+        img.src = src;
+    });
 
-    // 初始化背景图
-    changeBackground();
+function changeBackground() {
+    const backgroundContainer = document.getElementById('background-container');
+    backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+}
 
-            function fetchBooks() {
-                const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+// 每5秒更换一次背景图
+setInterval(changeBackground, 5000);
 
+<<<<<<< HEAD
                     fetch(url, {
                         method: 'GET',
                          headers: {
@@ -208,41 +219,58 @@
                             console.error('Error fetching books:', error);
                         });
                 }
+=======
+// 初始化背景图
+changeBackground();
+>>>>>>> b1c3205391051a0b71e1796587e7ce5ac8af8e72
 
-                function displayBooks(books) {
-                    const container = document.getElementById('books-container');
-                    container.innerHTML = '';
+        function fetchBooks() {
+            const url = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
 
-                    books.forEach(book => {
-                        const bookCard = document.createElement('div');
-                        bookCard.className = 'book-card';
-
-                        bookCard.innerHTML = `
-                            <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
-                            <h2>${book.title}</h2>
-                            <p>作者: ${book.author}</p>
-                            <p>出版社: ${book.publisher}</p>
-                            <p>价格: ¥${book.price.toFixed(2)}</p>
-                            <p>页数: ${book.pages}页</p>
-                        `;
-
-                        container.appendChild(bookCard);
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayBooks(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching books:', error);
                     });
-                }
-            
-                // Fetch books when page loads
-                fetchBooks();
-            });
-          
+            }
+
+            function displayBooks(books) {
+                const container = document.getElementById('books-container');
+                container.innerHTML = '';
+
+                books.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+
+                    bookCard.innerHTML = `
+                        <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                        <h2>${book.title}</h2>
+                        <p>作者: ${book.author}</p>
+                        <p>出版社: ${book.publisher}</p>
+                        <p>价格: ¥${book.price.toFixed(2)}</p>
+                        <p>页数: ${book.pages}页</p>
+                    `;
+
+                    container.appendChild(bookCard);
+                });
+            }
+
+            // Fetch books when page loads
+            fetchBooks();
+        });
+
 } else if (token && who !== 'admin') { // 如果已经登录但不是管理员
-                alert("大胆！没有权限访问此页面！");
-                // 重定向到学生端首页
-                window.location.href = '/static/student_index.html';
-            } else {
-                alert("请先登录！");
-                window.location.href = '/static/admin_login.html';
-            } 
-        
-    </script>
+            alert("大胆！没有权限访问此页面！");
+            // 重定向到学生端首页
+        window.location.href = '/static/student_index.html';
+        } else {
+            alert("请先登录！");
+            window.location.href = '/static/admin_login.html';
+        }
+
+</script>
 </body>
 </html>
