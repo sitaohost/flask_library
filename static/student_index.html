@@ -265,7 +265,7 @@
 if (token && who !== 'admin') {
     document.addEventListener('DOMContentLoaded', function () {
     // 获取用户名并显示
-    const username = localStorage.getItem('username'); 
+    const username = localStorage.getItem('username');
     console.log(username);
     const userID = localStorage.getItem('userID');
     console.log(userID);
@@ -281,6 +281,12 @@ if (token && who !== 'admin') {
         '/static/images/p2.jpg',
         '/static/images/p3.jpg'
     ];
+
+            // 预加载图片
+     backgroundImages.forEach(src => {
+           const img = new Image();
+            img.src = src;
+        });
 
     function changeBackground() {
         const backgroundContainer = document.getElementById('background-container');
@@ -398,7 +404,7 @@ if (token && who !== 'admin') {
 });
 
 }
-else if (token == null) { 
+else if (token == null) {
             alert("请先登录！");
             window.location.href = '/static/student_login.html';
         } else {
