@@ -291,29 +291,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function handleDelete(borrowId) {
+    const api = `http://localhost:8090/api/books/delete_borrow_record/${borrowId}`;
 
-        const api = `http://localhost:8090/api/books/delete_borrow_record/${borrowId}`;
-        if (confirm(`确定要删除借阅记录ID: ${borrowId}吗？`)) {
-            fetch(api, {
-                        method: 'DELETE',
-                        headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-                     })
-                .then(response => {
-                    if (response.ok) {
-                        // 删除成功后重新获取借阅记录
-                        fetchBorrowRecords();
-                    } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting borrow record:', error);
+    if (confirm(`确定要删除借阅记录ID: ${borrowId}吗？`)) {
+        fetch(api, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())  // 将响应转换为 JSON
+        .then(data => {
+            if (data.error) {  // 检查是否有错误消息
+                if (data.error === "无法删除未归还的借阅记录") {
+                    alert('未归还的图书不能删除！');
+                } else {
                     alert('删除借阅记录失败，请稍后再试！');
-                });
-        }
+                }
+            } else {
+                // 删除成功后重新获取借阅记录
+                fetchBorrowRecords();
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting borrow record:', error);
+            alert('删除借阅记录失败，请稍后再试！');
+        });
     }
+}
 
     function searchBorrowRecordsByStudentId(studentId) {
         const api = `http://localhost:8090/api/books/show_borrow_records_by_student_id/${studentId}`;
