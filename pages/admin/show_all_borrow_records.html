@@ -137,15 +137,15 @@ th {
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="http://localhost:8090/static/admin_index.html">首页</a></li>
-                <li><a href="http://localhost:8090/static/bookmanage.html">图书管理</a></li>
-                <li><a href="http://localhost:8090/static/studentmanage.html">学生管理</a></li>
-                <li><a href="http://localhost:8090/static/show_all_borrow_records.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/pages/admin/admin_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/pages/admin/bookmanage.html">图书管理</a></li>
+                <li><a href="http://localhost:8090/pages/admin/studentmanage.html">学生管理</a></li>
+                <li><a href="http://localhost:8090/pages/admin/show_all_borrow_records.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
             <span class="username" id="username-display"></span>
-            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/pages/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -319,11 +319,11 @@ document.addEventListener('DOMContentLoaded', function () {
 }else if (token && who !== 'admin') { // 如果已经登录但不是管理员
                 alert("大胆！没有权限访问此页面！");
                 // 重定向到学生端首页
-                window.location.href = 'http://localhost:8090/static/student_index.html';
+                window.location.href = 'http://localhost:8090/pages/students/student_index.html';
             } else {
                 alert("请先登录！");
                 // 重定向到登录页面
-                window.location.href = 'http://localhost:8090/static/admin_login.html';
+                window.location.href = 'http://localhost:8090/pages/admin/admin_login.html';
             }
 
 </script>

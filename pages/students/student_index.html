@@ -244,8 +244,8 @@
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="http://localhost:8090/static/student_index.html">首页</a></li>
-                <li><a href="http://localhost:8090/static/stu_borrows.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/pages/students/student_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/pages/students/stu_borrows.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
@@ -253,7 +253,7 @@
         <button id="personalInfoButton" class="button-detail">个人信息</button>
             <!-- 添加显示用户名的元素 -->
             <span class="username" id="username-display"></span>
-            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/pages/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -282,7 +282,7 @@
                     <p id="modalPublisher">出版社</p>
                     <p id="modalPages">页数</p>
                     <p id="modalDescription">描述</p>
-                    <label for="borrowDays">借阅天数（1-90天）:</label>
+                    <label for="borrowDays">借阅天数[1-90天]:</label>
                     <input type="number" id="borrowDays" min="1" max="90">
                     <button class="borrow-button" id="borrowButton">借阅</button>
                 </div>
@@ -350,9 +350,9 @@ if (token && who !== 'admin') {
 
     let currentBackgroundIndex = 0;
     const backgroundImages = [
-        '/static/images/p1.jpg',
-        '/static/images/p2.jpg',
-        '/static/images/p3.jpg'
+        '/pages/images/p1.jpg',
+        '/pages/images/p2.jpg',
+        '/pages/images/p3.jpg'
     ];
 
             // 预加载图片
@@ -401,7 +401,7 @@ if (token && who !== 'admin') {
             bookCard.className = 'book-card';
 
             bookCard.innerHTML = `
-                <img src="/static/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                <img src="/pages/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
                 <h2>${book.title}</h2>
                 <p>作者: ${book.author}</p>
                 <p>出版社: ${book.publisher}</p>
@@ -430,7 +430,7 @@ if (token && who !== 'admin') {
         document.getElementById('modalDescription').textContent = `描述: ${currentBook.description || '无描述'}`;
 
         // 设置封面图片的 src 属性
-    const pictureUrl = `/static/images/${currentBook.picture || 'placeholder.jpg'}`;
+    const pictureUrl = `/pages/images/${currentBook.picture || 'placeholder.jpg'}`;
     document.getElementById('modalPicture').src = pictureUrl;
 
         // 为关闭按钮添加事件监听器
@@ -472,7 +472,7 @@ if (token && who !== 'admin') {
     if (response.ok) {
         alert('借阅成功！');
         // hideModal();
-        window.location.href = 'http://localhost:8090/static/student_index.html';
+        window.location.href = 'http://localhost:8090/pages/students/student_index.html';
     } else {
         // 如果响应不是成功的状态码，则解析错误信息
         return response.json().then(data => {
@@ -585,10 +585,10 @@ function changePassword() {
 }
 else if (token == null) {
             alert("请先登录！");
-            window.location.href = 'http://localhost:8090/static/student_login.html';
+            window.location.href = 'http://localhost:8090/pages/students/student_login.html';
         } else {
             alert("你是管理员，不要多管闲事！");
-            window.location.href = 'http://localhost:8090/static/admin_index.html';
+            window.location.href = 'http://localhost:8090/pages/admin/admin_index.html';
         }
 
 </script>

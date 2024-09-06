@@ -1,14 +1,16 @@
 from flask import Blueprint, redirect, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required, decode_token
+from flask_jwt_extended import create_access_token, jwt_required
 from .models import Admin, Student, db, Book, Bar
 import os
 import datetime
 
-bp = Blueprint('main', __name__)
+bp = Blueprint('main', __name__,static_folder="../pages", static_url_path='/pages')
 
-@bp.route('/', )
+# 本地部署时，访问根目录时重定向到 index.html，以便前端路由正常工作
+# 在服务器中，可以通过 Nginx 配置实现同样的效果
+@bp.route('/')
 def index():
-    return redirect('/static/index.html')
+    return redirect('/pages/index.html')
 
 
 # 验证管理员登录

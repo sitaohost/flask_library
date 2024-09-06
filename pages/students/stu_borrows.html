@@ -351,8 +351,8 @@
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="http://localhost:8090/static/student_index.html">首页</a></li>
-                <li><a href="http://localhost:8090/static/stu_borrows.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/pages/students/student_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/pages/students/stu_borrows.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
@@ -360,7 +360,7 @@
         <button id="personalInfoButton" class="button-detail">个人信息</button>
             <!-- 添加显示用户名的元素 -->
             <span class="username" id="username-display"></span>
-            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/pages/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -693,10 +693,10 @@ function changePassword() {
 
         } else if (token == null) {
             alert("请先登录！");
-            location.href = 'http://localhost:8090/static/student_login.html';
+            location.href = 'http://localhost:8090/pages/students/student_login.html';
         } else {
             alert("你是管理员，不要多管闲事！");
-            window.location.href = 'http://localhost:8090/static/admin_index.html';
+            window.location.href = 'http://localhost:8090/pages/admin/admin_index.html';
         }
     </script>
 
