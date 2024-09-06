@@ -282,6 +282,7 @@
                     <p id="modalPublisher">出版社</p>
                     <p id="modalPages">页数</p>
                     <p id="modalDescription">描述</p>
+                    <p id="modalStock">库存</p>
                     <label for="borrowDays">借阅天数[1-90天]:</label>
                     <input type="number" id="borrowDays" min="1" max="90">
                     <button class="borrow-button" id="borrowButton">借阅</button>
@@ -428,7 +429,7 @@ if (token && who !== 'admin') {
         document.getElementById('modalPublisher').textContent = `出版社: ${currentBook.publisher}`;
         document.getElementById('modalPages').textContent = `页数: ${currentBook.pages}页`;
         document.getElementById('modalDescription').textContent = `描述: ${currentBook.description || '无描述'}`;
-
+        document.getElementById('modalStock').textContent = `库存: ${currentBook.quantity || 'null'}`;
         // 设置封面图片的 src 属性
     const pictureUrl = `/images/${currentBook.picture || 'placeholder.jpg'}`;
     document.getElementById('modalPicture').src = pictureUrl;
