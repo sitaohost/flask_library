@@ -343,16 +343,16 @@ if (token && who !== 'admin') {
     const userID = localStorage.getItem('userID');
     console.log(userID);
 
-    document.getElementById('username-display').textContent = `欢迎, ${username}`;
+    document.getElementById('username-display').textContent = `欢迎：${username}`;
 
     let currentBook = null;
     let invalidInputAlertShown = false; // 添加标志变量
 
     let currentBackgroundIndex = 0;
     const backgroundImages = [
-        '/pages/images/p1.jpg',
-        '/pages/images/p2.jpg',
-        '/pages/images/p3.jpg'
+    '/images/p1.jpg',
+    '/images/p2.jpg',
+    '/images/p3.jpg'
     ];
 
             // 预加载图片
@@ -401,7 +401,7 @@ if (token && who !== 'admin') {
             bookCard.className = 'book-card';
 
             bookCard.innerHTML = `
-                <img src="/pages/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                <img src="/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
                 <h2>${book.title}</h2>
                 <p>作者: ${book.author}</p>
                 <p>出版社: ${book.publisher}</p>
@@ -430,7 +430,7 @@ if (token && who !== 'admin') {
         document.getElementById('modalDescription').textContent = `描述: ${currentBook.description || '无描述'}`;
 
         // 设置封面图片的 src 属性
-    const pictureUrl = `/pages/images/${currentBook.picture || 'placeholder.jpg'}`;
+    const pictureUrl = `/images/${currentBook.picture || 'placeholder.jpg'}`;
     document.getElementById('modalPicture').src = pictureUrl;
 
         // 为关闭按钮添加事件监听器

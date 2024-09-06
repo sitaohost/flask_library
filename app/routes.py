@@ -4,7 +4,7 @@ from .models import Admin, Student, db, Book, Bar
 import os
 import datetime
 
-bp = Blueprint('main', __name__,static_folder="../pages", static_url_path='/pages')
+bp = Blueprint('main', __name__,static_folder="../static", static_url_path='')
 
 # 本地部署时，访问根目录时重定向到 index.html，以便前端路由正常工作
 # 在服务器中，可以通过 Nginx 配置实现同样的效果
@@ -73,7 +73,7 @@ def get_book_by_id(book_id):
     return jsonify({"error": "Book not found"}), 404
 
 # 新增图书
-UPLOAD_FOLDER = '/Users/sitao/flask/flask_library/static'  # 定义图书封面保存路径
+UPLOAD_FOLDER = '/Users/sitao/flask/flask_library/static/images'  # 定义图书封面保存路径
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 # 确保上传文件夹存在

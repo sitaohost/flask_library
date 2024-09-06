@@ -169,14 +169,14 @@
             // 获取用户名并显示
             const username = localStorage.getItem('username');
             console.log(username);
-            document.getElementById('username-display').textContent = `欢迎, ${username}`;
+            document.getElementById('username-display').textContent = `欢迎：${username}`;
    
 
     let currentBackgroundIndex = 0;
     const backgroundImages = [
-    '/pages/images/p1.jpg',
-    '/pages/images/p2.jpg',
-    '/pages/images/p3.jpg'
+    '/images/p1.jpg',
+    '/images/p2.jpg',
+    '/images/p3.jpg'
 ];
 
  // 预加载图片
@@ -224,7 +224,7 @@ changeBackground();
                     bookCard.className = 'book-card';
 
                     bookCard.innerHTML = `
-                        <img src="/pages/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                        <img src="/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
                         <h2>${book.title}</h2>
                         <p>作者: ${book.author}</p>
                         <p>出版社: ${book.publisher}</p>
