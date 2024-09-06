@@ -448,7 +448,7 @@
                 const searchResultsContainer = document.getElementById('books-container');
 
                 function fetchBooks() {
-                    const api = `http://localhost:8090/books/show_borrow_records_by_student_id/${userID}`;
+                    const api = `http://localhost:8090/api/books/show_borrow_records_by_student_id/${userID}`;
 
                     fetch(api, {
                         method: 'GET',
@@ -513,7 +513,7 @@
                 // 归还图书
                 function returnBook(bookId,borrow_id) {
                     if (confirm('确定要归还这本书吗？')) {
-                        const api = `http://localhost:8090/books/return/bar_id=${borrow_id}&book_id=${bookId}`;
+                        const api = `http://localhost:8090/api/books/return/bar_id=${borrow_id}&book_id=${bookId}`;
 
                         fetch(api, {
                             method: 'POST',
@@ -568,7 +568,7 @@
                 });
 
                 function performSearch(keyword) {
-                    const api = `http://localhost:8090/books/search/${keyword}`;
+                    const api = `http://localhost:8090/api/books/search/${keyword}`;
 
                     fetch(api, {
                         method: 'GET',
@@ -605,7 +605,7 @@ function showPersonalInfoModal() {
     // 从本地存储获取用户ID
     const userID = localStorage.getItem('userID');
 
-    const api = `http://localhost:8090/students/get/${userID}`;
+    const api = `http://localhost:8090/api/students/get/${userID}`;
     fetch(api, {
                         method: 'GET',
                         headers: {
@@ -662,7 +662,7 @@ function changePassword() {
         return;
     }
 
-    const api = 'http://localhost:8090/students/chpasswd';
+    const api = 'http://localhost:8090/api/students/chpasswd';
 
     fetch(api, {
         method: 'POST',
@@ -693,10 +693,10 @@ function changePassword() {
 
         } else if (token == null) {
             alert("请先登录！");
-            location.href = '/static/student_login.html';
+            location.href = 'http://localhost:8090/static/student_login.html';
         } else {
             alert("你是管理员，不要多管闲事！");
-            window.location.href = '/static/admin_index.html';
+            window.location.href = 'http://localhost:8090/static/admin_index.html';
         }
     </script>
 

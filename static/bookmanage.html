@@ -229,16 +229,16 @@ input, textarea {
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="/static/admin_index.html">首页</a></li>
-                <li><a href="/static/bookmanage.html">图书管理</a></li>
-                <li><a href="/static/studentmanage.html">学生管理</a></li>
-                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/static/admin_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/static/bookmanage.html">图书管理</a></li>
+                <li><a href="http://localhost:8090/static/studentmanage.html">学生管理</a></li>
+                <li><a href="http://localhost:8090/static/show_all_borrow_records.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
             <!-- 添加显示用户名的元素 -->
             <span class="username" id="username-display"></span>
-            <a href="/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -411,7 +411,7 @@ input, textarea {
     };
 
     function fetchBooks() {
-        const api = 'http://localhost:8090/books/all';
+        const api = 'http://localhost:8090/api/books/all';
 
                 fetch(api, {
                         method: 'GET',
@@ -469,7 +469,7 @@ input, textarea {
         editButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const bookId = this.getAttribute('data-book-id');
-                const api = `http://localhost:8090/books/get/${bookId}`
+                const api = `http://localhost:8090/api/books/get/${bookId}`
                 
                 fetch(api, {
                         method: 'GET',
@@ -504,7 +504,7 @@ input, textarea {
     // 提交新增图书表单
     document.getElementById('submitAddBook').addEventListener('click', function() {
         const formData = new FormData(document.getElementById('addBookForm'));
-        const api = 'http://localhost:8090/books/add'
+        const api = 'http://localhost:8090/api/books/add'
         fetch(api, {
             method: 'POST',
             body: formData,
@@ -530,7 +530,7 @@ input, textarea {
         const formData = new FormData(updateBookForm);
         const bookId = document.getElementById('updateBookId').value;
 
-        const api = `http://localhost:8090/books/update/${bookId}`
+        const api = `http://localhost:8090/api/books/update/${bookId}`
         fetch(api, {
             method: 'PUT',
             body: formData,
@@ -552,7 +552,7 @@ input, textarea {
     // 删除图书
     function deleteBook(bookId) {
         if (confirm('确定要删除这本书吗？')) {
-            const api = `http://localhost:8090/books/delete/${bookId}`
+            const api = `http://localhost:8090/api/books/delete/${bookId}`
             fetch(api, {
                         method: 'DELETE',
                         headers: {
@@ -606,7 +606,7 @@ input, textarea {
     });
 
     function performSearch(keyword) {
-        const api = `http://localhost:8090/books/search/${keyword}`;
+        const api = `http://localhost:8090/api/books/search/${keyword}`;
         
         fetch(api, {
                         method: 'GET',

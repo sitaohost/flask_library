@@ -137,15 +137,15 @@ th {
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="/static/admin_index.html">首页</a></li>
-                <li><a href="/static/bookmanage.html">图书管理</a></li>
-                <li><a href="/static/studentmanage.html">学生管理</a></li>
-                <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/static/admin_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/static/bookmanage.html">图书管理</a></li>
+                <li><a href="http://localhost:8090/static/studentmanage.html">学生管理</a></li>
+                <li><a href="http://localhost:8090/static/show_all_borrow_records.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
             <span class="username" id="username-display"></span>
-            <a href="/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
 
     function fetchBorrowRecords() {
-        const api = 'http://localhost:8090/books/show_borrow_records';
+        const api = 'http://localhost:8090/api/books/show_borrow_records';
 
         fetch(api, {
                         method: 'GET',
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleDelete(borrowId) {
 
-        const api = `http://localhost:8090/books/delete_borrow_record/${borrowId}`;
+        const api = `http://localhost:8090/api/books/delete_borrow_record/${borrowId}`;
         if (confirm(`确定要删除借阅记录ID: ${borrowId}吗？`)) {
             fetch(api, {
                         method: 'DELETE',
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function searchBorrowRecordsByStudentId(studentId) {
-        const api = `http://localhost:8090/books/show_borrow_records_by_student_id/${studentId}`;
+        const api = `http://localhost:8090/api/books/show_borrow_records_by_student_id/${studentId}`;
 
         fetch(api, {
                         method: 'GET',
@@ -319,11 +319,11 @@ document.addEventListener('DOMContentLoaded', function () {
 }else if (token && who !== 'admin') { // 如果已经登录但不是管理员
                 alert("大胆！没有权限访问此页面！");
                 // 重定向到学生端首页
-                window.location.href = '/static/student_index.html';
+                window.location.href = 'http://localhost:8090/static/student_index.html';
             } else {
                 alert("请先登录！");
                 // 重定向到登录页面
-                window.location.href = '/static/admin_login.html';
+                window.location.href = 'http://localhost:8090/static/admin_login.html';
             }
 
 </script>

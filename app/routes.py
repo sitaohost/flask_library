@@ -12,7 +12,7 @@ def index():
 
 
 # 验证管理员登录
-@bp.route('/admin_login', methods=['POST'])
+@bp.route('/api/admin_login', methods=['POST'])
 def admin_login():
     data = request.get_json()
     username = data.get('username')
@@ -33,7 +33,7 @@ def admin_login():
         return jsonify({"error": "密码错误"}), 401
 
 # 验证学生登录
-@bp.route('/student_login', methods=['POST'])
+@bp.route('/api/student_login', methods=['POST'])
 def student_login():
     data = request.get_json()
     username = data.get('username')
@@ -55,15 +55,14 @@ def student_login():
         return jsonify({"error": "密码错误"}), 401
 
 
-# 获取所有图书
-@bp.route('/books/all', methods=['GET'])
-@jwt_required()
+# 获取所有图书 [开放性接口]
+@bp.route('/api/books/all', methods=['GET'])
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
 # 根据图书 ID 获取图书
-@bp.route('/books/get/<int:book_id>', methods=['GET'])
+@bp.route('/api/books/get/<int:book_id>', methods=['GET'])
 @jwt_required()
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -82,7 +81,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@bp.route('/books/add', methods=['POST'])
+@bp.route('/api/books/add', methods=['POST'])
 @jwt_required()
 def add_book():
     data = request.form.to_dict()
@@ -111,7 +110,7 @@ def add_book():
     return jsonify(new_book.to_dict()), 201
 
 #更新图书
-@bp.route('/books/update/<int:book_id>', methods=['PUT'])
+@bp.route('/api/books/update/<int:book_id>', methods=['PUT'])
 @jwt_required()
 def update_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -141,7 +140,7 @@ def update_book(book_id):
     return jsonify(book.to_dict()), 200
 
 #删除图书
-@bp.route('/books/delete/<int:book_id>', methods=['DELETE'])
+@bp.route('/api/books/delete/<int:book_id>', methods=['DELETE'])
 @jwt_required()
 def delete_book(book_id):
     book = Book.query.filter_by(bid=book_id).first()
@@ -154,7 +153,7 @@ def delete_book(book_id):
 
 
 # 搜索图书
-@bp.route('/books/search/<string:keyword>', methods=['GET'])
+@bp.route('/api/books/search/<string:keyword>', methods=['GET'])
 @jwt_required()
 def search_books(keyword):
     # 根据书名搜索
@@ -174,7 +173,7 @@ def search_books(keyword):
     return jsonify({"message": "No books found matching the keyword."}), 404
 
 # 展示所有学生的借阅记录
-@bp.route('/books/show_borrow_records', methods=['GET'])
+@bp.route('/api/books/show_borrow_records', methods=['GET'])
 @jwt_required()
 def show_borrow_records():
     # 查询所有借阅记录
@@ -185,7 +184,7 @@ def show_borrow_records():
     
     return jsonify(records_list), 200
 
-@bp.route('/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
+@bp.route('/api/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
 @jwt_required()
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
@@ -196,7 +195,7 @@ def delete_borrow_record(bar_id):
     return jsonify({"error": "Record not found"}), 404
 
 
-@bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
+@bp.route('/api/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
 @jwt_required()
 def show_borrow_records_by_student_id(student_id):
     # 查询指定学生编号的借阅记录
@@ -209,14 +208,14 @@ def show_borrow_records_by_student_id(student_id):
 
 
 # 获取所有学生信息
-@bp.route('/students/all', methods=['GET'])
+@bp.route('/api/students/all', methods=['GET'])
 def get_students_all():
     students = Student.query.all()
     return jsonify([student.to_dict() for student in students]), 200
 
 
 # 根据学生 ID 获取学生信息
-@bp.route('/students/get/<int:student_id>', methods=['GET'])
+@bp.route('/api/students/get/<int:student_id>', methods=['GET'])
 @jwt_required()
 def get_student_by_id(student_id):
     student = Student.query.filter_by(rid=student_id).first()
@@ -226,7 +225,7 @@ def get_student_by_id(student_id):
 
 
 # 新增学生
-@bp.route('/students/add', methods=['POST'])
+@bp.route('/api/students/add', methods=['POST'])
 @jwt_required()
 def add_student():
     data = request.form.to_dict()
@@ -246,7 +245,7 @@ def add_student():
 
 
 # 更新学生信息
-@bp.route('/students/update/<int:student_id>', methods=['PUT'])
+@bp.route('/api/students/update/<int:student_id>', methods=['PUT'])
 @jwt_required()
 def update_student(student_id):
     student = Student.query.filter_by(rid=student_id).first()
@@ -267,7 +266,7 @@ def update_student(student_id):
     return jsonify(student.to_dict()), 200
 
 # 删除学生
-@bp.route('/students/delete/<int:student_id>', methods=['DELETE'])
+@bp.route('/api/students/delete/<int:student_id>', methods=['DELETE'])
 @jwt_required()
 def delete_student(student_id):
     student = Student.query.filter_by(rid=student_id).first()
@@ -279,7 +278,7 @@ def delete_student(student_id):
 
 
 # 搜索学生
-@bp.route('/students/search/<string:keyword>', methods=['GET'])
+@bp.route('/api/students/search/<string:keyword>', methods=['GET'])
 @jwt_required()
 def search_students(keyword):
     # 根据姓名搜索
@@ -291,7 +290,7 @@ def search_students(keyword):
     return jsonify({"message": "No students found matching the keyword."}), 404
 
 # 借书
-@bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
+@bp.route('/api/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
 @jwt_required()
 def borrow_book(b_bookid,u_id,b_days):
 
@@ -338,7 +337,7 @@ def borrow_book(b_bookid,u_id,b_days):
     return jsonify(new_record.to_dict()), 201
 
 #归还图书
-@bp.route('/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
+@bp.route('/api/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
 @jwt_required()
 def return_book(bar_id,book_id):
     bar=Bar.query.filter_by(borrow_id=bar_id).first()
@@ -357,7 +356,7 @@ def return_book(bar_id,book_id):
     
     return jsonify(bar.to_dict()), 201
     
-@bp.route('/students/chpasswd', methods=['POST'])
+@bp.route('/api/students/chpasswd', methods=['POST'])
 @jwt_required()
 def change_password():
     data = request.get_json()
