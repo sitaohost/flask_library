@@ -190,10 +190,16 @@ def show_borrow_records():
 @jwt_required()
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
+    
     if record:
+        # 检查借阅记录是否未归还
+        if record.return_date is None:
+            return jsonify({"error": "Cannot delete a borrow record that has not been returned."}), 400
+        
         db.session.delete(record)
         db.session.commit()
         return jsonify(record.to_dict()), 200
+
     return jsonify({"error": "Record not found"}), 404
 
 
