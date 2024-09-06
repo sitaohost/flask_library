@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, decode_token
 from .models import Admin, Student, db, Book, Bar
 import os
 import datetime
@@ -50,21 +50,21 @@ def student_login():
 
     if student.password == password:
         access_token = create_access_token(identity={"username": username, "role": 'student'})
-        return jsonify({"message": "登录成功!", "user": {"username": username,"userID": userID, "token": access_token}}), 200
+        return jsonify({"message": "登录成功!", "user": {"username": username,"userID": userID},"token": access_token}), 200
     else:
         return jsonify({"error": "密码错误"}), 401
 
 
 # 获取所有图书
 @bp.route('/books/all', methods=['GET'])
-
+@jwt_required()
 def get_books_all():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books]), 200
 
 # 根据图书 ID 获取图书
 @bp.route('/books/get/<int:book_id>', methods=['GET'])
-
+@jwt_required()
 def get_book_by_id(book_id):
     book = Book.query.filter_by(bid=book_id).first()
     if book:
@@ -155,7 +155,7 @@ def delete_book(book_id):
 
 # 搜索图书
 @bp.route('/books/search/<string:keyword>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def search_books(keyword):
     # 根据书名搜索
     books_by_title = Book.query.filter(Book.title.like(f'%{keyword}%')).all()
@@ -175,7 +175,7 @@ def search_books(keyword):
 
 # 展示所有学生的借阅记录
 @bp.route('/books/show_borrow_records', methods=['GET'])
-
+@jwt_required()
 def show_borrow_records():
     # 查询所有借阅记录
     borrow_records = Bar.query.all()
@@ -186,7 +186,7 @@ def show_borrow_records():
     return jsonify(records_list), 200
 
 @bp.route('/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
-
+@jwt_required()
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
     if record:
@@ -197,7 +197,7 @@ def delete_borrow_record(bar_id):
 
 
 @bp.route('/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
-
+@jwt_required()
 def show_borrow_records_by_student_id(student_id):
     # 查询指定学生编号的借阅记录
     borrow_records = Bar.query.filter_by(user_id=student_id).all()
@@ -210,7 +210,6 @@ def show_borrow_records_by_student_id(student_id):
 
 # 获取所有学生信息
 @bp.route('/students/all', methods=['GET'])
-@jwt_required()
 def get_students_all():
     students = Student.query.all()
     return jsonify([student.to_dict() for student in students]), 200
@@ -224,6 +223,7 @@ def get_student_by_id(student_id):
     if student:
         return jsonify(student.to_dict()), 200
     return jsonify({"error": "Student not found"}), 404
+
 
 # 新增学生
 @bp.route('/students/add', methods=['POST'])
@@ -266,7 +266,6 @@ def update_student(student_id):
     db.session.commit()
     return jsonify(student.to_dict()), 200
 
-
 # 删除学生
 @bp.route('/students/delete/<int:student_id>', methods=['DELETE'])
 @jwt_required()
@@ -291,9 +290,9 @@ def search_students(keyword):
     # 如果没有根据姓名找到学生，返回 404
     return jsonify({"message": "No students found matching the keyword."}), 404
 
-
+# 借书
 @bp.route('/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
-
+@jwt_required()
 def borrow_book(b_bookid,u_id,b_days):
 
     # if b_days is None:
@@ -304,11 +303,13 @@ def borrow_book(b_bookid,u_id,b_days):
     student = Student.query.filter_by(rid=u_id).first()
     not_return = Bar.query.filter_by(user_id=u_id).filter(Bar.return_date.is_(None)).count()
     is_borrow = Bar.query.filter_by(user_id=u_id).filter_by(book_id=b_bookid).filter(Bar.return_date.is_(None)).count()
+
+
     if is_borrow > 0:
         return jsonify({"error": "你已经借阅了这本书,请勿重复借阅"}), 403
     
-    if not_return > 3:
-        return jsonify({"error": "你的借阅数量已超过3本,请归还其他图书后重试"}), 402
+    if not_return >= 3:
+        return jsonify({"error": "借阅数量过多,请归还其他图书后重试"}), 402
     
     if not book:
         return jsonify({"error": "Book not found"}), 404
@@ -338,6 +339,7 @@ def borrow_book(b_bookid,u_id,b_days):
 
 #归还图书
 @bp.route('/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
+@jwt_required()
 def return_book(bar_id,book_id):
     bar=Bar.query.filter_by(borrow_id=bar_id).first()
     book=Book.query.filter_by(bid=book_id).first()
@@ -355,3 +357,26 @@ def return_book(bar_id,book_id):
     
     return jsonify(bar.to_dict()), 201
     
+@bp.route('/students/chpasswd', methods=['POST'])
+@jwt_required()
+def change_password():
+    data = request.get_json()
+    student_id = data.get('student_id')
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+
+    if not student_id or not old_password or not new_password:
+        return jsonify({"error": "请输入学生ID、旧密码和新密码"}), 400
+
+    student = Student.query.filter_by(rid=student_id).first()
+
+    if not student:
+        return jsonify({"error": "学生不存在"}), 404
+
+    if student.password != old_password:
+        return jsonify({"error": "旧密码不正确"}), 401
+
+    student.password = new_password
+    db.session.commit()
+
+    return jsonify({"message": "密码修改成功"}), 200

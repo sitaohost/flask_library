@@ -80,17 +80,35 @@
             /* 设置用户名的字体颜色为白色 */
             margin-right: 10px;
             /* 增加与退出按钮之间的间距 */
+            margin-left: 20px; /* 增加与个人信息按钮之间的间距 */
         }
 
         .content {
             padding: 20px;
         }
 
+        .button-detail {
+            background-color: #e6e6e6; /* 灰色背景 */
+            border: 0.5px solid #000; /* 黑色边框 */
+            color: #000; /* 文字颜色 */
+            padding: 5px 10px; /* 内边距 */
+            text-align: center; /* 文字居中 */
+            font-size: 10px; /* 字体大小 */
+            cursor: pointer; /* 鼠标悬停时显示为指针 */
+            border-radius: 4px; /* 圆角边框 */
+        }
+
+        .button-detail:hover {
+            background-color: #cecece; /* 鼠标悬停时的背景色 */
+        }
+
         /* 图书管理页面样式 */
         .search-container {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
         }
 
         .search-container input[type="text"] {
@@ -146,53 +164,60 @@
             background-color: #dc3545;
         }
 
-        /* 模态框样式 */
-        .modal {
-            display: none;
-            /* 隐藏 */
+       /* 模态框样式 */
+        .modal-backdrop {
             position: fixed;
-            z-index: 1;
-            left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9998; /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
         }
 
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 40%;
-            /* 使用 Flexbox 实现居中 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            /* 确保模态框内容能够正确居中 */
+        
+
+        .modal-dialog {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            margin: 0;
         }
 
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
+            background: none;
+            border: none;
             cursor: pointer;
         }
+
+        .modal-body {
+            text-align: left;
+        }
+
+        .modal-body p {
+            margin-bottom: 5px;
+        }
+
+        .borrow-button {
+            margin-top: 10px;
+        }
+
 
         /* 表单样式 */
         .form-group {
@@ -228,6 +253,96 @@
         .submit-button:hover {
             background-color: #0056b3;
         }
+
+     /* 模态框样式 */
+     .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9998; /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        
+
+        .modal-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            margin: 0;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            text-align: left;
+        }
+
+        .modal-body p {
+            margin-bottom: 5px;
+        }
+
+        .borrow-button {
+            margin-top: 10px;
+        }
+
+        /* 动态背景样式 */
+    #background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1; /* 使背景处于所有内容的后面 */
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+    #personalInfoModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000; /* 确保层级不与其他模态框重合 */
+    display: none;
+    background-color: transparent;
+}
+
+#personalInfoBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999; /* 遮罩层位于个人信息模态框下方 */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+
     </style>
 </head>
 
@@ -236,15 +351,16 @@
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-                <li><a href="/static/student_index.html">首页</a></li>
-                <li><a href="/static/stu_information.html">个人信息</a></li>
-                <li><a href="/static/stu_borrows.html">个人借阅</a></li>
+                <li><a href="http://localhost:8090/static/student_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/static/stu_borrows.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
+            <!-- 个人信息按钮 -->
+        <button id="personalInfoButton" class="button-detail">个人信息</button>
             <!-- 添加显示用户名的元素 -->
             <span class="username" id="username-display"></span>
-            <a href="/static/logout.html" class="logout-button">退出登录</a>
+            <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
         </div>
     </nav>
 
@@ -273,11 +389,51 @@
     </table>
     </div>
 
+    <!-- 个人信息遮罩层 -->
+    <div id="personalInfoBackdrop" class="modal-backdrop"></div>
 
+    <!-- 个人信息模态框 -->
+    <div id="personalInfoModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">个人信息</h4>
+                    <button type="button" class="close" onclick="hidePersonalInfoModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>用户ID: <span id="infoRid"></span></p>
+                    <p>用户名: <span id="infoName"></span></p>
+                    <p>性别: <span id="infoSex"></span></p>
+                    <p>年龄: <span id="infoAge"></span></p>
+                    <p>地址: <span id="infoAddress"></span></p>
+                    <p>电话号码: <span id="infoPhone"></span></p>
+                    
+                    <!-- 更改密码按钮 -->
+                    <button id="showChangePasswordButton" class="btn btn-primary" onclick="showChangePasswordSection()">更改密码</button>
+                    
+                    <!-- 修改密码部分，默认隐藏 -->
+                    <div id="changePasswordSection" style="display: none;">
+                        <h4>修改密码</h4>
+                        <div class="form-group">
+                            <label for="oldPassword">旧密码:</label>
+                            <input type="password" id="oldPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">新密码:</label>
+                            <input type="password" id="newPassword" class="form-control" required>
+                        </div>
+                        <button id="changePasswordButton" class="btn btn-success" onclick="changePassword()">确认更改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         // 检查 JWT 存储
         const token = localStorage.getItem('access_token');
         const who = localStorage.getItem('username');
+
+        const userID = localStorage.getItem('userID')
 
         if (token && who !== 'admin') {
             document.addEventListener('DOMContentLoaded', function () {
@@ -292,9 +448,14 @@
                 const searchResultsContainer = document.getElementById('books-container');
 
                 function fetchBooks() {
-                    const url = '/books/show_borrow_records_by_student_id/7'; // Ensure this URL matches your Flask route
+                    const api = `http://localhost:8090/books/show_borrow_records_by_student_id/${userID}`;
 
-                    fetch(url)
+                    fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
                         .then(response => response.json())
                         .then(data => {
                             displayBorrowRecords(data);
@@ -352,8 +513,13 @@
                 // 归还图书
                 function returnBook(bookId,borrow_id) {
                     if (confirm('确定要归还这本书吗？')) {
-                        fetch(`/books/return/bar_id=${borrow_id}&book_id=${bookId}`, {
-                            method: 'POST'
+                        const api = `http://localhost:8090/books/return/bar_id=${borrow_id}&book_id=${bookId}`;
+
+                        fetch(api, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
                         })
                             .then(response => {
                                 if (response.ok) {
@@ -402,9 +568,14 @@
                 });
 
                 function performSearch(keyword) {
-                    const url = `http://localhost:8090/books/search/${keyword}`;
+                    const api = `http://localhost:8090/books/search/${keyword}`;
 
-                    fetch(url)
+                    fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -423,6 +594,102 @@
                 fetchBooks();
 
             });
+
+            document.getElementById('personalInfoButton').addEventListener('click', showPersonalInfoModal);
+
+function showPersonalInfoModal() {
+    // 显示模态框和遮罩层
+    document.getElementById('personalInfoModal').style.display = 'flex';
+    document.getElementById('personalInfoBackdrop').style.display = 'block';
+
+    // 从本地存储获取用户ID
+    const userID = localStorage.getItem('userID');
+
+    const api = `http://localhost:8090/students/get/${userID}`;
+    fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })  // 调用Flask后端接口
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 检查是否有错误信息
+            if (data.error) {
+                alert("无法找到学生信息。");
+                hidePersonalInfoModal();
+                return;
+            }
+
+            // 将获取的数据填充到模态框
+            document.getElementById('infoRid').textContent = data.rid;
+            document.getElementById('infoName').textContent = data.name;
+            document.getElementById('infoSex').textContent = data.sex;
+            document.getElementById('infoAge').textContent = data.age;
+            document.getElementById('infoAddress').textContent = data.address;
+            document.getElementById('infoPhone').textContent = data.phone;
+        })
+        .catch(error => {
+            console.error('获取学生信息时发生错误:', error);
+            alert("无法获取学生信息。");
+        });
+}
+
+function hidePersonalInfoModal() {
+    // 隐藏模态框和遮罩层
+    document.getElementById('personalInfoModal').style.display = 'none';
+    document.getElementById('personalInfoBackdrop').style.display = 'none';
+}
+
+// 显示修改密码部分
+function showChangePasswordSection() {
+    document.getElementById('changePasswordSection').style.display = 'block';
+}
+
+// 修改密码功能
+function changePassword() {
+    const userID = localStorage.getItem('userID'); // 获取用户ID
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+
+    if (!oldPassword || !newPassword) {
+        alert('请输入旧密码和新密码！');
+        return;
+    }
+
+    const api = 'http://localhost:8090/students/chpasswd';
+
+    fetch(api, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            student_id: userID,
+            old_password: oldPassword,
+            new_password: newPassword
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert(data.message);
+            hidePersonalInfoModal();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('发生错误，请稍后再试。');
+    });
+}
 
         } else if (token == null) {
             alert("请先登录！");

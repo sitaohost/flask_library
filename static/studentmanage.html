@@ -383,9 +383,14 @@
     };
 
     function fetchStudents() {
-        const url = 'http://localhost:8090/students/all'; // 确保这个URL匹配你的Flask路由
+        const api = 'http://localhost:8090/students/all';
 
-        fetch(url)
+        fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
             .then(response => response.json())
             .then(data => {
                 displayStudents(data);
@@ -436,7 +441,14 @@
         editButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const studentId = this.getAttribute('data-student-id');
-                fetch(`http://localhost:8090/students/get/${studentId}`)
+                const api = `http://localhost:8090/students/get/${studentId}`;
+
+                fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
                     .then(response => response.json())
                     .then(student => {
                         openUpdateStudentModal(student);
@@ -463,14 +475,19 @@
     document.getElementById('submitAddStudent').addEventListener('click', function() {
         const formData = new FormData(document.getElementById('addStudentForm'));
 
-        fetch('/students/add', {
-            method: 'POST',
-            body: formData
-        })
+        const api = 'http://localhost:8090/students/add';
+        
+        fetch(api, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
         .then(response => response.json())
         .then(data => {
             alert('学生添加成功！');
-            window.location.href = '/static/studentmanage.html';
+            window.location.href = 'http://localhost:8090/static/studentmanage.html';
         })
         .catch(error => {
             console.error('Error:', error);
@@ -485,14 +502,19 @@
         const formData = new FormData(updateStudentForm);
         const studentId = document.getElementById('updateStudentId').value;
 
-        fetch(`/students/update/${studentId}`, {
-            method: 'PUT',
-            body: formData
-        })
+        const api = `http://localhost:8090/students/update/${studentId}`;
+
+        fetch(api, {
+                        method: 'PUT',
+                        body: formData,
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
         .then(response => response.json())
         .then(data => {
             alert('学生信息更新成功！');
-            window.location.href = '/static/studentmanage.html';
+            window.location.href = 'http://localhost:8090/static/studentmanage.html';
         })
         .catch(error => {
             console.error('Error:', error);
@@ -503,9 +525,13 @@
     // 删除学生
     function deleteStudent(studentId) {
         if (confirm('确定要删除这个学生吗？')) {
-            fetch(`/students/delete/${studentId}`, {
-                method: 'DELETE'
-            })
+            const api = `http://localhost:8090/students/delete/${studentId}`;
+            fetch(api, {
+                        method: 'DELETE',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -553,9 +579,15 @@
     });
 
     function performSearch(keyword) {
-        const url = `http://localhost:8090/students/search/${keyword}`;
 
-        fetch(url)
+        const api = `http://localhost:8090/students/search/${keyword}`;
+
+        fetch(api, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${token}`
+                      }
+                     })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

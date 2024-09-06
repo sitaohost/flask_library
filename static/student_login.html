@@ -101,7 +101,7 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
 
-            fetch('http://localhost:8090/student_login', {
+    fetch('http://localhost:8090/student_login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -120,7 +120,7 @@
 
             alert(data.message); // 显示成功消息
             // 登录成功后跳转到 student_index.html 页面
-            location.href = '/static/student_index.html';
+            location.href = 'http://localhost:8090/static/student_index.html';
         }
     })
     .catch(error => {
