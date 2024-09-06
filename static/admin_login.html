@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://www.dtbiot.com/wp-content/uploads/2021/09/图书管理-scaled.jpg');
+            background-image: url('https://dl.sitao.org/library_index.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -98,7 +98,7 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
     
-            fetch('http://localhost:8090/admin_login', {
+            fetch('http://localhost:8090/api/admin_login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

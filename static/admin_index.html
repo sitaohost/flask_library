@@ -134,16 +134,16 @@
 <nav class="navbar">
     <div class="navbar-left">
         <ul class="navbar-nav">
-            <li><a href="/static/admin_index.html">首页</a></li>
-            <li><a href="/static/bookmanage.html">图书管理</a></li>
-            <li><a href="/static/studentmanage.html">学生管理</a></li>
-            <li><a href="/static/show_all_borrow_records.html">借阅记录</a></li>
+            <li><a href="http://localhost:8090/static/admin_index.html">首页</a></li>
+            <li><a href="http://localhost:8090/static/bookmanage.html">图书管理</a></li>
+            <li><a href="http://localhost:8090/static/studentmanage.html">学生管理</a></li>
+            <li><a href="http://localhost:8090/static/show_all_borrow_records.html">借阅记录</a></li>
         </ul>
     </div>
     <div class="navbar-right">
         <!-- 添加显示用户名的元素 -->
         <span class="username" id="username-display"></span>
-        <a href="/static/logout.html" class="logout-button">退出登录</a>
+        <a href="http://localhost:8090/static/logout.html" class="logout-button">退出登录</a>
     </div>
 </nav>
 
@@ -198,7 +198,7 @@ setInterval(changeBackground, 5000);
 changeBackground();
 
         function fetchBooks() {
-            const api = 'http://localhost:8090/books/all'; // Ensure this URL matches your Flask route
+            const api = 'http://localhost:8090/api/books/all';
 
             fetch(api, {
                         method: 'GET',
@@ -236,17 +236,16 @@ changeBackground();
                 });
             }
 
-            // Fetch books when page loads
             fetchBooks();
         });
 
 } else if (token && who !== 'admin') { // 如果已经登录但不是管理员
             alert("大胆！没有权限访问此页面！");
             // 重定向到学生端首页
-        window.location.href = '/static/student_index.html';
+        window.location.href = 'http://localhost:8090/static/student_index.html';
         } else {
             alert("请先登录！");
-            window.location.href = '/static/admin_login.html';
+            window.location.href = 'http://localhost:8090/static/admin_login.html';
         }
 
 </script>

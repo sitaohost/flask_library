@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://www.dtbiot.com/wp-content/uploads/2021/09/图书管理-scaled.jpg');
+            background-image: url('https://dl.sitao.org/library_index.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -101,7 +101,7 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
 
-    fetch('http://localhost:8090/student_login', {
+    fetch('http://localhost:8090/api/student_login', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -130,13 +130,13 @@
 
 } else if (token && who == 'admin') { 
         alert("你是管理员,不要多管闲事");
-        window.location.href = '/static/admin_index.html';
+        window.location.href = 'http://localhost:8090/static/admin_index.html';
 
         } 
 
         if (token && who !== 'admin') { 
             alert("你已经登录！");
-            location.href = '/static/student_index.html';
+            location.href = 'http://localhost:8090/static/student_index.html';
         }
         
     </script>

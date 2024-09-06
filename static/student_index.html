@@ -375,7 +375,7 @@ if (token && who !== 'admin') {
 
 
     function fetchBooks() {
-        const api = 'http://localhost:8090/books/all';
+        const api = 'http://localhost:8090/api/books/all';
 
         fetch(api, {
                         method: 'GET',
@@ -458,7 +458,7 @@ if (token && who !== 'admin') {
 
     function borrowBook(b_bookId, b_days) {
         const u_id = localStorage.getItem('userID');
-        const api = `http://localhost:8090/books/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
+        const api = `http://localhost:8090/api/books/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
         const borrowButton = document.getElementById('borrowButton');
         borrowButton.disabled = true; // 禁用按钮
 
@@ -496,7 +496,7 @@ function showPersonalInfoModal() {
     // 从本地存储获取用户ID
     const userID = localStorage.getItem('userID');
 
-    const api = `http://localhost:8090/students/get/${userID}`;
+    const api = `http://localhost:8090/api/students/get/${userID}`;
     fetch(api, {
                         method: 'GET',
                         headers: {
@@ -553,7 +553,7 @@ function changePassword() {
         return;
     }
 
-    const api = 'http://localhost:8090/students/chpasswd';
+    const api = 'http://localhost:8090/api/students/chpasswd';
 
     fetch(api, {
         method: 'POST',
