@@ -186,15 +186,22 @@ def show_borrow_records():
     
     return jsonify(records_list), 200
 
+
 @bp.route('/api/books/delete_borrow_record/<int:bar_id>', methods=['DELETE'])
 @jwt_required()
 def delete_borrow_record(bar_id):
     record = Bar.query.filter_by(borrow_id=bar_id).first()
+
     if record:
-        db.session.delete(record)
-        db.session.commit()
-        return jsonify(record.to_dict()), 200
-    return jsonify({"error": "Record not found"}), 404
+        # 检查是否存在归还日期
+        if record.return_date:
+            db.session.delete(record)
+            db.session.commit()
+            return jsonify(record.to_dict()), 200
+        else:
+            return jsonify({"error": "无法删除未归还的借阅记录"}), 400
+
+    return jsonify({"error": "记录未找到"}), 404
 
 
 @bp.route('/api/books/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
