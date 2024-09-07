@@ -1,32 +1,37 @@
-'''
-_init__.py 是 Flask 应用程序的初始化文件。它的作用是创建并配置 Flask 应用实例，以及初始化应用所需的扩展（如数据库、登录管理等）
-'''
-
 from flask import Flask
 from .models import db
 from flask_jwt_extended import JWTManager
+from .config import Config  # 导入配置文件
 
 def create_app():
-    app = Flask(__name__) # 创建一个 Flask 应用实例，__name__ 参数告诉 Flask 在寻找资源文件（如静态文件）时使用当前模块的路径。
-    app.json.ensure_ascii = False  # 解决中文乱码问题(防止中文字符在 JSON 响应中被转义为 Unicode 字符串)
-    app.config['JWT_SECRET_KEY'] = '612'  # 改为自己的密钥
+    app = Flask(__name__, static_folder="../static", static_url_path='')
+    app.config.from_object(Config)  # 使用配置文件中的配置
+    # 初始化插件
+    db.init_app(app)
     JWTManager(app)
+    
+    # 注册蓝图
+    register_blueprints(app)
+    
+    return app
 
-    # app.static_folder="../pages" # 设置静态文件目录
-    # app.static_url_path='' # 设置静态文件 URL 前缀
+    # bp = Blueprint('main', __name__, static_folder="./static", static_url_path='')
+    # app.register_blueprint(bp) # 注册蓝图 bp。蓝图（Blueprint）是一种将应用程序的各个功能模块化的方法
 
-    # 配置 MySQL 数据库 URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://library:library123@localhost/library'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def register_blueprints(app):
+    # 在这里导入并注册蓝图
+    from .routes.public import public_bp
+    from .routes.login import login_bp
+    from .routes.admin import admin_bp
+    from .routes.students import student_bp
 
-    # 初始化 SQLAlchemy
-    db.init_app(app) # init_app() 方法将 SQLAlchemy 与应用实例绑定，从而使数据库模型与应用实例关联。
+    
 
-    # with app.app_context():
-    #     # 创建数据库和表（如果需要，可以省略此步骤，如果表已经存在）
-    #     db.create_all()
-
-    from . import routes
-    app.register_blueprint(routes.bp) # 注册蓝图 bp。蓝图（Blueprint）是一种将应用程序的各个功能模块化的方法
-
-    return app # 返回创建的 Flask 应用实例。这样做的好处是可以在项目的其他地方（如 run.py）使用这个工厂函数create_app()来创建和配置应用实例
+    # 注册各个蓝图
+    # 使用 url_prefix 来指定蓝图的 URL 前缀
+    app.register_blueprint(public_bp, url_prefix='') 
+    app.register_blueprint(login_bp, url_prefix='')
+    app.register_blueprint(admin_bp, url_prefix='')
+    app.register_blueprint(student_bp, url_prefix='')
+   
+    

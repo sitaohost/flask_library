@@ -15,7 +15,7 @@ class Admin(db.Model):
 
 class Student(db.Model):
     __tablename__ = 'students'
-    
+
     rid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=True)
     sex = db.Column(db.String(5), nullable=True)
