@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书管理</title>
     <style>
-         body {
+        body {
             margin: 0;
             font-family: Arial, sans-serif;
-            
+
         }
 
         .navbar {
@@ -23,7 +24,8 @@
         .navbar-left,
         .navbar-right {
             display: flex;
-            align-items: center; /* 确保所有元素垂直居中 */
+            align-items: center;
+            /* 确保所有元素垂直居中 */
         }
 
         .navbar-left {
@@ -66,7 +68,8 @@
             border-radius: 4px;
             text-decoration: none;
             color: white;
-            margin-left: 10px; /* 增加与用户名之间的间距 */
+            margin-left: 10px;
+            /* 增加与用户名之间的间距 */
         }
 
         .logout-button:hover {
@@ -74,8 +77,10 @@
         }
 
         .username {
-            color: white; /* 设置用户名的字体颜色为白色 */
-            margin-right: 10px; /* 增加与退出按钮之间的间距 */
+            color: white;
+            /* 设置用户名的字体颜色为白色 */
+            margin-right: 10px;
+            /* 增加与退出按钮之间的间距 */
         }
 
         .content {
@@ -92,7 +97,7 @@
         .search-container input[type="text"] {
             padding: 6px;
             font-size: 14px;
-            width: 80%;
+            width: 30%;
             box-sizing: border-box;
         }
 
@@ -106,17 +111,24 @@
 
         .new-button {
             background-color: #28a745;
-            margin-left: 10px;
+            margin-right: 50px;
+            width: 150px;
+            /* 设置按钮的宽度 */
+            height: 40px;
+            /* 设置按钮的高度 */
         }
 
-         table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.9); /* 设置背景颜色为白色并且带有透明度 */
-            opacity: 0.9; /* 设定不透明度 */
+            background-color: rgba(255, 255, 255, 0.9);
+            /* 设置背景颜色为白色并且带有透明度 */
+            opacity: 0.9;
+            /* 设定不透明度 */
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: center;
@@ -143,110 +155,114 @@
             background-color: #dc3545;
         }
 
- /* 模态框样式 */
-.modal {
-    display: none; /* 隐藏 */
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            /* 隐藏 */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 40%;
-    /* 使用 Flexbox 实现居中 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* 确保模态框内容能够正确居中 */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            /* 使用 Flexbox 实现居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* 确保模态框内容能够正确居中 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-/* 表单样式 */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-}
+        /* 表单样式 */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
 
-label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
 
-input, textarea {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        input,
+        textarea {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-/* 提交按钮样式 */
-.submit-button {
-    display: block;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+        /* 提交按钮样式 */
+        .submit-button {
+            display: block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-.submit-button:hover {
-    background-color: #0056b3;
-}
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
         /* 动态背景样式 */
-    #background-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1; /* 使背景处于所有内容的后面 */
-    background-size: cover;
-    background-position: center;
-    transition: background-image 1s ease-in-out;
-    }
-
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            /* 使背景处于所有内容的后面 */
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
     </style>
 </head>
+
 <body>
-<div id="background-container"></div>
+    <div id="background-container"></div>
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
-            <li><a href="http://localhost:8090/pages/admin/admin_index.html">首页</a></li>
-            <li><a href="http://localhost:8090/pages/admin/bookmanage.html">图书管理</a></li>
-            <li><a href="http://localhost:8090/pages/admin/studentmanage.html">学生管理</a></li>
-            <li><a href="http://localhost:8090/pages/admin/show_all_borrow_records.html">借阅记录</a></li>
+                <li><a href="http://localhost:8090/pages/admin/admin_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/pages/admin/bookmanage.html">图书管理</a></li>
+                <li><a href="http://localhost:8090/pages/admin/studentmanage.html">学生管理</a></li>
+                <li><a href="http://localhost:8090/pages/admin/show_all_borrow_records.html">借阅记录</a></li>
             </ul>
         </div>
         <div class="navbar-right">
@@ -258,223 +274,222 @@ input, textarea {
 
     <div class="content">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="搜索图书...">
+            <input type="text" id="searchInput" placeholder="输入 [书名/书号/作者/出版社] 后回车搜索...">
             <button class="new-button">新增图书</button>
-            <button id="searchButton" style="display:none;">搜索</button> <!-- 添加搜索按钮 -->
         </div>
         <div id="searchResults" class="search-results"></div> <!-- 显示搜索结果的区域 -->
     </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>编号</th>
-                    <th>书名</th>
-                    <th>作者</th>
-                    <th>出版社</th>
-                    <th>价格</th>
-                    <th>页数</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody id="books-container">
-                <!-- 图书列表将插入到这里 -->
-            </tbody>
-        </table>
+    <table>
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>价格</th>
+                <th>页数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="books-container">
+            <!-- 图书列表将插入到这里 -->
+        </tbody>
+    </table>
     </div>
 
-<!-- 新增图书的模态框 -->
-<div id="addBookModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeAddBookModal()">&times;</span>
-        <h2>新增图书</h2>
-        <form id="addBookForm" class="form-container">
-            <div class="form-group">
-                <label for="addTitle">书名：</label>
-                <input type="text" id="addTitle" name="title" required>
-            </div>
-            <div class="form-group">
-                <label for="addAuthor">作者：</label>
-                <input type="text" id="addAuthor" name="author" required>
-            </div>
-            <div class="form-group">
-                <label for="addPublisher">出版社：</label>
-                <input type="text" id="addPublisher" name="publisher" required>
-            </div>
-            <div class="form-group">
-                <label for="addPages">页数：</label>
-                <input type="number" id="addPages" name="pages" required>
-            </div>
-            <div class="form-group">
-                <label for="addPrice">价格：</label>
-                <input type="number" step="0.01" id="addPrice" name="price" required>
-            </div>
-            <div class="form-group">
-                <label for="addQuantity">库存：</label>
-                <input type="number" id="addQuantity" name="quantity" required>
-            </div>
-            <div class="form-group">
-                <label for="addDescription">描述：</label>
-                <textarea id="addDescription" name="description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="addPicture">图片：</label>
-                <input type="file" id="addPicture" name="picture" accept="image/*">
-            </div>
-            <button type="button" id="submitAddBook">提交</button>
-        </form>
+    <!-- 新增图书的模态框 -->
+    <div id="addBookModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddBookModal()">&times;</span>
+            <h2>新增图书</h2>
+            <form id="addBookForm" class="form-container">
+                <div class="form-group">
+                    <label for="addTitle">书名：</label>
+                    <input type="text" id="addTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="addAuthor">作者：</label>
+                    <input type="text" id="addAuthor" name="author" required>
+                </div>
+                <div class="form-group">
+                    <label for="addPublisher">出版社：</label>
+                    <input type="text" id="addPublisher" name="publisher" required>
+                </div>
+                <div class="form-group">
+                    <label for="addPages">页数：</label>
+                    <input type="number" id="addPages" name="pages" required>
+                </div>
+                <div class="form-group">
+                    <label for="addPrice">价格：</label>
+                    <input type="number" step="0.01" id="addPrice" name="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="addQuantity">库存：</label>
+                    <input type="number" id="addQuantity" name="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="addDescription">描述：</label>
+                    <textarea id="addDescription" name="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="addPicture">图片：</label>
+                    <input type="file" id="addPicture" name="picture" accept="image/*">
+                </div>
+                <button type="button" id="submitAddBook">提交</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<!-- 更新图书信息的模态框 -->
-<div id="updateBookModal" class="modal">
-    <div class="modal-content">
-        <span id="closeUpdateBookModal" class="close" onclick="closeUpdateBookModal()">&times;</span>
-        <h2>修改图书信息</h2>
-        <form id="updateBookForm">
-            <input type="hidden" id="updateBookId" name="book_id"> <!-- 用于存储图书 ID -->
-            <div class="form-group">
-                <label for="updateTitle">书名：</label>
-                <input type="text" id="updateTitle" name="title">
-            </div>
-            <div class="form-group">
-                <label for="updateAuthor">作者：</label>
-                <input type="text" id="updateAuthor" name="author">
-            </div>
-            <div class="form-group">
-                <label for="updatePublisher">出版社：</label>
-                <input type="text" id="updatePublisher" name="publisher">
-            </div>
-            <div class="form-group">
-                <label for="updatePages">页数：</label>
-                <input type="number" id="updatePages" name="pages">
-            </div>
-            <div class="form-group">
-                <label for="updatePrice">价格：</label>
-                <input type="number" step="0.01" id="updatePrice" name="price">
-            </div>
-            <div class="form-group">
-                <label for="updateQuantity">库存数量：</label>
-                <input type="number" id="updateQuantity" name="quantity">
-            </div>
-            <div class="form-group">
-                <label for="updateOriginalQuantity">原始数量：</label>
-                <input type="number" id="updateOriginalQuantity" name="originalquantity">
-            </div>
-            <div class="form-group">
-                <label for="updatexDescription">描述：</label>
-                <textarea id="updateDescription" name="description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="updatePicture">新封面：</label>
-                <input type="file" id="updatePicture" name="picture" accept="image/*">
-            </div>
-            <button type="submit" id="submitUpdateBook">提交修改</button>
-        </form>
+    <!-- 更新图书信息的模态框 -->
+    <div id="updateBookModal" class="modal">
+        <div class="modal-content">
+            <span id="closeUpdateBookModal" class="close" onclick="closeUpdateBookModal()">&times;</span>
+            <h2>修改图书信息</h2>
+            <form id="updateBookForm">
+                <input type="hidden" id="updateBookId" name="book_id"> <!-- 用于存储图书 ID -->
+                <div class="form-group">
+                    <label for="updateTitle">书名：</label>
+                    <input type="text" id="updateTitle" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="updateAuthor">作者：</label>
+                    <input type="text" id="updateAuthor" name="author">
+                </div>
+                <div class="form-group">
+                    <label for="updatePublisher">出版社：</label>
+                    <input type="text" id="updatePublisher" name="publisher">
+                </div>
+                <div class="form-group">
+                    <label for="updatePages">页数：</label>
+                    <input type="number" id="updatePages" name="pages">
+                </div>
+                <div class="form-group">
+                    <label for="updatePrice">价格：</label>
+                    <input type="number" step="0.01" id="updatePrice" name="price">
+                </div>
+                <div class="form-group">
+                    <label for="updateQuantity">库存数量：</label>
+                    <input type="number" id="updateQuantity" name="quantity">
+                </div>
+                <div class="form-group">
+                    <label for="updateOriginalQuantity">原始数量：</label>
+                    <input type="number" id="updateOriginalQuantity" name="originalquantity">
+                </div>
+                <div class="form-group">
+                    <label for="updatexDescription">描述：</label>
+                    <textarea id="updateDescription" name="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="updatePicture">新封面：</label>
+                    <input type="file" id="updatePicture" name="picture" accept="image/*">
+                </div>
+                <button type="submit" id="submitUpdateBook">提交修改</button>
+            </form>
+        </div>
     </div>
-</div>
 
 
-<script>
-    let currentBackgroundIndex = 0;
-    const backgroundImages = [
-    '/images/p1.jpg',
-    '/images/p2.jpg',
-    '/images/p3.jpg'
-];
+    <script>
+        let currentBackgroundIndex = 0;
+        const backgroundImages = [
+            '/images/p1.jpg',
+            '/images/p2.jpg',
+            '/images/p3.jpg'
+        ];
 
- // 预加载图片
- backgroundImages.forEach(src => {
-       const img = new Image();
-        img.src = src;
-    });
+        // 预加载图片
+        backgroundImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
 
-function changeBackground() {
-    const backgroundContainer = document.getElementById('background-container');
-    backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
-    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
-}
-
-// 每5秒更换一次背景图
-setInterval(changeBackground, 5000);
-
-// 初始化背景图
-changeBackground();
-
-    // 检查 JWT 存储
-    const token = localStorage.getItem('access_token');
-    const who = localStorage.getItem('username');
-
-    // 如果已经登录且是admin, 显示首页
-    if (token && who === 'admin') {
-
-    document.addEventListener('DOMContentLoaded', function () {
-    // 获取用户名并显示
-    const username = localStorage.getItem('username'); 
-    console.log(username);
-    document.getElementById('username-display').textContent = `欢迎：${username}`;
-
-    const addBookModal = document.getElementById('addBookModal');
-    const btnNewBook = document.querySelector('.new-button');
-    const closeAddBookModal = document.querySelector('#addBookModal .close');
-    const updateBookModal = document.getElementById('updateBookModal');
-    const closeUpdateBookModal = document.querySelector('#updateBookModal .close');
-    const updateBookForm = document.getElementById('updateBookForm');
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-    const searchResultsContainer = document.getElementById('books-container');
-
-    // 打开新增图书模态框
-    btnNewBook.onclick = function() {
-        addBookModal.style.display = 'block';
-    };
-
-    // 关闭新增图书模态框
-    closeAddBookModal.onclick = function() {
-        addBookModal.style.display = 'none';
-    };
-
-    // 关闭更新图书模态框
-    closeUpdateBookModal.onclick = function() {
-        updateBookModal.style.display = 'none';
-    };
-
-    // 当用户点击模态框外部时关闭模态框
-    window.onclick = function(event) {
-        if (event.target === addBookModal) {
-            addBookModal.style.display = 'none';
-        } else if (event.target === updateBookModal) {
-            updateBookModal.style.display = 'none';
+        function changeBackground() {
+            const backgroundContainer = document.getElementById('background-container');
+            backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+            currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
         }
-    };
 
-    function fetchBooks() {
-        const api = 'http://localhost:8090/api/books/all';
+        // 每5秒更换一次背景图
+        setInterval(changeBackground, 5000);
 
-                fetch(api, {
+        // 初始化背景图
+        changeBackground();
+
+        // 检查 JWT 存储
+        const token = localStorage.getItem('access_token');
+        const who = localStorage.getItem('username');
+
+        // 如果已经登录且是admin, 显示首页
+        if (token && who === 'admin') {
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // 获取用户名并显示
+                const username = localStorage.getItem('username');
+                console.log(username);
+                document.getElementById('username-display').textContent = `欢迎：${username}`;
+
+                const addBookModal = document.getElementById('addBookModal');
+                const btnNewBook = document.querySelector('.new-button');
+                const closeAddBookModal = document.querySelector('#addBookModal .close');
+                const updateBookModal = document.getElementById('updateBookModal');
+                const closeUpdateBookModal = document.querySelector('#updateBookModal .close');
+                const updateBookForm = document.getElementById('updateBookForm');
+                const searchInput = document.getElementById('searchInput');
+                const searchButton = document.getElementById('searchButton');
+                const searchResultsContainer = document.getElementById('books-container');
+
+                // 打开新增图书模态框
+                btnNewBook.onclick = function () {
+                    addBookModal.style.display = 'block';
+                };
+
+                // 关闭新增图书模态框
+                closeAddBookModal.onclick = function () {
+                    addBookModal.style.display = 'none';
+                };
+
+                // 关闭更新图书模态框
+                closeUpdateBookModal.onclick = function () {
+                    updateBookModal.style.display = 'none';
+                };
+
+                // 当用户点击模态框外部时关闭模态框
+                window.onclick = function (event) {
+                    if (event.target === addBookModal) {
+                        addBookModal.style.display = 'none';
+                    } else if (event.target === updateBookModal) {
+                        updateBookModal.style.display = 'none';
+                    }
+                };
+
+                function fetchBooks() {
+                    const api = 'http://localhost:8090/api/books/all';
+
+                    fetch(api, {
                         method: 'GET',
-                         headers: {
-                        'Authorization': `Bearer ${token}`
+                        headers: {
+                            'Authorization': `Bearer ${token}`
                         }
                     })
-            .then(response => response.json())
+                        .then(response => response.json())
 
-            .then(data => {
-                displayBooks(data);
-            })
-            .catch(error => {
-                console.error('Error fetching books:', error);
-            });
-    }
+                        .then(data => {
+                            displayBooks(data);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching books:', error);
+                        });
+                }
 
-    function displayBooks(books) {
-        const container = document.getElementById('books-container');
-        container.innerHTML = ''; // 清空容器
+                function displayBooks(books) {
+                    const container = document.getElementById('books-container');
+                    container.innerHTML = ''; // 清空容器
 
-        books.forEach(book => {
-            const row = document.createElement('tr');
+                    books.forEach(book => {
+                        const row = document.createElement('tr');
 
-            row.innerHTML = `
+                        row.innerHTML = `
                 <td>${book.bid}</td>
                 <td>${book.title}</td>
                 <td>${book.author}</td>
@@ -487,199 +502,184 @@ changeBackground();
                 </td>
             `;
 
-            container.appendChild(row);
-        });
-
-        // 编辑按钮的点击事件
-        handleEditButtonClick();
-
-        // 删除按钮的点击事件
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('delete-button')) {
-                const bookId = e.target.getAttribute('data-book-id');
-                deleteBook(bookId);
-            }
-        });
-    }
-
-    function handleEditButtonClick() {
-        const editButtons = document.querySelectorAll('.edit-button');
-        editButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const bookId = this.getAttribute('data-book-id');
-                const api = `http://localhost:8090/api/books/get/${bookId}`
-                
-                fetch(api, {
-                        method: 'GET',
-                        headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-                     })
-                    .then(response => response.json())
-                    .then(book => {
-                        openUpdateBookModal(book);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching book details:', error);
+                        container.appendChild(row);
                     });
-            });
-        });
-    }
 
-    function openUpdateBookModal(book) {
-        document.getElementById('updateBookId').value = book.bid;
-        document.getElementById('updateTitle').value = book.title;
-        document.getElementById('updateAuthor').value = book.author;
-        document.getElementById('updatePublisher').value = book.publisher;
-        document.getElementById('updatePages').value = book.pages;
-        document.getElementById('updatePrice').value = book.price;
-        document.getElementById('updateQuantity').value = book.quantity;
-        document.getElementById('updateOriginalQuantity').value = book.originalquantity;
-        document.getElementById('updateDescription').value = book.description;
-        updateBookModal.style.display = 'block';
-    }
+                    // 编辑按钮的点击事件
+                    handleEditButtonClick();
 
-    // 提交新增图书表单
-    document.getElementById('submitAddBook').addEventListener('click', function() {
-        const formData = new FormData(document.getElementById('addBookForm'));
-        const api = 'http://localhost:8090/api/books/add'
-        fetch(api, {
-            method: 'POST',
-            body: formData,
-	        headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('图书添加成功！');
-            window.location.href = 'http://localhost:8090/pages/admin/bookmanage.html';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('添加图书失败，请稍后再试！');
-        });
-    });
+                    // 删除按钮的点击事件
+                    document.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('delete-button')) {
+                            const bookId = e.target.getAttribute('data-book-id');
+                            deleteBook(bookId);
+                        }
+                    });
+                }
 
-    // 提交更新图书信息表单
-    updateBookForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // 防止表单默认提交
+                function handleEditButtonClick() {
+                    const editButtons = document.querySelectorAll('.edit-button');
+                    editButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const bookId = this.getAttribute('data-book-id');
+                            const api = `http://localhost:8090/api/books/get/${bookId}`
 
-        const formData = new FormData(updateBookForm);
-        const bookId = document.getElementById('updateBookId').value;
+                            fetch(api, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(book => {
+                                    openUpdateBookModal(book);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching book details:', error);
+                                });
+                        });
+                    });
+                }
 
-        const api = `http://localhost:8090/api/books/update/${bookId}`
-        fetch(api, {
-            method: 'PUT',
-            body: formData,
-	        headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('图书信息更新成功！');
-            window.location.href = 'http://localhost:8090/pages/admin/bookmanage.html';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('更新图书信息失败，请稍后再试！');
-        });
-    });
+                function openUpdateBookModal(book) {
+                    document.getElementById('updateBookId').value = book.bid;
+                    document.getElementById('updateTitle').value = book.title;
+                    document.getElementById('updateAuthor').value = book.author;
+                    document.getElementById('updatePublisher').value = book.publisher;
+                    document.getElementById('updatePages').value = book.pages;
+                    document.getElementById('updatePrice').value = book.price;
+                    document.getElementById('updateQuantity').value = book.quantity;
+                    document.getElementById('updateOriginalQuantity').value = book.originalquantity;
+                    document.getElementById('updateDescription').value = book.description;
+                    updateBookModal.style.display = 'block';
+                }
 
-    // 删除图书
-    function deleteBook(bookId) {
-        if (confirm('确定要删除这本书吗？')) {
-            const api = `http://localhost:8090/api/books/delete/${bookId}`
-            fetch(api, {
-                        method: 'DELETE',
+                // 提交新增图书表单
+                document.getElementById('submitAddBook').addEventListener('click', function () {
+                    const formData = new FormData(document.getElementById('addBookForm'));
+                    const api = 'http://localhost:8090/api/books/add'
+                    fetch(api, {
+                        method: 'POST',
+                        body: formData,
                         headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-          })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert('图书添加成功！');
+                            window.location.href = 'http://localhost:8090/pages/admin/bookmanage.html';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('添加图书失败，请稍后再试！');
+                        });
+                });
+
+                // 提交更新图书信息表单
+                updateBookForm.addEventListener('submit', function (event) {
+                    event.preventDefault(); // 防止表单默认提交
+
+                    const formData = new FormData(updateBookForm);
+                    const bookId = document.getElementById('updateBookId').value;
+
+                    const api = `http://localhost:8090/api/books/update/${bookId}`
+                    fetch(api, {
+                        method: 'PUT',
+                        body: formData,
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert('图书信息更新成功！');
+                            window.location.href = 'http://localhost:8090/pages/admin/bookmanage.html';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('更新图书信息失败，请稍后再试！');
+                        });
+                });
+
+                // 删除图书
+                function deleteBook(bookId) {
+                    if (confirm('确定要删除这本书吗？')) {
+                        const api = `http://localhost:8090/api/books/delete/${bookId}`
+                        fetch(api, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.json();
+                                } else {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                            })
+                            .then(data => {
+                                alert('图书删除成功！');
+                                fetchBooks(); // 重新加载图书列表
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                let message = '删除过程中发生错误，请稍后再试！';
+                                if (error.message.includes('404')) {
+                                    message = '图书未找到！';
+                                }
+                                alert(message);
+                            });
+                    }
                 }
-            })
-            .then(data => {
-                alert('图书删除成功！');
-                fetchBooks(); // 重新加载图书列表
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                let message = '删除过程中发生错误，请稍后再试！';
-                if (error.message.includes('404')) {
-                    message = '图书未找到！';
-                }
-                alert(message);
-            });
-        }
-    }
 
-    // 当输入框获得焦点时显示搜索按钮
-    searchInput.addEventListener('focus', function () {
-        searchButton.style.display = 'inline-block';
-    });
 
-    // 当输入框失去焦点时隐藏搜索按钮
-    searchInput.addEventListener('blur', function () {
-        if (!searchInput.value) {
-            searchButton.style.display = 'none';
-        }
-    });
+                // 监听回车键事件
+                searchInput.addEventListener('keyup', function (event) {
+                    if (event.key === 'Enter') {
+                        performSearch(searchInput.value);
+                    }
+                });
 
-    // 监听搜索按钮点击事件
-    searchButton.addEventListener('click', function () {
-        performSearch(searchInput.value);
-    });
+                function performSearch(keyword) {
+                    const api = `http://localhost:8090/api/books/search/${keyword}`;
 
-    // 监听回车键事件
-    searchInput.addEventListener('keyup', function (event) {
-        if (event.key === 'Enter') {
-            performSearch(searchInput.value);
-        }
-    });
-
-    function performSearch(keyword) {
-        const api = `http://localhost:8090/api/books/search/${keyword}`;
-        
-        fetch(api, {
+                    fetch(api, {
                         method: 'GET',
                         headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            displayBooks(data); // 使用搜索结果更新图书列表
+                        })
+                        .catch(error => {
+                            console.error('Error searching books:', error);
+                            alert('未找到相关信息！');
+                        });
                 }
-                return response.json();
-            })
-            .then(data => {
-                displayBooks(data); // 使用搜索结果更新图书列表
-            })
-            .catch(error => {
-                console.error('Error searching books:', error);
-                alert('未找到相关信息！');
+
+                // 初次加载图书数据
+                fetchBooks();
             });
-    }
+        } else if (token !== null && who !== 'admin') { // 如果已经登录但不是管理员
+            alert("大胆！没有权限访问此页面！");
+            // 重定向到学生端首页
+            window.location.href = 'http://localhost:8090/pages/students/student_index.html';
+        } else {
+            alert("请先登录！");
+            window.location.href = 'http://localhost:8090/pages/admin/admin_login.html';
+        }
 
-    // 初次加载图书数据
-    fetchBooks();
-});
-} else if (token !== null && who !== 'admin') { // 如果已经登录但不是管理员
-                alert("大胆！没有权限访问此页面！");
-                // 重定向到学生端首页
-                window.location.href = 'http://localhost:8090/pages/students/student_index.html';
-            } else {
-                alert("请先登录！");
-                window.location.href = 'http://localhost:8090/pages/admin/admin_login.html';
-            } 
-
-</script>
+    </script>
 
 </body>
+
 </html>

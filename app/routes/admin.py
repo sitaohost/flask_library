@@ -96,7 +96,6 @@ def delete_book(book_id):
     return jsonify({"error": "Book not found"}), 404
 
 
-
 # 搜索图书
 @admin_bp.route('/api/books/search/<string:keyword>', methods=['GET'])
 @jwt_required()
@@ -112,10 +111,8 @@ def search_books(keyword):
     ).all()
 
     if books:
-        # 如果根据书名找到了书籍，直接返回结果
         return jsonify([book.to_dict() for book in books]), 200
 
-    # 如果既没有根据书名也没有根据作者找到书籍，返回 404 Not Found
     return jsonify({"message": "No books found matching the keyword."}), 404
 
 # 展示所有学生的借阅记录

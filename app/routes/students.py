@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from app.models import Student, Book, Bar, db
 from flask_jwt_extended import jwt_required
 from flask import Blueprint, jsonify, request
@@ -6,8 +7,28 @@ import datetime
 student_bp = Blueprint('student_bp', __name__)
 
 
+# 搜索图书
+@student_bp.route('/api/students/searchBooks/<string:keyword>', methods=['GET'])
+@jwt_required()
+def search_book(keyword):
+    books = Book.query.filter(
+        or_(
+            Book.bid.like(f'%{keyword}%'),  # 根据书号搜索
+            Book.title.like(f'%{keyword}%'),  # 根据书名搜索
+            Book.author.like(f'%{keyword}%'),  # 根据作者搜索
+            Book.publisher.like(f'%{keyword}%'),  # 根据出版社搜索
+        )
+    ).all()
+
+    if books:
+        # 将查询结果转换为字典列表
+        return jsonify([book.to_dict() for book in books]), 200
+
+    return jsonify({"error": "Book not found"}), 404
+
+
 # 借书
-@student_bp.route('/api/books/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
+@student_bp.route('/api/students/borrow/<int:b_bookid>&uid=<int:u_id>&days=<int:b_days>', methods=['POST'])
 @jwt_required()
 def borrow_book(b_bookid,u_id,b_days):
 
@@ -53,8 +74,9 @@ def borrow_book(b_bookid,u_id,b_days):
 
     return jsonify(new_record.to_dict()), 201
 
+
 # 归还图书
-@student_bp.route('/api/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
+@student_bp.route('/api/students/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
 @jwt_required()
 def return_book(bar_id,book_id):
     bar=Bar.query.filter_by(borrow_id=bar_id).first()
@@ -72,7 +94,38 @@ def return_book(bar_id,book_id):
     db.session.commit()
     
     return jsonify(bar.to_dict()), 201
+
+# 根据学生 ID 获取借阅记录
+@student_bp.route('/api/students/show_borrow_records_by_student_id/<int:student_id>', methods=['GET'])
+#@jwt_required()
+def show_borrow_records_by_student_id(student_id):
+    # 查询指定学生编号的借阅记录
+    borrow_records = Bar.query.filter_by(user_id=student_id).all()
     
+    # 将查询结果转换为字典列表
+    records_list = [record.to_dict() for record in borrow_records]
+    
+    return jsonify(records_list), 200
+  
+# 搜索借阅记录
+@student_bp.route('/api/students/searchBorrowRecords/<string:keyword>', methods=['GET'])
+@jwt_required()
+def search_borrow_record(keyword):
+   
+    records = Bar.query.filter(
+        or_(
+            Bar.borrow_id.like(f'%{keyword}%'),# 根据借阅记录ID搜索
+            Bar.book_id.like(f'%{keyword}%'), # 根据书号搜索
+            Bar.book_name.like(f'%{keyword}%'), # 根据书名搜索
+        )
+    ).all()
+
+    if records:
+        # 将查询结果转换为字典列表
+        return jsonify([record.to_dict() for record in records]), 200
+
+    return jsonify({"error": "Record not found"}), 404
+
 # 修改密码
 @student_bp.route('/api/students/chpasswd', methods=['POST'])
 @jwt_required()
