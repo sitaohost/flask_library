@@ -106,14 +106,14 @@ def search_books(keyword):
     if books_by_title:
         # 如果根据书名找到了书籍，直接返回结果
         return jsonify([book.to_dict() for book in books_by_title]), 200
-    
+
     # 如果根据书名没有找到书籍，尝试根据作者搜索
     books_by_author = Book.query.filter(Book.author.like(f'%{keyword}%')).all()
-    
+
     if books_by_author:
         # 如果根据作者找到了书籍，返回结果
         return jsonify([book.to_dict() for book in books_by_author]), 200
-    
+
     # 如果既没有根据书名也没有根据作者找到书籍，返回 404 Not Found
     return jsonify({"message": "No books found matching the keyword."}), 404
 
