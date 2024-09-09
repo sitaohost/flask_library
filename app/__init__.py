@@ -1,4 +1,5 @@
-from flask import Flask, config
+from flask import Flask
+from flask_cors import CORS
 from .models import db
 from flask_jwt_extended import JWTManager
 from config import Config # 导入配置文件
@@ -11,6 +12,7 @@ def create_app():
     # 初始化插件
     db.init_app(app)
     JWTManager(app)
+    CORS(app)
     
     # 注册蓝图
     register_blueprints(app)
