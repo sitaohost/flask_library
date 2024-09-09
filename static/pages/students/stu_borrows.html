@@ -80,7 +80,8 @@
             /* 设置用户名的字体颜色为白色 */
             margin-right: 10px;
             /* 增加与退出按钮之间的间距 */
-            margin-left: 20px; /* 增加与个人信息按钮之间的间距 */
+            margin-left: 20px;
+            /* 增加与个人信息按钮之间的间距 */
         }
 
         .content {
@@ -88,33 +89,40 @@
         }
 
         .button-detail {
-            background-color: #e6e6e6; /* 灰色背景 */
-            border: 0.5px solid #000; /* 黑色边框 */
-            color: #000; /* 文字颜色 */
-            padding: 5px 10px; /* 内边距 */
-            text-align: center; /* 文字居中 */
-            font-size: 10px; /* 字体大小 */
-            cursor: pointer; /* 鼠标悬停时显示为指针 */
-            border-radius: 4px; /* 圆角边框 */
+            background-color: #e6e6e6;
+            /* 灰色背景 */
+            border: 0.5px solid #000;
+            /* 黑色边框 */
+            color: #000;
+            /* 文字颜色 */
+            padding: 5px 10px;
+            /* 内边距 */
+            text-align: center;
+            /* 文字居中 */
+            font-size: 10px;
+            /* 字体大小 */
+            cursor: pointer;
+            /* 鼠标悬停时显示为指针 */
+            border-radius: 4px;
+            /* 圆角边框 */
         }
 
         .button-detail:hover {
-            background-color: #cecece; /* 鼠标悬停时的背景色 */
+            background-color: #cecece;
+            /* 鼠标悬停时的背景色 */
         }
 
         /* 图书管理页面样式 */
         .search-container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            padding: 20px;
+            margin-bottom: 20px;
         }
 
         .search-container input[type="text"] {
             padding: 6px;
             font-size: 14px;
-            width: 80%;
+            width: 30%;
             box-sizing: border-box;
         }
 
@@ -132,10 +140,12 @@
         }
 
         table {
-                width: 100%;
-                border-collapse: collapse;
-                background-color: rgba(255, 255, 255, 0.9); /* 设置背景颜色为白色并且带有透明度 */
-                opacity: 0.9; /* 设定不透明度 */
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.9);
+            /* 设置背景颜色为白色并且带有透明度 */
+            opacity: 0.9;
+            /* 设定不透明度 */
         }
 
         th,
@@ -166,19 +176,20 @@
             background-color: #dc3545;
         }
 
-       /* 模态框样式 */
+        /* 模态框样式 */
         .modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9998; /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            z-index: 9998;
+            /* 较低的z-index值，使得遮罩层位于模态框下方 */
             background-color: rgba(0, 0, 0, 0.5);
             display: none;
         }
 
-        
+
 
         .modal-dialog {
             position: absolute;
@@ -256,19 +267,20 @@
             background-color: #0056b3;
         }
 
-     /* 模态框样式 */
-     .modal-backdrop {
+        /* 模态框样式 */
+        .modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9998; /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            z-index: 9998;
+            /* 较低的z-index值，使得遮罩层位于模态框下方 */
             background-color: rgba(0, 0, 0, 0.5);
             display: none;
         }
 
-        
+
 
         .modal-dialog {
             position: absolute;
@@ -311,45 +323,47 @@
         }
 
         /* 动态背景样式 */
-    #background-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1; /* 使背景处于所有内容的后面 */
-    background-size: cover;
-    background-position: center;
-    transition: background-image 1s ease-in-out;
-}
-    #personalInfoModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10000; /* 确保层级不与其他模态框重合 */
-    display: none;
-    background-color: transparent;
-}
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            /* 使背景处于所有内容的后面 */
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
 
-#personalInfoBackdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999; /* 遮罩层位于个人信息模态框下方 */
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-}
+        #personalInfoModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            /* 确保层级不与其他模态框重合 */
+            display: none;
+            background-color: transparent;
+        }
 
-
+        #personalInfoBackdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            /* 遮罩层位于个人信息模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
     </style>
 </head>
 
 <body>
-<div id="background-container"></div>
+    <div id="background-container"></div>
     <nav class="navbar">
         <div class="navbar-left">
             <ul class="navbar-nav">
@@ -359,7 +373,7 @@
         </div>
         <div class="navbar-right">
             <!-- 个人信息按钮 -->
-        <button id="personalInfoButton" class="button-detail">个人信息</button>
+            <button id="personalInfoButton" class="button-detail">个人信息</button>
             <!-- 添加显示用户名的元素 -->
             <span class="username" id="username-display"></span>
             <a href="http://localhost:8090/pages/logout.html" class="logout-button">退出登录</a>
@@ -368,8 +382,7 @@
 
     <div class="content">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="搜索图书...">
-            <button id="searchButton" style="display:none;">搜索</button> <!-- 添加搜索按钮 -->
+            <input type="text" id="searchInput" placeholder="输入 [借阅记录ID/书名/书号/作者/出版社] 后回车搜索...">
         </div>
         <div id="searchResults" class="search-results"></div> <!-- 显示搜索结果的区域 -->
     </div>
@@ -409,10 +422,11 @@
                     <p>年龄: <span id="infoAge"></span></p>
                     <p>地址: <span id="infoAddress"></span></p>
                     <p>电话号码: <span id="infoPhone"></span></p>
-                    
+
                     <!-- 更改密码按钮 -->
-                    <button id="showChangePasswordButton" class="btn btn-primary" onclick="showChangePasswordSection()">更改密码</button>
-                    
+                    <button id="showChangePasswordButton" class="btn btn-primary"
+                        onclick="showChangePasswordSection()">更改密码</button>
+
                     <!-- 修改密码部分，默认隐藏 -->
                     <div id="changePasswordSection" style="display: none;">
                         <h4>修改密码</h4>
@@ -424,7 +438,8 @@
                             <label for="newPassword">新密码:</label>
                             <input type="password" id="newPassword" class="form-control" required>
                         </div>
-                        <button id="changePasswordButton" class="btn btn-success" onclick="changePassword()">确认更改</button>
+                        <button id="changePasswordButton" class="btn btn-success"
+                            onclick="changePassword()">确认更改</button>
                     </div>
                 </div>
             </div>
@@ -432,29 +447,29 @@
     </div>
     <script>
         let currentBackgroundIndex = 0;
-    const backgroundImages = [
-    '/images/p1.jpg',
-    '/images/p2.jpg',
-    '/images/p3.jpg'
-];
+        const backgroundImages = [
+            '/images/p1.jpg',
+            '/images/p2.jpg',
+            '/images/p3.jpg'
+        ];
 
- // 预加载图片
- backgroundImages.forEach(src => {
-       const img = new Image();
-        img.src = src;
-    });
+        // 预加载图片
+        backgroundImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
 
-function changeBackground() {
-    const backgroundContainer = document.getElementById('background-container');
-    backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
-    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
-}
+        function changeBackground() {
+            const backgroundContainer = document.getElementById('background-container');
+            backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+            currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+        }
 
-// 每5秒更换一次背景图
-setInterval(changeBackground, 5000);
+        // 每5秒更换一次背景图
+        setInterval(changeBackground, 5000);
 
-// 初始化背景图
-changeBackground();
+        // 初始化背景图
+        changeBackground();
 
         // 检查 JWT 存储
         const token = localStorage.getItem('access_token');
@@ -474,15 +489,48 @@ changeBackground();
                 const searchButton = document.getElementById('searchButton');
                 const searchResultsContainer = document.getElementById('books-container');
 
-                function fetchBooks() {
-                    const api = `http://localhost:8090/api/books/show_borrow_records_by_student_id/${userID}`;
+                // 展示借阅记录函数
+                function displayBorrowRecords(records) {
+
+                    const container = document.getElementById('booksborrowed-container');
+                    container.innerHTML = ''; // 清空容器
+
+                    records.forEach(record => {
+                        const row = document.createElement('tr');
+
+                        row.innerHTML = `
+                    <td>${record.borrow_id}</td>
+                    <td>${record.book_name}</td>
+                    <td>${record.borrow_date}</td>
+                    <td>${record.borrow_days}</td>
+                    <td>${record.return_date || '未归还'}</td>
+                    <td class="action-buttons">
+                    ${record.return_date ? '' : `<button class="delete-button" borrow-id="${record.borrow_id}" data-book-id="${record.book_id}">归还</button>`}
+                </td>
+                `;
+                        container.appendChild(row);
+                    });
+
+                    // 归还按钮的点击事件
+                    document.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('delete-button')) {
+                            const bookId = e.target.getAttribute('data-book-id');
+                            const borrow_id = e.target.getAttribute('borrow-id')
+                            returnBook(bookId, borrow_id);
+                        }
+                    });
+                }
+
+                // 获取借阅记录
+                function fetchBorrowRecords() {
+                    const api = `http://localhost:8090/api/students/show_borrow_records_by_student_id/${userID}`;
 
                     fetch(api, {
                         method: 'GET',
                         headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-                     })
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
                         .then(response => response.json())
                         .then(data => {
                             displayBorrowRecords(data);
@@ -492,55 +540,10 @@ changeBackground();
                         });
                 }
 
-                function displayBorrowRecords(records) {
-                    const container = document.getElementById('booksborrowed-container');
-                    container.innerHTML = ''; // 清空容器
-
-                    records.forEach(record => {
-                        const row = document.createElement('tr');
-
-                        row.innerHTML = `
-                <td>${record.borrow_id}</td>
-                <td>${record.book_name}</td>
-                <td>${record.borrow_date}</td>
-                <td>${record.borrow_days}</td>
-                <td>${record.return_date || '未归还'}</td>
-                <td class="action-buttons">
-                    ${record.return_date ? '' : `<button class="delete-button" borrow-id="${record.borrow_id}" data-book-id="${record.book_id}">归还</button>`}
-                </td>
-                `;
-
-                        container.appendChild(row);
-                    });
-
-                    // 归还按钮的点击事件
-                    document.addEventListener('click', function (e) {
-                        if (e.target.classList.contains('delete-button')) {
-                            const bookId = e.target.getAttribute('data-book-id');
-                            const borrow_id=e.target.getAttribute('borrow-id')
-                            returnBook(bookId,borrow_id);
-                        }
-                    });
-                }
-
-
-                function openUpdateBookModal(book) {
-                    document.getElementById('updateBookId').value = book.bid;
-                    document.getElementById('updateTitle').value = book.title;
-                    document.getElementById('updateAuthor').value = book.author;
-                    document.getElementById('updatePublisher').value = book.publisher;
-                    document.getElementById('updatePages').value = book.pages;
-                    document.getElementById('updatePrice').value = book.price;
-                    document.getElementById('updateQuantity').value = book.quantity;
-                    document.getElementById('updateOriginalQuantity').value = book.originalquantity;
-                    document.getElementById('updateDescription').value = book.description;
-                    updateBookModal.style.display = 'block';
-                }
-
                 // 归还图书
-                function returnBook(bookId,borrow_id) {
+                function returnBook(bookId, borrow_id) {
                     if (confirm('确定要归还这本书吗？')) {
-                        const api = `http://localhost:8090/api/books/return/bar_id=${borrow_id}&book_id=${bookId}`;
+                        const api = `http://localhost:8090/api/students/return/bar_id=${borrow_id}&book_id=${bookId}`;
 
                         fetch(api, {
                             method: 'POST',
@@ -557,7 +560,7 @@ changeBackground();
                             })
                             .then(data => {
                                 alert('图书归还成功！');
-                                fetchBooks(); // 重新加载图书列表
+                                fetchBorrowRecords(); // 重新加载图书列表
                             })
                             .catch(error => {
                                 console.error('Error:', error);
@@ -570,39 +573,16 @@ changeBackground();
                     }
                 }
 
-                // 当输入框获得焦点时显示搜索按钮
-                searchInput.addEventListener('focus', function () {
-                    searchButton.style.display = 'inline-block';
-                });
-
-                // 当输入框失去焦点时隐藏搜索按钮
-                searchInput.addEventListener('blur', function () {
-                    if (!searchInput.value) {
-                        searchButton.style.display = 'none';
-                    }
-                });
-
-                // 监听搜索按钮点击事件
-                searchButton.addEventListener('click', function () {
-                    performSearch(searchInput.value);
-                });
-
-                // 监听回车键事件
-                searchInput.addEventListener('keyup', function (event) {
-                    if (event.key === 'Enter') {
-                        performSearch(searchInput.value);
-                    }
-                });
-
-                function performSearch(keyword) {
-                    const api = `http://localhost:8090/api/books/search/${keyword}`;
+                // 搜索借阅记录
+                function searchBorrowRecords(keyword) {
+                    const api = `http://localhost:8090/api/students/searchBorrowRecords/${keyword}`;
 
                     fetch(api, {
                         method: 'GET',
                         headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-                     })
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -610,113 +590,121 @@ changeBackground();
                             return response.json();
                         })
                         .then(data => {
-                            displayBooks(data); // 使用搜索结果更新图书列表
+                            displayBorrowRecords(data);
                         })
                         .catch(error => {
-                            console.error('Error searching books:', error);
-                            alert('搜索图书失败，请稍后再试！');
+                            console.error('Error searching borrow records', error);
+                            alert('查找借阅记录失败');
                         });
                 }
-                // 初次加载图书数据
-                fetchBooks();
+
+                // 监听回车键事件
+                searchInput.addEventListener('keyup', function (event) {
+                    if (event.key === 'Enter') {
+                        searchBorrowRecords(searchInput.value);
+                    }
+                });
+
+                fetchBorrowRecords();
 
             });
 
             document.getElementById('personalInfoButton').addEventListener('click', showPersonalInfoModal);
 
-function showPersonalInfoModal() {
-    // 显示模态框和遮罩层
-    document.getElementById('personalInfoModal').style.display = 'flex';
-    document.getElementById('personalInfoBackdrop').style.display = 'block';
+            function showPersonalInfoModal() {
+                // 显示模态框和遮罩层
+                document.getElementById('personalInfoModal').style.display = 'flex';
+                document.getElementById('personalInfoBackdrop').style.display = 'block';
 
-    // 从本地存储获取用户ID
-    const userID = localStorage.getItem('userID');
+                // 从本地存储获取用户ID
+                const userID = localStorage.getItem('userID');
 
-    const api = `http://localhost:8090/api/students/get/${userID}`;
-    fetch(api, {
-                        method: 'GET',
-                        headers: {
+                const api = `http://localhost:8090/api/students/get/${userID}`;
+                fetch(api, {
+                    method: 'GET',
+                    headers: {
                         'Authorization': `Bearer ${token}`
-                      }
-                     })  // 调用Flask后端接口
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('网络响应失败');
+                    }
+                })  // 调用Flask后端接口
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('网络响应失败');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 检查是否有错误信息
+                        if (data.error) {
+                            alert("无法找到学生信息。");
+                            hidePersonalInfoModal();
+                            return;
+                        }
+
+                        // 将获取的数据填充到模态框
+                        document.getElementById('infoRid').textContent = data.rid;
+                        document.getElementById('infoName').textContent = data.name;
+                        document.getElementById('infoSex').textContent = data.sex;
+                        document.getElementById('infoAge').textContent = data.age;
+                        document.getElementById('infoAddress').textContent = data.address;
+                        document.getElementById('infoPhone').textContent = data.phone;
+                    })
+                    .catch(error => {
+                        console.error('获取学生信息时发生错误:', error);
+                        alert("无法获取学生信息。");
+                    });
             }
-            return response.json();
-        })
-        .then(data => {
-            // 检查是否有错误信息
-            if (data.error) {
-                alert("无法找到学生信息。");
-                hidePersonalInfoModal();
-                return;
+
+            function hidePersonalInfoModal() {
+                // 隐藏模态框和遮罩层
+                document.getElementById('personalInfoModal').style.display = 'none';
+                document.getElementById('personalInfoBackdrop').style.display = 'none';
             }
 
-            // 将获取的数据填充到模态框
-            document.getElementById('infoRid').textContent = data.rid;
-            document.getElementById('infoName').textContent = data.name;
-            document.getElementById('infoSex').textContent = data.sex;
-            document.getElementById('infoAge').textContent = data.age;
-            document.getElementById('infoAddress').textContent = data.address;
-            document.getElementById('infoPhone').textContent = data.phone;
-        })
-        .catch(error => {
-            console.error('获取学生信息时发生错误:', error);
-            alert("无法获取学生信息。");
-        });
-}
+            // 显示修改密码部分
+            function showChangePasswordSection() {
+                document.getElementById('changePasswordSection').style.display = 'block';
+            }
 
-function hidePersonalInfoModal() {
-    // 隐藏模态框和遮罩层
-    document.getElementById('personalInfoModal').style.display = 'none';
-    document.getElementById('personalInfoBackdrop').style.display = 'none';
-}
+            // 修改密码功能
+            function changePassword() {
+                const userID = localStorage.getItem('userID'); // 获取用户ID
+                const oldPassword = document.getElementById('oldPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
 
-// 显示修改密码部分
-function showChangePasswordSection() {
-    document.getElementById('changePasswordSection').style.display = 'block';
-}
+                if (!oldPassword || !newPassword) {
+                    alert('请输入旧密码和新密码！');
+                    return;
+                }
 
-// 修改密码功能
-function changePassword() {
-    const userID = localStorage.getItem('userID'); // 获取用户ID
-    const oldPassword = document.getElementById('oldPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
+                const api = 'http://localhost:8090/api/students/chpasswd';
 
-    if (!oldPassword || !newPassword) {
-        alert('请输入旧密码和新密码！');
-        return;
-    }
+                fetch(api, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        student_id: userID,
+                        old_password: oldPassword,
+                        new_password: newPassword
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            alert(data.message);
+                            hidePersonalInfoModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('发生错误，请稍后再试。');
+                    });
+            }
 
-    const api = 'http://localhost:8090/api/students/chpasswd';
-
-    fetch(api, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            student_id: userID,
-            old_password: oldPassword,
-            new_password: newPassword
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            alert(data.message);
-            hidePersonalInfoModal();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('发生错误，请稍后再试。');
-    });
-}
 
         } else if (token == null) {
             alert("请先登录！");
