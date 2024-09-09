@@ -54,7 +54,7 @@ def add_book():
     db.session.commit()
     return jsonify(new_book.to_dict()), 201
 
-#更新图书
+# 更新图书
 @admin_bp.route('/api/books/update/<int:book_id>', methods=['PUT'])
 @jwt_required()
 def update_book(book_id):
@@ -84,7 +84,7 @@ def update_book(book_id):
     db.session.commit()
     return jsonify(book.to_dict()), 200
 
-#删除图书
+# 删除图书
 @admin_bp.route('/api/books/delete/<int:book_id>', methods=['DELETE'])
 @jwt_required()
 def delete_book(book_id):
@@ -101,19 +101,20 @@ def delete_book(book_id):
 @admin_bp.route('/api/books/search/<string:keyword>', methods=['GET'])
 @jwt_required()
 def search_books(keyword):
-    # 根据书名搜索
-    books_by_title = Book.query.filter(Book.title.like(f'%{keyword}%')).all()
-    if books_by_title:
+
+    books = Book.query.filter(
+        or_(
+            Book.title.like(f'%{keyword}%'),# 根据书名搜索
+            Book.bid.like(f'%{keyword}%'), # 根据书号搜索
+            Book.author.like(f'%{keyword}%'), # 根据作者搜索
+            Book.publisher.like(f'%{keyword}%'), # 根据出版社搜索
+        )
+    ).all()
+
+    if books:
         # 如果根据书名找到了书籍，直接返回结果
-        return jsonify([book.to_dict() for book in books_by_title]), 200
-    
-    # 如果根据书名没有找到书籍，尝试根据作者搜索
-    books_by_author = Book.query.filter(Book.author.like(f'%{keyword}%')).all()
-    
-    if books_by_author:
-        # 如果根据作者找到了书籍，返回结果
-        return jsonify([book.to_dict() for book in books_by_author]), 200
-    
+        return jsonify([book.to_dict() for book in books]), 200
+
     # 如果既没有根据书名也没有根据作者找到书籍，返回 404 Not Found
     return jsonify({"message": "No books found matching the keyword."}), 404
 
@@ -230,13 +231,23 @@ def delete_student(student_id):
 
 
 # 搜索学生
+from flask import jsonify
+from flask_jwt_extended import jwt_required
+from sqlalchemy import or_
+
 @admin_bp.route('/api/students/search/<string:keyword>', methods=['GET'])
 @jwt_required()
 def search_students(keyword):
-    # 根据姓名搜索
-    students_by_name = Student.query.filter(Student.name.like(f'%{keyword}%')).all()
-    if students_by_name:
-        return jsonify([student.to_dict() for student in students_by_name]), 200
+    # 根据姓名或学号搜索
+    students = Student.query.filter(
+        or_(
+            Student.name.like(f'%{keyword}%'),   # 根据姓名搜索
+            Student.rid.like(f'%{keyword}%')  # 根据学号搜索
+        )
+    ).all()
 
-    # 如果没有根据姓名找到学生，返回 404
+    if students:
+        return jsonify([student.to_dict() for student in students]), 200
+
+    # 如果没有找到学生，返回 404
     return jsonify({"message": "No students found matching the keyword."}), 404

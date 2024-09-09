@@ -53,7 +53,7 @@ def borrow_book(b_bookid,u_id,b_days):
 
     return jsonify(new_record.to_dict()), 201
 
-#归还图书
+# 归还图书
 @student_bp.route('/api/books/return/bar_id=<int:bar_id>&book_id=<int:book_id>', methods=['POST'])
 @jwt_required()
 def return_book(bar_id,book_id):
@@ -73,6 +73,7 @@ def return_book(bar_id,book_id):
     
     return jsonify(bar.to_dict()), 201
     
+# 修改密码
 @student_bp.route('/api/students/chpasswd', methods=['POST'])
 @jwt_required()
 def change_password():
