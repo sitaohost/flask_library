@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生主页</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0b0c0b;
+            padding: 10px;
+            border-bottom: 2px solid #212321;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            /* 确保所有元素垂直居中 */
+        }
+
+        .navbar-left {
+            flex: 1;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            background-color: #423673;
+            transform: scale(1.05);
+        }
+
+        .logout-button {
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            margin-left: 10px;
+            /* 增加与用户名之间的间距 */
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .username {
+            color: white;
+            /* 设置用户名的字体颜色为白色 */
+            margin-right: 10px;
+            /* 增加与退出按钮之间的间距 */
+            margin-left: 20px;
+            /* 增加与个人信息按钮之间的间距 */
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* 图书列表样式 */
+        #books-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .book-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .book-card h2 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .book-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .button-detail {
+            background-color: #e6e6e6;
+            /* 灰色背景 */
+            border: 0.5px solid #000;
+            /* 黑色边框 */
+            color: #000;
+            /* 文字颜色 */
+            padding: 5px 10px;
+            /* 内边距 */
+            text-align: center;
+            /* 文字居中 */
+            font-size: 10px;
+            /* 字体大小 */
+            cursor: pointer;
+            /* 鼠标悬停时显示为指针 */
+            border-radius: 4px;
+            /* 圆角边框 */
+        }
+
+        .button-detail:hover {
+            background-color: #cecece;
+            /* 鼠标悬停时的背景色 */
+        }
+
+        #bookModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            /* 提高模态框的层级，使其位于其他元素之上 */
+            display: none;
+            background-color: transparent;
+        }
+
+        /* 模态框样式 */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9998;
+            /* 较低的z-index值，使得遮罩层位于模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+
+
+        .modal-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            margin: 0;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            text-align: left;
+        }
+
+        .modal-body p {
+            margin-bottom: 5px;
+        }
+
+        .borrow-button {
+            margin-top: 10px;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        /* 动态背景样式 */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            /* 使背景处于所有内容的后面 */
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+
+
+        #personalInfoModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            /* 确保层级不与其他模态框重合 */
+            display: none;
+            background-color: transparent;
+        }
+
+        #personalInfoBackdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            /* 遮罩层位于个人信息模态框下方 */
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            width: 20%;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <ul class="navbar-nav">
+                <li><a href="http://localhost:8090/pages/students/student_index.html">首页</a></li>
+                <li><a href="http://localhost:8090/pages/students/stu_borrows.html">借阅记录</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <!-- 个人信息按钮 -->
+            <button id="personalInfoButton" class="button-detail">个人信息</button>
+            <!-- 添加显示用户名的元素 -->
+            <span class="username" id="username-display"></span>
+            <a href="http://localhost:8090/pages/logout.html" class="logout-button">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="输入 [书名/书号/作者/出版社] 后回车搜索...">
+        </div>
+        <div id="searchResults" class="search-results"></div> <!-- 显示搜索结果的区域 -->
+    </div>
+
+    <div class="content">
+        <div id="books-container">
+            <!-- 图书列表将插入到这里 -->
+        </div>
+    </div>
+
+
+    <!-- 遮罩层 -->
+    <div class="modal-backdrop"></div>
+
+    <!-- 模态框 -->
+    <div id="bookModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">图书详情</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加图片显示 -->
+                    <img id="modalPicture" src="" alt="封面图片"
+                        style="max-width: 300px; max-height: 400px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+                    <p id="modalTitle">标题</p>
+                    <p id="modalAuthor">作者</p>
+                    <p id="modalPublisher">出版社</p>
+                    <p id="modalPages">页数</p>
+                    <p id="modalDescription">描述</p>
+                    <p id="modalStock">库存</p>
+                    <label for="borrowDays">借阅天数[1-90天]:</label>
+                    <input type="number" id="borrowDays" min="1" max="90">
+                    <button class="borrow-button" id="borrowButton">借阅</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 个人信息遮罩层 -->
+    <div id="personalInfoBackdrop" class="modal-backdrop"></div>
+
+    <!-- 个人信息模态框 -->
+    <div id="personalInfoModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">个人信息</h4>
+                    <button type="button" class="close" onclick="hidePersonalInfoModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>用户ID: <span id="infoRid"></span></p>
+                    <p>用户名: <span id="infoName"></span></p>
+                    <p>性别: <span id="infoSex"></span></p>
+                    <p>年龄: <span id="infoAge"></span></p>
+                    <p>地址: <span id="infoAddress"></span></p>
+                    <p>电话号码: <span id="infoPhone"></span></p>
+
+                    <!-- 更改密码按钮 -->
+                    <button id="showChangePasswordButton" class="btn btn-primary"
+                        onclick="showChangePasswordSection()">更改密码</button>
+
+                    <!-- 修改密码部分，默认隐藏 -->
+                    <div id="changePasswordSection" style="display: none;">
+                        <h4>修改密码</h4>
+                        <div class="form-group">
+                            <label for="oldPassword">旧密码:</label>
+                            <input type="password" id="oldPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">新密码:</label>
+                            <input type="password" id="newPassword" class="form-control" required>
+                        </div>
+                        <button id="changePasswordButton" class="btn btn-success"
+                            onclick="changePassword()">确认更改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        // 检查 JWT 存储
+        const token = localStorage.getItem('access_token');
+        const who = localStorage.getItem('username');
+
+        if (token && who !== 'admin') {
+            document.addEventListener('DOMContentLoaded', function () {
+                // 获取用户名并显示
+                const username = localStorage.getItem('username');
+                console.log(username);
+                const userID = localStorage.getItem('userID');
+                console.log(userID);
+
+                document.getElementById('username-display').textContent = `欢迎：${username}`;
+
+                // const borrowButton = document.getElementById('borrowButton');
+
+                let currentBook = null;
+                let invalidInputAlertShown = false; // 添加标志变量
+
+                let currentBackgroundIndex = 0;
+                const backgroundImages = [
+                    '/images/p1.jpg',
+                    '/images/p2.jpg',
+                    '/images/p3.jpg'
+                ];
+
+                // 预加载图片
+                backgroundImages.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+
+                function changeBackground() {
+                    const backgroundContainer = document.getElementById('background-container');
+                    backgroundContainer.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+                    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+                }
+
+                // 每5秒更换一次背景图
+                setInterval(changeBackground, 5000);
+
+                // 初始化背景图
+                changeBackground();
+
+
+                function fetchBooks() {
+                    const api = 'http://localhost:8090/api/books/all';
+
+                    fetch(api, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            displayBooks(data);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching books:', error);
+                        });
+                }
+
+                function displayBooks(books) {
+                    const container = document.getElementById('books-container');
+                    container.innerHTML = '';
+
+                    books.forEach(book => {
+                        const bookCard = document.createElement('div');
+                        bookCard.className = 'book-card';
+
+                        bookCard.innerHTML = `
+                <img src="/images/${book.picture || 'placeholder.jpg'}" alt="${book.title}">
+                <h2>${book.title}</h2>
+                <p>作者: ${book.author}</p>
+                <p>出版社: ${book.publisher}</p>
+                <p>页数: ${book.pages}页</p>
+                <p><button class="button-detail" data-book-id="${book.bid}">详情</button></p>
+            `;
+
+                        container.appendChild(bookCard);
+
+                        // 为每个详情按钮添加事件监听器
+                        bookCard.querySelector('.button-detail').addEventListener('click', function (event) {
+                            event.preventDefault();
+                            currentBook = book;
+                            showModal();
+                        });
+                    });
+                }
+
+                // 监听回车键事件
+                searchInput.addEventListener('keyup', function (event) {
+                    if (event.key === 'Enter') {
+                        performSearch(searchInput.value);
+                    }
+                });
+
+                function performSearch(keyword) {
+                    const api = `http://localhost:8090/api/students/searchBooks/${keyword}`;
+
+                    fetch(api, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            displayBooks(data); // 使用搜索结果更新图书列表
+                        })
+                        .catch(error => {
+                            console.error('Error searching books:', error);
+                            alert('未找到相关信息！');
+                        });
+                }
+
+
+                function showModal() {
+                    document.getElementById('bookModal').style.display = 'flex';
+                    document.querySelector('.modal-backdrop').style.display = 'block';
+                    document.getElementById('modalTitle').textContent = `标题: ${currentBook.title}`;
+                    document.getElementById('modalAuthor').textContent = `作者: ${currentBook.author}`;
+                    document.getElementById('modalPublisher').textContent = `出版社: ${currentBook.publisher}`;
+                    document.getElementById('modalPages').textContent = `页数: ${currentBook.pages}页`;
+                    document.getElementById('modalDescription').textContent = `描述: ${currentBook.description || '无描述'}`;
+                    document.getElementById('modalStock').textContent = `库存: ${currentBook.quantity || 'null'}`;
+                    // 设置封面图片的 src 属性
+                    const pictureUrl = `/images/${currentBook.picture || 'placeholder.jpg'}`;
+                    document.getElementById('modalPicture').src = pictureUrl;
+
+                    // 为关闭按钮添加事件监听器
+                    document.querySelector('.modal-dialog .close').addEventListener('click', hideModal);
+
+                    // 为借阅按钮添加事件监听器
+                    document.getElementById('borrowButton').addEventListener('click', function () {
+                        const days = parseInt(document.getElementById('borrowDays').value);
+                        if (isNaN(days) || days < 1 || days > 90) {
+                            if (!invalidInputAlertShown) { // 只有当标志为假时才显示提示
+                                alert('请输入有效的借阅天数[1-90天]');
+                                invalidInputAlertShown = true; // 设置标志为真
+                            }
+                            return;
+                        }
+                        borrowBook(currentBook.bid, days);
+                    });
+                }
+
+                function hideModal() {
+                    document.getElementById('bookModal').style.display = 'none';
+                    document.querySelector('.modal-backdrop').style.display = 'none';
+                    invalidInputAlertShown = false; // 重置标志变量，以便下次输入时重新启用提示
+                }
+
+                function borrowBook(b_bookId, b_days) {
+                    const u_id = localStorage.getItem('userID');
+                    const api = `http://localhost:8090/api/students/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
+
+                    fetch(api, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('借阅成功！');
+                                location.href = 'http://localhost:8090/pages/students/student_index.html';
+                            } else {
+                                // 如果响应不是成功的状态码，则解析错误信息
+                                return response.json().then(data => {
+                                    alert(data.error || '借阅失败，请稍后再试！');
+                                    console.error('Error borrowing book:', data.error);
+                                });
+                            }
+                        })
+
+                }
+
+                fetchBooks();
+            });
+
+            document.getElementById('personalInfoButton').addEventListener('click', showPersonalInfoModal);
+
+            function showPersonalInfoModal() {
+                // 显示模态框和遮罩层
+                document.getElementById('personalInfoModal').style.display = 'flex';
+                document.getElementById('personalInfoBackdrop').style.display = 'block';
+
+                // 从本地存储获取用户ID
+                const userID = localStorage.getItem('userID');
+
+                const api = `http://localhost:8090/api/students/get/${userID}`;
+                fetch(api, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })  // 调用Flask后端接口
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('网络响应失败');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 检查是否有错误信息
+                        if (data.error) {
+                            alert("无法找到学生信息。");
+                            hidePersonalInfoModal();
+                            return;
+                        }
+
+                        // 将获取的数据填充到模态框
+                        document.getElementById('infoRid').textContent = data.rid;
+                        document.getElementById('infoName').textContent = data.name;
+                        document.getElementById('infoSex').textContent = data.sex;
+                        document.getElementById('infoAge').textContent = data.age;
+                        document.getElementById('infoAddress').textContent = data.address;
+                        document.getElementById('infoPhone').textContent = data.phone;
+                    })
+                    .catch(error => {
+                        console.error('获取学生信息时发生错误:', error);
+                        alert("无法获取学生信息。");
+                    });
+            }
+
+            function hidePersonalInfoModal() {
+                // 隐藏模态框和遮罩层
+                document.getElementById('personalInfoModal').style.display = 'none';
+                document.getElementById('personalInfoBackdrop').style.display = 'none';
+            }
+
+            // 显示修改密码部分
+            function showChangePasswordSection() {
+                document.getElementById('changePasswordSection').style.display = 'block';
+            }
+
+            // 修改密码功能
+            function changePassword() {
+                const userID = localStorage.getItem('userID'); // 获取用户ID
+                const oldPassword = document.getElementById('oldPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+
+                if (!oldPassword || !newPassword) {
+                    alert('请输入旧密码和新密码！');
+                    return;
+                }
+
+                const api = 'http://localhost:8090/api/students/chpasswd';
+
+                fetch(api, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        student_id: userID,
+                        old_password: oldPassword,
+                        new_password: newPassword
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            alert(data.message);
+                            hidePersonalInfoModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('发生错误，请稍后再试。');
+                    });
+            }
+
+        }
+        else if (token == null) {
+            alert("请先登录！");
+            window.location.href = 'http://localhost:8090/pages/students/student_login.html';
+        } else {
+            alert("你是管理员，不要多管闲事！");
+            window.location.href = 'http://localhost:8090/pages/admin/admin_index.html';
+        }
+
+    </script>
+
+</body>
+
+</html>
