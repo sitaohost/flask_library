@@ -382,7 +382,7 @@
 
     <div class="content">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="输入 [借阅记录ID/书名/书号/作者/出版社] 后回车搜索...">
+            <input type="text" id="searchInput" placeholder="输入 [借阅记录ID/书名/书号/出版社] 后回车搜索...">
         </div>
         <div id="searchResults" class="search-results"></div> <!-- 显示搜索结果的区域 -->
     </div>
@@ -560,7 +560,7 @@
                             })
                             .then(data => {
                                 alert('图书归还成功！');
-                                fetchBorrowRecords(); // 重新加载图书列表
+                                window.location.reload('http://localhost:8090/pages/students/stu_borrows.html');
                             })
                             .catch(error => {
                                 console.error('Error:', error);
@@ -571,6 +571,7 @@
                                 alert(message);
                             });
                     }
+
                 }
 
                 // 搜索借阅记录

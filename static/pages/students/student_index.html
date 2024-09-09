@@ -399,6 +399,8 @@
 
                 document.getElementById('username-display').textContent = `欢迎：${username}`;
 
+                // const borrowButton = document.getElementById('borrowButton');
+
                 let currentBook = null;
                 let invalidInputAlertShown = false; // 添加标志变量
 
@@ -545,8 +547,6 @@
                 function borrowBook(b_bookId, b_days) {
                     const u_id = localStorage.getItem('userID');
                     const api = `http://localhost:8090/api/students/borrow/${b_bookId}&uid=${u_id}&days=${b_days}`;
-                    const borrowButton = document.getElementById('borrowButton');
-                    borrowButton.disabled = true; // 禁用按钮
 
                     fetch(api, {
                         method: 'POST',
@@ -557,8 +557,7 @@
                         .then(response => {
                             if (response.ok) {
                                 alert('借阅成功！');
-                                // hideModal();
-                                window.location.href = 'http://localhost:8090/pages/students/student_index.html';
+                                location.href = 'http://localhost:8090/pages/students/student_index.html';
                             } else {
                                 // 如果响应不是成功的状态码，则解析错误信息
                                 return response.json().then(data => {
@@ -567,6 +566,7 @@
                                 });
                             }
                         })
+
                 }
 
                 fetchBooks();
